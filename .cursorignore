@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.npm/
+
+# Build output
+dist/
+build/
+.astro/
+
+# Cache and logs
+.cache/
+.temp/
+*.log
+
+# Environment variables and sensitive data
+.env
+.env.*
+!.env.example
+**/config/secrets.ts
+**/config/secrets.js
+**/config/credentials.*
+**/config/api-keys.*
+**/private/*.key
+**/private/*.pem
+**/private/*.cert
+**/private/*.crt
+**/private/secrets.*
+**/secure/*.config
+**/secure/credentials.*
+**/*secret*
+**/*password*
+**/*credential*
+**/*private-key*
+**/*apikey*
+**/*token*
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Lock files (optional, uncomment if you want to ignore)
+# package-lock.json
+# pnpm-lock.yaml
+# yarn.lock

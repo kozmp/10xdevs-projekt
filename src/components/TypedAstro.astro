@@ -1,0 +1,19 @@
+---
+// Define props interface
+interface Props {
+  title: string;
+  items: string[];
+  count?: number;
+}
+
+// Destructure props with types
+const { title, items, count = 0 } = Astro.props;
+---
+
+<div class="space-y-4">
+  <h1 class="text-2xl font-bold">{title}</h1>
+  <p>Count: {count}</p>
+  <ul class="list-disc pl-5">
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+</div>
