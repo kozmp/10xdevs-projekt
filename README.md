@@ -1,94 +1,98 @@
-# 10x Astro Starter
+# Project Name: AI Product Description Generator
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+## 1. Project Description
 
-## Tech Stack
+AI Product Description Generator is a web application for Shopify store owners that leverages Large Language Models (LLMs) to automatically generate professional product descriptions and SEO meta tags, reducing the manual effort from hours to minutes.
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+## 2. Tech Stack
 
-## Prerequisites
+- **Frontend:** Astro 5, React 19, TypeScript 5, Tailwind CSS 4, Shadcn/ui
+- **Backend:** Supabase, PostgreSQL
+- **External APIs:** OpenRouter.ai (OpenAI + Anthropic), Shopify Admin REST API
+- **DevOps:** Docker, DigitalOcean, GitHub Actions
+- **Monitoring:** Sentry
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
-
-## Getting Started
-
-1. Clone the repository:
+## 3. Getting Started Locally
 
 ```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
+# Clone the repository
+git clone https://github.com/your-org/ai-product-description-generator.git
+cd ai-product-description-generator
 
-2. Install dependencies:
-
-```bash
+# Install dependencies
 npm install
-```
 
-3. Run the development server:
+# Install Node.js version from .nvmrc
+nvm use
 
-```bash
+# Start development server
 npm run dev
 ```
 
-4. Build for production:
+## 4. Available Scripts
+
+- `npm run dev` – start Astro development server
+- `npm run build` – build the production site
+- `npm run preview` – preview the production build
+- `npm run astro` – run Astro CLI commands
+- `npm run lint` – run ESLint
+- `npm run lint:fix` – run ESLint with auto-fix
+- `npm run format` – format code with Prettier
+
+## 5. Project Scope
+
+**In Scope (MVP Prototype):**
+
+- Shopify integration via static API key
+- Fetch and bulk-select up to 50 existing products
+- Batch generation of HTML product descriptions and 155–160 character SEO meta descriptions in Polish and English
+- Real-time progress bar, token cost estimation (total and per-product)
+- Rich-text editor with undo/redo (48h window) and full version history saved
+- Asynchronous job queue with retry/backoff (3 attempts)
+- Update Shopify (draft or publish) respecting API rate limits
+- Logging and monitoring with Supabase Metrics and Sentry
+
+**Out of Scope:**
+
+- Integrations beyond Shopify
+- Image generation
+- Long-term AI context/memory
+- Collection/category operations
+- Creating new products
+- Advanced AI features (fine-tuning, RAG, SEO scoring)
+- Multi-user collaboration and role-based access
+
+## 6. Project Status
+
+Current status: MVP Prototype under development (3–4 week sprint by a 2–3 person team).
+
+## 7. License
+
+This project is licensed under the [MIT License](LICENSE.md).
+
+## Running Supabase with Docker Desktop
+
+After running `supabase init` you have a Docker Compose file at `.supabase/docker-compose.yml`. You can use Docker Desktop to launch the Supabase local services:
+
+1. Open Docker Desktop.
+2. Go to the "Stacks" (or "Apps") section and click "Add stack".
+3. Select the file at `.supabase/docker-compose.yml` in your project directory.
+4. Set the name (e.g. `supabase-local`) and click "Deploy the stack".
+
+Alternatively, from the terminal you can run:
 
 ```bash
-npm run build
+# Start Supabase emulator via Docker Compose
+docker compose -f .supabase/docker-compose.yml up -d
+
+# Stop services when done
+docker compose -f .supabase/docker-compose.yml down
 ```
 
-## Available Scripts
+This will bring up:
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+- Postgres (port 54321)
+- Supabase API (port 54322)
+- Realtime and other services
 
-## Project Structure
-
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
-
-## AI Development Support
-
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
-
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
-
-### Cursor IDE
-
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
-
-### GitHub Copilot
-
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
-
-### Windsurf
-
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
-
-## License
-
-MIT
+Your application can then connect to `http://localhost:54322` for API calls and `postgresql://localhost:54321` for the database.
