@@ -244,6 +244,12 @@ Funkcjonalności techniczne:
 - Aplikacja mobilna (iOS/Android)
 - OAuth flow (w MVP tylko statyczny klucz API)
 - Integracja MCP (Model Context Protocol)
+- Zaawansowane zarządzanie sesjami użytkownika
+- Historia wersji szablonów promptów
+- Zarządzanie wieloma sklepami na jedno konto
+- Role i poziomy dostępu użytkowników
+- Logi aktywności użytkownika
+- Zaawansowane opcje bezpieczeństwa (2FA, limity logowań)
 
 Zaawansowane funkcje AI:
 
@@ -274,10 +280,13 @@ Biznesowe:
 
 Użytkowe:
 
-- Jeden użytkownik = jeden sklep Shopify
+- Jeden użytkownik = jedno konto = jeden sklep Shopify
 - Brak współdzielenia kont i uprawnień
 - Brak eksportu danych (CSV/JSON) w MVP
 - Historia zmian dostępna tylko w interfejsie aplikacji
+- Podstawowa autoryzacja (email + hasło) bez zaawansowanych opcji bezpieczeństwa
+- Maksymalnie 3 własne szablony promptów na użytkownika
+- Brak możliwości współdzielenia szablonów między użytkownikami
 
 ### 4.3 Planowane rozszerzenia (wersja 2.0)
 
@@ -760,6 +769,60 @@ Kryteria akceptacji:
 - System usuwa: klucz API, historię jobów, wygenerowane opisy, logi operacji
 - Użytkownik otrzymuje email potwierdzający usunięcie
 - Operacja jest logowana (anonimowo) dla compliance
+
+### 5.9 Szablony i autoryzacja (MVP)
+
+US-039: Podstawowe szablony promptów
+
+Jako użytkownik
+Chcę mieć dostęp do predefiniowanych szablonów promptów i możliwość tworzenia własnych
+Aby utrzymać spójny styl komunikacji dla moich produktów
+
+Kryteria akceptacji:
+
+- System oferuje 3 predefiniowane szablony (Professional, Casual, Sales-focused)
+- Użytkownik może stworzyć i zapisać własny szablon (nazwa + treść)
+- Szablon może zawierać podstawowe zmienne ({product_name}, {category})
+- Użytkownik może edytować własne szablony
+- Maksymalna długość promptu: 500 znaków
+
+US-040: Podstawowa autoryzacja sklepu
+
+Jako właściciel sklepu Shopify
+Chcę połączyć mój sklep z aplikacją
+Aby móc automatycznie aktualizować opisy produktów
+
+Kryteria akceptacji:
+
+- Użytkownik może dodać sklep przez Private App credentials
+- System szyfruje klucz API w bazie Supabase
+- System waliduje poprawność klucza przy dodawaniu
+- Użytkownik może zaktualizować lub usunąć klucz API
+- System wyświetla podstawowe informacje o połączonym sklepie
+
+US-042: Podstawowe logowanie
+
+Jako użytkownik
+Chcę mieć prosty i bezpieczny dostęp do systemu
+Aby chronić moje dane i ustawienia
+
+Kryteria akceptacji:
+
+- Logowanie przez email i hasło (Supabase Auth)
+- Rejestracja wymaga:
+  - Adresu email
+  - Hasła (min. 8 znaków)
+  - Akceptacji regulaminu
+- Podstawowe funkcje:
+  - Weryfikacja email
+  - Reset hasła
+  - Wylogowanie
+- Interfejs:
+  - Przycisk logowania w prawym górnym rogu
+  - Prosty panel użytkownika
+- Dostęp:
+  - Dashboard wymaga logowania
+  - Historia generowania wymaga logowania
 
 US-032: Eksport historii operacji
 

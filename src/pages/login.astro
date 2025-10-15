@@ -1,0 +1,90 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+---
+
+<Layout title="Login - AI Product Description Generator">
+  <main class="container mx-auto min-h-screen flex items-center justify-center p-6">
+    <Card className="w-full max-w-md p-8">
+      <div class="space-y-6">
+        <div class="space-y-2 text-center">
+          <h1 class="text-2xl font-bold">Sign in to your account</h1>
+          <p class="text-muted-foreground">Enter your credentials to sign in</p>
+        </div>
+
+        <form id="login-form" class="space-y-4">
+          <div class="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" name="email" type="email" placeholder="your@email.com" required autocomplete="email" />
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              <a href="/forgot-password" class="text-sm text-primary hover:underline">Forgot password?</a>
+            </div>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              required
+              minlength="8"
+              autocomplete="current-password"
+            />
+          </div>
+
+          <div id="error-message" class="text-destructive text-sm hidden"></div>
+
+          <Button type="submit" className="w-full">Sign in</Button>
+        </form>
+
+        <div class="text-center text-sm">
+          <span class="text-muted-foreground">Don't have an account?</span>
+          <a href="/signup" class="text-primary hover:underline">Sign up</a>
+        </div>
+      </div>
+    </Card>
+  </main>
+</Layout>
+
+<script>
+  const form = document.getElementById("login-form") as HTMLFormElement;
+  const errorMessage = document.getElementById("error-message");
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!errorMessage) return;
+    errorMessage.classList.add("hidden");
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+
+      // Success - redirect to dashboard
+      window.location.href = "/";
+    } catch (err) {
+      errorMessage.textContent = err instanceof Error ? err.message : "An error occurred";
+      errorMessage.classList.remove("hidden");
+    }
+  });
+</script>

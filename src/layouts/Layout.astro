@@ -1,4 +1,5 @@
 ---
+import { Navbar } from "../components/Navbar";
 import "../styles/global.css";
 
 interface Props {
@@ -6,6 +7,12 @@ interface Props {
 }
 
 const { title = "10x Astro Starter" } = Astro.props;
+
+// Sprawdź stan autoryzacji
+const {
+  data: { session },
+} = await Astro.locals.supabase.auth.getSession();
+const isAuthenticated = !!session;
 ---
 
 <!doctype html>
@@ -18,7 +25,10 @@ const { title = "10x Astro Starter" } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <Navbar client:load isAuthenticated={isAuthenticated} />
+    <main class="container mx-auto px-4 py-8">
+      <slot />
+    </main>
   </body>
 </html>
 

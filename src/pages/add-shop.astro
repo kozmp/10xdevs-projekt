@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { AddShopForm } from "../components/AddShopForm";
+---
+
+<Layout title="Dodaj sklep">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Dodaj nowy sklep</h1>
+    <div class="max-w-md mx-auto">
+      <AddShopForm client:load />
+    </div>
+  </main>
+</Layout>

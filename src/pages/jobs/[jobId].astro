@@ -1,0 +1,10 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { JobProgressPage } from "../../components/JobProgressPage";
+
+const { jobId } = Astro.params;
+---
+
+<Layout title={`Zlecenie ${jobId} - 10x Astro Starter`}>
+  <JobProgressPage jobId={jobId!} client:load />
+</Layout>

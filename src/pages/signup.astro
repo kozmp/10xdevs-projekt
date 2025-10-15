@@ -1,0 +1,120 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+---
+
+<Layout title="Sign Up - AI Product Description Generator">
+  <main class="container mx-auto min-h-screen flex items-center justify-center p-6">
+    <Card className="w-full max-w-md p-8">
+      <div class="space-y-6">
+        <div class="space-y-2 text-center">
+          <h1 class="text-2xl font-bold">Create an Account</h1>
+          <p class="text-muted-foreground">Enter your details to create an account</p>
+        </div>
+
+        <form id="signup-form" class="space-y-4">
+          <div class="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" name="email" type="email" placeholder="your@email.com" required autoComplete="email" />
+          </div>
+
+          <div class="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <Input id="password" name="password" type="password" required minLength={8} autoComplete="new-password" />
+            <div class="text-xs text-muted-foreground space-y-1">
+              <p>Hasło musi spełniać następujące wymagania:</p>
+              <ul class="list-disc list-inside pl-2">
+                <li>Minimum 8 znaków</li>
+                <li>Przynajmniej jedna mała litera</li>
+                <li>Przynajmniej jedna wielka litera</li>
+                <li>Przynajmniej jedna cyfra</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="flex items-start space-x-2">
+            <div class="flex items-center h-5 mt-1">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                value="accepted"
+                class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-2 focus:ring-primary cursor-pointer"
+                required
+              />
+            </div>
+            <div class="ml-3 text-sm">
+              <label for="terms" class="font-medium text-gray-900 cursor-pointer select-none"> Accept Terms </label>
+              <p class="text-gray-500">
+                I have read and agree to the
+                <a href="/terms" class="text-primary hover:underline ml-1">Terms of Service</a>
+              </p>
+            </div>
+          </div>
+
+          <div id="error-message" class="text-destructive text-sm hidden"></div>
+          <div id="success-message" class="text-green-600 text-sm hidden"></div>
+
+          <Button type="submit" className="w-full">Sign up</Button>
+        </form>
+
+        <div class="text-center text-sm">
+          <span class="text-muted-foreground">Already have an account?</span>
+          <a href="/login" class="text-primary hover:underline">Sign in</a>
+        </div>
+      </div>
+    </Card>
+  </main>
+</Layout>
+
+<script>
+  const form = document.getElementById("signup-form") as HTMLFormElement;
+  const errorMessage = document.getElementById("error-message");
+  const successMessage = document.getElementById("success-message");
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!errorMessage || !successMessage) return;
+    errorMessage.classList.add("hidden");
+    successMessage.classList.add("hidden");
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.get("email"),
+          password: formData.get("password"),
+          termsAccepted: formData.get("terms") === "accepted",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Registration failed");
+      }
+
+      if (data.requiresEmailVerification) {
+        successMessage.textContent = "Account created successfully! Please check your email to verify your account.";
+        successMessage.classList.remove("hidden");
+        form.reset();
+      } else {
+        // Auto-login - redirect to dashboard
+        window.location.href = "/";
+      }
+    } catch (err) {
+      errorMessage.textContent = err instanceof Error ? err.message : "An error occurred";
+      errorMessage.classList.remove("hidden");
+    }
+  });
+</script>

@@ -22,3 +22,28 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local configuration files
+.claude/
+.cursor/
+*.local.json
+
+# test and temporary files
+NUL
+**/test-*.ts
+**/test-*.js
+**/test-*.sh
+create-test-user.ts
+generate-token.ts
+verify-token.js
+
+# local documentation and planning
+.docs/
+.ai/
+AUTH-SETUP.md
+TEST-API-GUIDE.md
+CLAUDE.md
+
+# database backups and local config
+*.sqlite
+*.sqlite-journal

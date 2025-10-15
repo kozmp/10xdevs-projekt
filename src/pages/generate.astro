@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { GeneratePage } from "../components/GeneratePage";
+import { AUTH_ROUTES } from "../lib/auth/routes-config";
+
+// Wyłącz prerenderowanie - strona musi być renderowana na serwerze
+export const prerender = false;
+
+// Sprawdź czy użytkownik jest zalogowany
+const { user } = Astro.locals;
+
+// Jeśli nie jest zalogowany, przekieruj na stronę logowania
+if (!user) {
+  return Astro.redirect(AUTH_ROUTES.LOGIN);
+}
+---
+
+<Layout title="Generowanie opisów - 10x Astro Starter">
+  <GeneratePage client:load />
+</Layout>
