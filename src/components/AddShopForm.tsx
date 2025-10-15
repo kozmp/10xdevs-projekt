@@ -1,70 +1,86 @@
-import { useState } from "react";
+import React from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { updateShopSchema } from "../lib/schemas/shop";
-import { toast } from "sonner";
-import { supabaseClient } from "../db/supabase.client";
+import { Card } from "./ui/card";
 
-export const AddShopForm = () => {
-  const [apiKey, setApiKey] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+export function AddShopForm() {
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [success, setSuccess] = React.useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
 
     try {
-      // Walidacja danych
-      const validationResult = updateShopSchema.safeParse({ apiKey });
-      if (!validationResult.success) {
-        toast.error("Błąd walidacji danych");
-        return;
-      }
+      setLoading(true);
+      setError(null);
+      setSuccess(false);
 
-      // Wysłanie żądania do API
       const response = await fetch("/api/shops", {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${(await supabaseClient.auth.getSession()).data.session?.access_token}`,
         },
-        body: JSON.stringify({ apiKey }),
+        body: JSON.stringify({
+          shopifyDomain: formData.get("domain"),
+          apiKey: formData.get("apiKey"),
+          apiSecret: formData.get("apiSecret"),
+        }),
       });
 
       if (!response.ok) {
-        throw new Error("Błąd podczas dodawania sklepu");
+        const data = await response.json();
+        throw new Error(data.error || "Failed to add shop");
       }
 
-      const data = await response.json();
-      toast.success("Sklep został pomyślnie dodany");
+      setSuccess(true);
+      form.reset();
 
-      // Opcjonalne: przekierowanie do dashboardu
-      window.location.href = "/dashboard";
-    } catch (error) {
-      toast.error("Wystąpił błąd podczas dodawania sklepu");
-      console.error("Error:", error);
+      // Przekieruj na dashboard po 2 sekundach
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="apiKey">Klucz API Sklepu</Label>
-        <Input
-          id="apiKey"
-          type="text"
-          value={apiKey}
-          onChange={(e) => setApiKey(e.target.value)}
-          placeholder="Wprowadź klucz API"
-          required
-        />
-      </div>
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? "Dodawanie..." : "Dodaj sklep"}
-      </Button>
-    </form>
+    <Card className="max-w-lg mx-auto p-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="domain">Domena sklepu</Label>
+          <Input id="domain" name="domain" type="text" placeholder="your-store.myshopify.com" required />
+          <p className="text-sm text-muted-foreground">Wprowadź domenę swojego sklepu Shopify</p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="apiKey">Klucz API</Label>
+          <Input id="apiKey" name="apiKey" type="text" required />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="apiSecret">Sekret API</Label>
+          <Input id="apiSecret" name="apiSecret" type="password" required />
+        </div>
+
+        {error && <div className="p-4 bg-red-50 text-red-600 rounded-md">{error}</div>}
+
+        {success && (
+          <div className="p-4 bg-green-50 text-green-600 rounded-md">
+            Sklep został pomyślnie dodany! Za chwilę nastąpi przekierowanie...
+          </div>
+        )}
+
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "Dodawanie..." : "Dodaj sklep"}
+        </Button>
+      </form>
+    </Card>
   );
-};
+}

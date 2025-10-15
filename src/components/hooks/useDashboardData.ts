@@ -35,8 +35,8 @@ export function useDashboardData(): UseDashboardDataReturn {
       }
       const shop: ShopResponseDTO = await shopResponse.json();
 
-      // Fetch products count (limit=0 to get only meta)
-      const productsResponse = await fetch('/api/products?page=1&limit=0');
+      // Fetch products count (limit=1 to get meta with minimal data)
+      const productsResponse = await fetch('/api/products?page=1&limit=1');
       if (!productsResponse.ok) {
         throw new Error(
           `Failed to fetch products: ${productsResponse.statusText}`

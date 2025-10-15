@@ -1,13 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { AddShopForm } from "../components/AddShopForm";
+import { AUTH_ROUTES } from "../lib/auth/routes-config";
+
+// Wyłącz prerenderowanie - strona musi być renderowana na serwerze
+export const prerender = false;
+
+// Sprawdź czy użytkownik jest zalogowany
+const { user } = Astro.locals;
+
+// Jeśli nie jest zalogowany, przekieruj na stronę logowania
+if (!user) {
+  return Astro.redirect(AUTH_ROUTES.LOGIN);
+}
 ---
 
-<Layout title="Dodaj sklep">
-  <main class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8">Dodaj nowy sklep</h1>
-    <div class="max-w-md mx-auto">
-      <AddShopForm client:load />
-    </div>
+<Layout title="Dodaj sklep - 10x Astro Starter">
+  <main class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Dodaj sklep</h1>
+    <AddShopForm client:load />
   </main>
 </Layout>

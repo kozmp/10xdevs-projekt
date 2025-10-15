@@ -43,6 +43,20 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // Ustaw ciasteczka sesji
+    const { data: { session }, error: sessionError } = await locals.supabase.auth.setSession({
+      access_token: data.session!.access_token,
+      refresh_token: data.session!.refresh_token,
+    });
+
+    if (sessionError) {
+      console.error('Session error:', sessionError);
+      return new Response(
+        JSON.stringify({ error: 'Błąd podczas ustawiania sesji' }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
     return new Response(
       JSON.stringify({
         message: 'Logowanie pomyślne',

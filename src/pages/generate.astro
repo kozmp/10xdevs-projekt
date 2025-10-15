@@ -13,8 +13,11 @@ const { user } = Astro.locals;
 if (!user) {
   return Astro.redirect(AUTH_ROUTES.LOGIN);
 }
+
+// Pobierz ID produktów z URL
+const productIds = Astro.url.searchParams.get("ids")?.split(",") || [];
 ---
 
 <Layout title="Generowanie opisów - 10x Astro Starter">
-  <GeneratePage client:load />
+  <GeneratePage client:load selectedProductIds={productIds} />
 </Layout>

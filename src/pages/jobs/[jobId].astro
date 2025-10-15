@@ -1,10 +1,23 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { JobProgressPage } from "../../components/JobProgressPage";
+import { AUTH_ROUTES } from "../../lib/auth/routes-config";
 
+// Wyłącz prerenderowanie - strona musi być renderowana na serwerze
+export const prerender = false;
+
+// Sprawdź czy użytkownik jest zalogowany
+const { user } = Astro.locals;
+
+// Jeśli nie jest zalogowany, przekieruj na stronę logowania
+if (!user) {
+  return Astro.redirect(AUTH_ROUTES.LOGIN);
+}
+
+// Pobierz ID zadania z parametrów URL
 const { jobId } = Astro.params;
 ---
 
-<Layout title={`Zlecenie ${jobId} - 10x Astro Starter`}>
-  <JobProgressPage jobId={jobId!} client:load />
+<Layout title="Postęp zadania - 10x Astro Starter">
+  <JobProgressPage jobId={jobId} client:load />
 </Layout>

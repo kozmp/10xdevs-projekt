@@ -1,78 +1,76 @@
-import { useState, useEffect, useCallback } from 'react';
-import type { ProductSummaryDTO, ProductStatus } from '@/types';
+import { useState, useEffect } from 'react';
 
-interface UseProductsParams {
-  page?: number;
-  limit?: number;
-  status?: ProductStatus;
-  search?: string;
-}
-
-interface PaginationMeta {
-  total: number;
+interface Pagination {
   page: number;
   limit: number;
-  totalPages: number;
+  total: number;
 }
 
-interface UseProductsReturn {
-  products: ProductSummaryDTO[];
-  meta?: PaginationMeta;
-  loading: boolean;
-  error?: Error;
-  refetch: () => void;
+interface Filters {
+  status?: string;
+  category?: string;
 }
 
-export function useProducts({
-  page = 1,
-  limit = 20,
-  status,
-  search,
-}: UseProductsParams): UseProductsReturn {
-  const [products, setProducts] = useState<ProductSummaryDTO[]>([]);
-  const [meta, setMeta] = useState<PaginationMeta>();
+export function useProducts() {
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [filters, setFilters] = useState<Filters>({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const [pagination, setPagination] = useState<Pagination>({
+    page: 1,
+    limit: 10,
+    total: 0,
+  });
 
-  const fetchProducts = useCallback(async () => {
-    setLoading(true);
-    setError(undefined);
-
+  const fetchProducts = async () => {
     try {
-      // Build query params
-      const params = new URLSearchParams();
-      params.set('page', page.toString());
-      params.set('limit', limit.toString());
-      if (status) params.set('status', status);
-      if (search && search.trim()) params.set('search', search.trim());
+      setLoading(true);
+      setError(null);
 
-      const response = await fetch(`/api/products?${params.toString()}`);
+      const queryParams = new URLSearchParams({
+        page: pagination.page.toString(),
+        limit: pagination.limit.toString(),
+        search: searchQuery,
+        ...filters,
+      });
 
+      const response = await fetch(`/api/products?${queryParams}`);
       if (!response.ok) {
-        throw new Error(`Failed to fetch products: ${response.statusText}`);
+        throw new Error('Failed to fetch products');
       }
 
       const data = await response.json();
       setProducts(data.data || []);
-      setMeta(data.meta);
+      setPagination(prev => ({ ...prev, total: data.meta?.total || 0 }));
     } catch (err) {
-      setError(
-        err instanceof Error ? err : new Error('Unknown error occurred')
-      );
+      setError(err instanceof Error ? err : new Error('Unknown error occurred'));
     } finally {
       setLoading(false);
     }
-  }, [page, limit, status, search]);
+  };
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]);
+  }, [pagination.page, pagination.limit, searchQuery, filters]);
+
+  const handlePaginationChange = (page: number) => {
+    setPagination(prev => ({ ...prev, page }));
+  };
 
   return {
     products,
-    meta,
     loading,
     error,
+    selectedIds,
+    setSelectedIds,
+    filters,
+    setFilters,
+    searchQuery,
+    setSearchQuery,
+    pagination,
+    setPagination: handlePaginationChange,
     refetch: fetchProducts,
   };
 }

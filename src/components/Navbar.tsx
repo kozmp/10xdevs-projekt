@@ -1,38 +1,46 @@
-import { useAuth } from "./hooks/useAuth";
-import { Button } from "./ui/button";
+import React from 'react';
+import { Button } from './ui/button';
 
-interface NavbarProps {
-  isAuthenticated: boolean;
-}
-
-export const Navbar = ({ isAuthenticated: initialIsAuthenticated }: NavbarProps) => {
-  const { isAuthenticated, handleLogout } = useAuth({ isAuthenticated: initialIsAuthenticated });
-
+export function Navbar() {
   return (
-    <nav className="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700">
-      <div className="flex flex-wrap justify-between items-center">
-        <div className="flex items-center">
-          <a href="/" className="flex items-center">
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">10x Devs</span>
-          </a>
-        </div>
+    <nav className="border-b">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <a href="/" className="text-xl font-bold">10x Devs</a>
+          </div>
 
-        <div className="flex items-center">
-          {isAuthenticated ? (
-            <Button
-              variant="ghost"
-              onClick={handleLogout}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          <div className="flex items-center space-x-4">
+            <a
+              href="/products"
+              className="text-sm font-medium hover:text-primary transition-colors"
             >
-              Wyloguj się
-            </Button>
-          ) : (
-            <a href="/login">
-              <Button variant="ghost">Zaloguj się</Button>
+              Produkty
             </a>
-          )}
+            <a
+              href="/jobs"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Zadania
+            </a>
+            <a
+              href="/add-shop"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Dodaj sklep
+            </a>
+            <Button
+              variant="outline"
+              onClick={() => {
+                fetch('/api/auth/logout', { method: 'POST' })
+                  .then(() => window.location.href = '/login');
+              }}
+            >
+              Wyloguj
+            </Button>
+          </div>
         </div>
       </div>
     </nav>
   );
-};
+}

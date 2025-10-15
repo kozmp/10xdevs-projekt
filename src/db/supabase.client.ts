@@ -28,6 +28,26 @@ export function createSupabaseServerInstance({ cookies, headers }: ServerClientO
         autoRefreshToken: false,
         persistSession: true,
         detectSessionInUrl: false,
+        flowType: 'pkce',
+        storage: {
+          getItem: (key: string) => {
+            return cookies.get(key)?.value;
+          },
+          setItem: (key: string, value: string) => {
+            cookies.set(key, value, {
+              path: '/',
+              httpOnly: true,
+              sameSite: 'lax',
+              secure: import.meta.env.PROD,
+            });
+          },
+          removeItem: (key: string) => {
+            cookies.set(key, '', {
+              path: '/',
+              expires: new Date(0),
+            });
+          },
+        },
       },
       global: {
         headers: {

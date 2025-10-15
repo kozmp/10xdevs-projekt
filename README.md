@@ -11,6 +11,9 @@ AI Product Description Generator is a web application for Shopify store owners t
 - **External APIs:** OpenRouter.ai (OpenAI + Anthropic), Shopify Admin REST API
 - **DevOps:** Docker, DigitalOcean, GitHub Actions
 - **Monitoring:** Sentry
+- **Testing:**
+  - Unit & Component Testing: Vitest, React Testing Library
+  - E2E Testing: Cypress/Playwright
 
 ## 3. Getting Started Locally
 

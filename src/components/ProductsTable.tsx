@@ -1,165 +1,102 @@
-import { useMemo, useCallback } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Checkbox } from '@/components/ui/checkbox';
-import type { ProductSummaryDTO } from '@/types';
+import React from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
+import { Checkbox } from "./ui/checkbox";
+import { PaginationControls } from "./PaginationControls";
+import { ProductPreviewModal } from "./ProductPreviewModal";
 
 interface ProductsTableProps {
-  products: ProductSummaryDTO[];
+  products: any[];
+  loading: boolean;
   selectedIds: string[];
-  onToggle: (id: string) => boolean;
-  onToggleAll: (ids: string[]) => void;
-  onRowClick?: (productId: string) => void;
-  isMaxReached: boolean;
-  maxLimit: number;
+  onSelectIds: (ids: string[]) => void;
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+  };
+  onPaginationChange: (page: number) => void;
 }
-
-const statusLabels: Record<string, string> = {
-  published: 'Opublikowany',
-  draft: 'Szkic',
-};
 
 export function ProductsTable({
   products,
+  loading,
   selectedIds,
-  onToggle,
-  onToggleAll,
-  onRowClick,
-  isMaxReached,
-  maxLimit,
+  onSelectIds,
+  pagination,
+  onPaginationChange,
 }: ProductsTableProps) {
-  const productIds = useMemo(() => products.map((p) => p.id), [products]);
+  const [previewProduct, setPreviewProduct] = React.useState<any>(null);
 
-  const allSelected = useMemo(() => {
-    if (products.length === 0) return false;
-    return products.every((p) => selectedIds.includes(p.id));
-  }, [products, selectedIds]);
+  const handleSelectAll = (checked: boolean) => {
+    onSelectIds(checked ? products.map((p) => p.id) : []);
+  };
 
-  const someSelected = useMemo(() => {
-    if (products.length === 0) return false;
-    return products.some((p) => selectedIds.includes(p.id)) && !allSelected;
-  }, [products, selectedIds, allSelected]);
+  const handleSelectOne = (checked: boolean, id: string) => {
+    onSelectIds(checked ? [...selectedIds, id] : selectedIds.filter((selectedId) => selectedId !== id));
+  };
 
-  const handleSelectAll = useCallback(() => {
-    onToggleAll(productIds);
-  }, [onToggleAll, productIds]);
-
-  const handleToggle = useCallback(
-    (id: string) => {
-      const isSelected = selectedIds.includes(id);
-      if (!isSelected && isMaxReached) {
-        // Show feedback that limit is reached
-        return;
-      }
-      onToggle(id);
-    },
-    [onToggle, selectedIds, isMaxReached]
-  );
-
-  if (products.length === 0) {
+  if (loading) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
-        Brak produktów do wyświetlenia
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
       </div>
     );
   }
 
   return (
-    <div className="border rounded-md">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-12">
-              <Checkbox
-                checked={allSelected}
-                onCheckedChange={handleSelectAll}
-                aria-label="Zaznacz wszystkie produkty"
-                ref={(node) => {
-                  if (node) {
-                    (node as any).indeterminate = someSelected;
-                  }
-                }}
-              />
-            </TableHead>
-            <TableHead>Nazwa</TableHead>
-            <TableHead>SKU</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Kategorie</TableHead>
-            <TableHead>Kolekcje</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product) => {
-            const isSelected = selectedIds.includes(product.id);
-            const isDisabled = !isSelected && isMaxReached;
-
-            return (
-              <TableRow
-                key={product.id}
-                className="cursor-pointer hover:bg-muted/50"
-                onClick={(e) => {
-                  // Don't trigger row click if clicking on checkbox
-                  if (
-                    e.target instanceof HTMLElement &&
-                    (e.target.closest('button[role="checkbox"]') ||
-                      e.target.closest('input[type="checkbox"]'))
-                  ) {
-                    return;
-                  }
-                  onRowClick?.(product.id);
-                }}
-              >
-                <TableCell
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
+    <>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-12">
+                <Checkbox
+                  checked={selectedIds.length === products.length}
+                  onCheckedChange={handleSelectAll}
+                  aria-label="Zaznacz wszystkie"
+                />
+              </TableHead>
+              <TableHead>Nazwa</TableHead>
+              <TableHead>SKU</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Kategorie</TableHead>
+              <TableHead>Ostatnia aktualizacja</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {products.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell>
                   <Checkbox
-                    checked={isSelected}
-                    onCheckedChange={() => handleToggle(product.id)}
-                    disabled={isDisabled}
-                    aria-label={`Zaznacz produkt ${product.name}`}
-                    title={
-                      isDisabled
-                        ? `Osiągnięto limit ${maxLimit} produktów`
-                        : undefined
-                    }
+                    checked={selectedIds.includes(product.id)}
+                    onCheckedChange={(checked) => handleSelectOne(checked, product.id)}
+                    aria-label={`Zaznacz ${product.name}`}
                   />
                 </TableCell>
-                <TableCell className="font-medium">{product.name}</TableCell>
-                <TableCell>{product.sku || '-'}</TableCell>
                 <TableCell>
-                  <span
-                    className={
-                      product.status === 'published'
-                        ? 'text-green-600'
-                        : 'text-gray-600'
-                    }
-                  >
-                    {statusLabels[product.status] || product.status}
-                  </span>
+                  <button onClick={() => setPreviewProduct(product)} className="text-left hover:text-primary">
+                    {product.name}
+                  </button>
                 </TableCell>
-                <TableCell>
-                  {product.categories.length > 0
-                    ? product.categories.map((c) => c.name).join(', ')
-                    : '-'}
-                </TableCell>
-                <TableCell>
-                  {product.collections.length > 0
-                    ? product.collections.map((c) => c.name).join(', ')
-                    : '-'}
-                </TableCell>
+                <TableCell>{product.sku}</TableCell>
+                <TableCell>{product.status}</TableCell>
+                <TableCell>{product.categories?.map((c) => c.name).join(", ")}</TableCell>
+                <TableCell>{new Date(product.updated_at).toLocaleString()}</TableCell>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="mt-4">
+        <PaginationControls
+          currentPage={pagination.page}
+          totalPages={Math.ceil(pagination.total / pagination.limit)}
+          onPageChange={onPaginationChange}
+        />
+      </div>
+
+      <ProductPreviewModal product={previewProduct} onClose={() => setPreviewProduct(null)} />
+    </>
   );
 }
