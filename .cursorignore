@@ -14,6 +14,7 @@ build/
 *.log
 
 # Environment variables and sensitive data
+.evn.test
 .env
 .env.*
 !.env.example

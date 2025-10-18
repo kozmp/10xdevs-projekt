@@ -1,0 +1,414 @@
+
+> 10x-astro-starter@0.0.1 test:e2e
+> playwright test
+
+[dotenv@17.2.3] injecting env (3) from .env.test -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+Running 19 tests using 6 workers
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: ⚙️  enable debug logging with { debug: true }
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: ⚙️  write to custom object with { processEnv: myObject }
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: ⚙️  override existing env vars with { override: true }
+
+[1A[2K[1/19] [chromium] › tests\e2e\login.spec.ts:57:3 › Login Flow › should redirect to dashboard after successful login
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: ⚙️  override existing env vars with { override: true }
+
+[1A[2K[2/19] [chromium] › tests\e2e\auth.spec.ts:4:3 › Authentication › should navigate to login page
+[1A[2K[3/19] [chromium] › tests\e2e\login.spec.ts:15:3 › Login Flow › should display login page correctly
+[1A[2K[4/19] [chromium] › tests\e2e\auth.spec.ts:10:3 › Authentication › should show validation errors on empty form submission
+[1A[2K[5/19] [chromium] › tests\e2e\login.spec.ts:27:3 › Login Flow › should show error with invalid credentials
+[1A[2K[6/19] [chromium] › tests\e2e\login.spec.ts:41:3 › Login Flow › should successfully login with valid credentials
+[1A[2K[7/19] [chromium] › tests\e2e\login.spec.ts:71:3 › Login Flow › should navigate to signup page
+[1A[2K[8/19] [chromium] › tests\e2e\login.spec.ts:79:3 › Login Flow › should navigate to forgot password page
+[1A[2K[9/19] [chromium] › tests\e2e\login.spec.ts:87:3 › Login Flow › should clear error message on form resubmission
+[1A[2K[10/19] [chromium] › tests\e2e\navigation.spec.ts:35:3 › Navigation Flow › should navigate from dashboard to products page
+[1A[2K[11/19] [chromium] › tests\e2e\navigation.spec.ts:47:3 › Navigation Flow › should navigate from dashboard to jobs page
+[1A[2K  1) [chromium] › tests\e2e\auth.spec.ts:10:3 › Authentication › should show validation errors on empty form submission 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=Email is required')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=Email is required')[22m
+
+
+      11 |     await page.goto('/login');
+      12 |     await page.click('button[type="submit"]');
+    > 13 |     await expect(page.locator('text=Email is required')).toBeVisible();
+         |                                                          ^
+      14 |     await expect(page.locator('text=Password is required')).toBeVisible();
+      15 |   });
+      16 | });
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\auth.spec.ts:13:58
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-Authentication-should-09d7a-rs-on-empty-form-submission-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-Authentication-should-09d7a-rs-on-empty-form-submission-chromium\error-context.md
+
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[1A[2K[12/19] [chromium] › tests\e2e\navigation.spec.ts:59:3 › Navigation Flow › should navigate from products to dashboard
+[1A[2K  2) [chromium] › tests\e2e\login.spec.ts:41:3 › Login Flow › should successfully login with valid credentials 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      51 |
+      52 |     // Assert
+    > 53 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      54 |     await expect(page).toHaveURL('/');
+      55 |   });
+      56 |
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\login.spec.ts:53:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\login-Login-Flow-should-su-b5977-ogin-with-valid-credentials-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-Login-Flow-should-su-b5977-ogin-with-valid-credentials-chromium\error-context.md
+
+
+[1A[2K  3) [chromium] › tests\e2e\login.spec.ts:57:3 › Login Flow › should redirect to dashboard after successful login 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      64 |
+      65 |     // Assert
+    > 66 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      67 |     const isDashboardLoaded = await dashboardPage.isLoaded();
+      68 |     expect(isDashboardLoaded).toBeTruthy();
+      69 |   });
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\login.spec.ts:66:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\login-Login-Flow-should-re-79594-oard-after-successful-login-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\login-Login-Flow-should-re-79594-oard-after-successful-login-chromium\error-context.md
+
+
+[1A[2K  4) [chromium] › tests\e2e\navigation.spec.ts:35:3 › Navigation Flow › should navigate from dashboard to products page 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-0ea70--dashboard-to-products-page-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-0ea70--dashboard-to-products-page-chromium\error-context.md
+
+
+[1A[2K  5) [chromium] › tests\e2e\navigation.spec.ts:47:3 › Navigation Flow › should navigate from dashboard to jobs page 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-7de38-from-dashboard-to-jobs-page-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-7de38-from-dashboard-to-jobs-page-chromium\error-context.md
+
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+
+[1A[2K[13/19] [chromium] › tests\e2e\navigation.spec.ts:87:3 › Navigation Flow › should complete full navigation cycle: dashboard -> products -> jobs -> dashboard
+[1A[2K[14/19] [chromium] › tests\e2e\navigation.spec.ts:73:3 › Navigation Flow › should navigate from jobs to products
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[1A[2K[15/19] [chromium] › tests\e2e\navigation.spec.ts:111:3 › Navigation Flow › should redirect to login when accessing protected route without auth
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+[1A[2K[16/19] [chromium] › tests\e2e\navigation.spec.ts:122:3 › Navigation Flow › should maintain page state during navigation
+[1A[2K  6) [chromium] › tests\e2e\navigation.spec.ts:59:3 › Navigation Flow › should navigate from products to dashboard 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-62a73--from-products-to-dashboard-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-62a73--from-products-to-dashboard-chromium\error-context.md
+
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+[1A[2K[17/19] [chromium] › tests\e2e\navigation.spec.ts:139:3 › Navigation Flow › should handle browser back button navigation
+[1A[2K  7) [chromium] › tests\e2e\navigation.spec.ts:73:3 › Navigation Flow › should navigate from jobs to products 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-52f76-igate-from-jobs-to-products-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-52f76-igate-from-jobs-to-products-chromium\error-context.md
+
+
+[1A[2K  8) [chromium] › tests\e2e\navigation.spec.ts:87:3 › Navigation Flow › should complete full navigation cycle: dashboard -> products -> jobs -> dashboard 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-57be5-products---jobs---dashboard-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-57be5-products---jobs---dashboard-chromium\error-context.md
+
+
+[1A[2K  9) [chromium] › tests\e2e\auth.spec.ts:4:3 › Authentication › should navigate to login page ──────
+
+    [31mTest timeout of 30000ms exceeded.[39m
+
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('text=Login')[22m
+
+
+      4 |   test('should navigate to login page', async ({ page }) => {
+      5 |     await page.goto('/');
+    > 6 |     await page.click('text=Login');
+        |                ^
+      7 |     await expect(page).toHaveURL('/login');
+      8 |   });
+      9 |
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\auth.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-Authentication-should-navigate-to-login-page-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-Authentication-should-navigate-to-login-page-chromium\error-context.md
+
+
+[1A[2K  10) [chromium] › tests\e2e\navigation.spec.ts:111:3 › Navigation Flow › should redirect to login when accessing protected route without auth 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-48794-rotected-route-without-auth-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-48794-rotected-route-without-auth-chromium\error-context.md
+
+
+[1A[2K  11) [chromium] › tests\e2e\navigation.spec.ts:122:3 › Navigation Flow › should maintain page state during navigation 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-21997-age-state-during-navigation-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-21997-age-state-during-navigation-chromium\error-context.md
+
+
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+
+[1A[2K[18/19] [chromium] › tests\e2e\navigation.spec.ts:169:3 › Navigation Flow › should preserve authentication across page navigation
+[1A[2K[dotenv@17.2.3] injecting env (0) from .env.test -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+
+[1A[2K[19/19] [chromium] › tests\e2e\navigation.spec.ts:153:3 › Navigation Flow › should handle browser forward button navigation
+[1A[2K  12) [chromium] › tests\e2e\navigation.spec.ts:139:3 › Navigation Flow › should handle browser back button navigation 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-331b9-wser-back-button-navigation-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-331b9-wser-back-button-navigation-chromium\error-context.md
+
+
+[1A[2K  13) [chromium] › tests\e2e\navigation.spec.ts:169:3 › Navigation Flow › should preserve authentication across page navigation 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-a5c43-tion-across-page-navigation-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-a5c43-tion-across-page-navigation-chromium\error-context.md
+
+
+[1A[2K  14) [chromium] › tests\e2e\navigation.spec.ts:153:3 › Navigation Flow › should handle browser forward button navigation 
+
+    TimeoutError: page.waitForURL: Timeout 10000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "/" until "load"
+    ============================================================
+
+      30 |
+      31 |     await loginPage.login(email, password);
+    > 32 |     await page.waitForURL('/', { timeout: 10000 });
+         |                ^
+      33 |   });
+      34 |
+      35 |   test('should navigate from dashboard to products page', async ({ page }) => {
+        at C:\projekty\10 devs projekt\10xdevs-projekt\tests\e2e\navigation.spec.ts:32:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\navigation-Navigation-Flow-4af4d-r-forward-button-navigation-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\navigation-Navigation-Flow-4af4d-r-forward-button-navigation-chromium\error-context.md
+
+
+🧹 Starting E2E teardown - cleaning up test data...
+🔌 Connected to Supabase
+✅ Cleaned up product_collections table
+✅ Cleaned up product_categories table
+✅ Cleaned up job_products table
+✅ Deleted all records from collections table
+✅ Cleaned up categories table
+✅ Cleaned up jobs table
+✅ Cleaned up products table
+✨ E2E teardown completed successfully
+[1A[2K  14 failed
+    [chromium] › tests\e2e\auth.spec.ts:4:3 › Authentication › should navigate to login page ───────
+    [chromium] › tests\e2e\auth.spec.ts:10:3 › Authentication › should show validation errors on empty form submission 
+    [chromium] › tests\e2e\login.spec.ts:41:3 › Login Flow › should successfully login with valid credentials 
+    [chromium] › tests\e2e\login.spec.ts:57:3 › Login Flow › should redirect to dashboard after successful login 
+    [chromium] › tests\e2e\navigation.spec.ts:35:3 › Navigation Flow › should navigate from dashboard to products page 
+    [chromium] › tests\e2e\navigation.spec.ts:47:3 › Navigation Flow › should navigate from dashboard to jobs page 
+    [chromium] › tests\e2e\navigation.spec.ts:59:3 › Navigation Flow › should navigate from products to dashboard 
+    [chromium] › tests\e2e\navigation.spec.ts:73:3 › Navigation Flow › should navigate from jobs to products 
+    [chromium] › tests\e2e\navigation.spec.ts:87:3 › Navigation Flow › should complete full navigation cycle: dashboard -> products -> jobs -> dashboard 
+    [chromium] › tests\e2e\navigation.spec.ts:111:3 › Navigation Flow › should redirect to login when accessing protected route without auth 
+    [chromium] › tests\e2e\navigation.spec.ts:122:3 › Navigation Flow › should maintain page state during navigation 
+    [chromium] › tests\e2e\navigation.spec.ts:139:3 › Navigation Flow › should handle browser back button navigation 
+    [chromium] › tests\e2e\navigation.spec.ts:153:3 › Navigation Flow › should handle browser forward button navigation 
+    [chromium] › tests\e2e\navigation.spec.ts:169:3 › Navigation Flow › should preserve authentication across page navigation 
+  5 passed (51.7s)
+
+[36m  Serving HTML report at http://localhost:63086. Press Ctrl+C to quit.[39m

@@ -42,8 +42,9 @@ export function ProductsPage() {
       {selectedIds.length > 0 && (
         <BulkActionsBar
           selectedCount={selectedIds.length}
-          onClearSelection={() => setSelectedIds([])}
-          onGenerateDescriptions={handleGenerateDescriptions}
+          maxLimit={10}
+          onGenerate={handleGenerateDescriptions}
+          onClear={() => setSelectedIds([])}
         />
       )}
 

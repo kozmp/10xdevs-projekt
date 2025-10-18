@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GenerationStyle, GenerationLanguage } from '@/lib/services/product-description-generator.service';
+import type { GenerationStyle, GenerationLanguage } from '@/lib/services/product-description-generator.service';
 
 interface UseGenerateParams {
   ids: string[];
@@ -48,6 +48,12 @@ export function useGenerate({ ids }: UseGenerateParams): UseGenerateReturn {
       setResults([]);
       setSummary(null);
 
+      console.log('Sending request to generate descriptions:', {
+        productIds: ids,
+        style,
+        language,
+      });
+
       const response = await fetch('/api/products/generate-descriptions', {
         method: 'POST',
         headers: {
@@ -62,8 +68,15 @@ export function useGenerate({ ids }: UseGenerateParams): UseGenerateReturn {
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('API error response:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorData
+        });
         throw new Error(errorData.error || 'Failed to generate descriptions');
       }
+      
+      console.log('API response:', response);
 
       const data = await response.json();
       setResults(data.results);

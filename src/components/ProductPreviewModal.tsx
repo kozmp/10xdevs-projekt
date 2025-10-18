@@ -1,74 +1,54 @@
-import { useMemo } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import { useProductDetail } from '@/components/hooks/useProductDetail';
+import { useMemo } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { useProductDetail } from "@/components/hooks/useProductDetail";
 
 interface ProductPreviewModalProps {
   productId: string | null;
   onClose: () => void;
 }
 
-export function ProductPreviewModal({
-  productId,
-  onClose,
-}: ProductPreviewModalProps) {
+export function ProductPreviewModal({ productId, onClose }: ProductPreviewModalProps) {
   const { product, loading, error } = useProductDetail(productId);
 
   const open = productId !== null;
 
   // Sanitize HTML (basic sanitization - in production use DOMPurify)
   const sanitizeHTML = (html: string | null) => {
-    if (!html) return 'Brak danych';
+    if (!html) return "Brak danych";
     // Basic sanitization - remove script tags
-    return html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+    return html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
   };
 
   const formattedDate = useMemo(() => {
-    if (!product?.createdAt) return '-';
-    return new Intl.DateTimeFormat('pl-PL', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
+    if (!product?.createdAt) return "-";
+    return new Intl.DateTimeFormat("pl-PL", {
+      dateStyle: "medium",
+      timeStyle: "short",
     }).format(new Date(product.createdAt));
   }, [product]);
 
   const lastSyncedDate = useMemo(() => {
-    if (!product?.lastSyncedAt) return '-';
-    return new Intl.DateTimeFormat('pl-PL', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
+    if (!product?.lastSyncedAt) return "-";
+    return new Intl.DateTimeFormat("pl-PL", {
+      dateStyle: "medium",
+      timeStyle: "short",
     }).format(new Date(product.lastSyncedAt));
   }, [product]);
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto" showCloseButton>
         <DialogHeader>
-          <DialogTitle>
-            {loading ? 'Ładowanie...' : product?.name || 'Szczegóły produktu'}
-          </DialogTitle>
-          <DialogDescription>
-            {product?.sku && `SKU: ${product.sku}`}
-          </DialogDescription>
+          <DialogTitle>{loading ? "Ładowanie..." : product?.name || "Szczegóły produktu"}</DialogTitle>
+          <DialogDescription>{product?.sku && `SKU: ${product.sku}`}</DialogDescription>
         </DialogHeader>
 
         {loading && (
           <div className="flex items-center justify-center py-8">
             <div className="text-center">
               <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent" />
-              <p className="mt-4 text-muted-foreground">
-                Ładowanie szczegółów produktu...
-              </p>
+              <p className="mt-4 text-muted-foreground">Ładowanie szczegółów produktu...</p>
             </div>
           </div>
         )}
@@ -92,22 +72,12 @@ export function ProductPreviewModal({
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium">Status:</span>
-                <span
-                  className={`text-sm ${
-                    product.status === 'published'
-                      ? 'text-green-600'
-                      : 'text-gray-600'
-                  }`}
-                >
-                  {product.status === 'published' ? 'Opublikowany' : 'Szkic'}
+                <span className={`text-sm ${product.status === "published" ? "text-green-600" : "text-gray-600"}`}>
+                  {product.status === "published" ? "Opublikowany" : "Szkic"}
                 </span>
               </div>
-              <div className="text-sm text-muted-foreground">
-                Utworzono: {formattedDate}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Ostatnia synchronizacja: {lastSyncedDate}
-              </div>
+              <div className="text-sm text-muted-foreground">Utworzono: {formattedDate}</div>
+              <div className="text-sm text-muted-foreground">Ostatnia synchronizacja: {lastSyncedDate}</div>
             </div>
 
             {/* Accordion Sections */}
@@ -140,9 +110,7 @@ export function ProductPreviewModal({
 
               {/* Categories */}
               <AccordionItem value="categories">
-                <AccordionTrigger>
-                  Kategorie ({product.categories.length})
-                </AccordionTrigger>
+                <AccordionTrigger>Kategorie ({product.categories.length})</AccordionTrigger>
                 <AccordionContent>
                   {product.categories.length > 0 ? (
                     <ul className="list-disc list-inside space-y-1">
@@ -153,18 +121,14 @@ export function ProductPreviewModal({
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-sm text-muted-foreground">
-                      Brak kategorii
-                    </p>
+                    <p className="text-sm text-muted-foreground">Brak kategorii</p>
                   )}
                 </AccordionContent>
               </AccordionItem>
 
               {/* Collections */}
               <AccordionItem value="collections">
-                <AccordionTrigger>
-                  Kolekcje ({product.collections.length})
-                </AccordionTrigger>
+                <AccordionTrigger>Kolekcje ({product.collections.length})</AccordionTrigger>
                 <AccordionContent>
                   {product.collections.length > 0 ? (
                     <ul className="list-disc list-inside space-y-1">
@@ -175,9 +139,7 @@ export function ProductPreviewModal({
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-sm text-muted-foreground">
-                      Brak kolekcji
-                    </p>
+                    <p className="text-sm text-muted-foreground">Brak kolekcji</p>
                   )}
                 </AccordionContent>
               </AccordionItem>

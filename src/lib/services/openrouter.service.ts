@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { encrypt, decrypt } from "@/lib/encryption";
+import { encryptApiKey, decryptApiKey } from "@/lib/encryption";
 import {
   OpenRouterConfig,
   Message,
@@ -54,10 +54,6 @@ export class OpenRouterService {
   }
 
   // Private helper methods
-  private async getEncryptedApiKey(): Promise<string> {
-    return await encrypt(this.apiKey);
-  }
-
   private async validateRequest(params: ChatParams): Promise<void> {
     try {
       await chatParamsSchema.parseAsync(params);
@@ -86,6 +82,11 @@ export class OpenRouterService {
   private async handleResponse(response: Response): Promise<ChatResponse> {
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
+      console.error('OpenRouter API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error
+      });
       
       if (response.status === 429) {
         const retryAfter = parseInt(response.headers.get("retry-after") || "0");
@@ -122,5 +123,31 @@ export class OpenRouterService {
 
       return this.retryWithBackoff(fn, attempt + 1);
     }
+  }
+
+  public async chat(params: ChatParams): Promise<ChatResponse> {
+    await this.validateRequest(params);
+
+    const messages = this.formatMessages(params.messages);
+    const requestBody = {
+      messages,
+      model: params.model || this.defaultModel,
+      temperature: params.temperature || 0.7,
+      max_tokens: params.max_tokens || 1000,
+      response_format: this.responseFormat
+    };
+
+    return this.retryWithBackoff(async () => {
+      const response = await fetch(`${this.baseUrl}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      return this.handleResponse(response);
+    });
   }
 }

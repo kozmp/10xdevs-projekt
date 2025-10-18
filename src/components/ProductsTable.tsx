@@ -96,7 +96,7 @@ export function ProductsTable({
         />
       </div>
 
-      <ProductPreviewModal product={previewProduct} onClose={() => setPreviewProduct(null)} />
+      <ProductPreviewModal productId={previewProduct?.id || null} onClose={() => setPreviewProduct(null)} />
     </>
   );
 }

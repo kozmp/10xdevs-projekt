@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:e2e": "cross-env PUBLIC_SUPABASE_URL=https://suxficwccuswjthvbqcs.supabase.co PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1eGZpY3djY3Vzd2p0aHZicWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2MjkxNzQsImV4cCI6MjA3NjIwNTE3NH0.urk0NanZLbq-FTeCqGFJKppu7m-QNGJZWB4GSXBZQG8 astro build",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
@@ -14,9 +15,14 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest --watch",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build:e2e && playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:debug": "playwright test --debug"
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:login": "playwright test login.spec.ts",
+    "test:e2e:nav": "playwright test navigation.spec.ts",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:codegen": "playwright codegen http://localhost:4321"
   },
   "dependencies": {
     "@astrojs/node": "^9.4.3",
@@ -38,7 +44,6 @@
     "astro": "^5.13.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "dotenv": "^17.2.3",
     "lucide-react": "^0.487.0",
     "next-themes": "^0.4.6",
     "node-fetch": "^3.3.2",
@@ -61,6 +66,8 @@
     "@typescript-eslint/parser": "8.28.0",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.2.3",
     "eslint": "9.23.0",
     "eslint-config-prettier": "10.1.1",
     "eslint-import-resolver-typescript": "4.2.5",

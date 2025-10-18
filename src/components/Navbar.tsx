@@ -1,7 +1,12 @@
 import React from 'react';
 import { Button } from './ui/button';
 
-export function Navbar() {
+interface NavbarProps {
+  isAuthenticated?: boolean;
+  userEmail?: string | null;
+}
+
+export function Navbar({ isAuthenticated, userEmail }: NavbarProps) {
   return (
     <nav className="border-b">
       <div className="container mx-auto px-6 py-4">
@@ -29,8 +34,14 @@ export function Navbar() {
             >
               Dodaj sklep
             </a>
+            {userEmail && (
+              <span className="text-sm text-muted-foreground" data-testid="user-email">
+                {userEmail}
+              </span>
+            )}
             <Button
               variant="outline"
+              data-testid="logout-button"
               onClick={() => {
                 fetch('/api/auth/logout', { method: 'POST' })
                   .then(() => window.location.href = '/login');

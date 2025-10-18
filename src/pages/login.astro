@@ -15,7 +15,7 @@ import { Card } from "@/components/ui/card";
           <p class="text-muted-foreground">Enter your credentials to sign in</p>
         </div>
 
-        <form id="login-form" class="space-y-4">
+        <form id="login-form" class="space-y-4" novalidate>
           <div class="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" name="email" type="email" placeholder="your@email.com" required autocomplete="email" />
@@ -61,6 +61,21 @@ import { Card } from "@/components/ui/card";
     errorMessage.classList.add("hidden");
 
     const formData = new FormData(form);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    // Client-side validation
+    if (!email || !email.trim()) {
+      errorMessage.textContent = "Email is required";
+      errorMessage.classList.remove("hidden");
+      return;
+    }
+
+    if (!password || password.length < 8) {
+      errorMessage.textContent = "Password must be at least 8 characters";
+      errorMessage.classList.remove("hidden");
+      return;
+    }
 
     try {
       const response = await fetch("/api/auth/login", {

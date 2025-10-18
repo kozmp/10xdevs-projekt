@@ -64,6 +64,12 @@ export class ProductDescriptionGeneratorService {
   ): Promise<GeneratedDescription> {
     const { style, language } = config;
     
+    console.log('Generating description for product:', {
+      productId: productData.id,
+      style,
+      language
+    });
+    
     const systemPrompt = `
       Jesteś ekspertem w tworzeniu opisów produktów.
       ${this.stylePrompts[style]}

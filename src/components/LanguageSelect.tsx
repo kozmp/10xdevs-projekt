@@ -1,4 +1,4 @@
-import { GenerationLanguage } from "@/lib/services/product-description-generator.service";
+import type { GenerationLanguage } from "@/lib/services/product-description-generator.service";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 interface LanguageSelectProps {

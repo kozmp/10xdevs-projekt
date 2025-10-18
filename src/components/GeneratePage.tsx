@@ -2,7 +2,7 @@ import React from "react";
 import { useGenerate } from "./hooks/useGenerate";
 import { StyleSelectCards } from "./StyleSelectCards";
 import { LanguageSelect } from "./LanguageSelect";
-import { GenerationStyle, GenerationLanguage } from "@/lib/services/product-description-generator.service";
+import type { GenerationStyle, GenerationLanguage } from "@/lib/services/product-description-generator.service";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
 
@@ -17,7 +17,16 @@ export function GeneratePage({ selectedProductIds }: GeneratePageProps) {
   const { generate, isGenerating, progress, results, summary, error } = useGenerate({ ids: selectedProductIds });
 
   const handleGenerate = async () => {
-    await generate(selectedStyle, selectedLanguage);
+    console.log("Starting generation with:", {
+      style: selectedStyle,
+      language: selectedLanguage,
+      productIds: selectedProductIds,
+    });
+    try {
+      await generate(selectedStyle, selectedLanguage);
+    } catch (error) {
+      console.error("Generation error:", error);
+    }
   };
 
   return (
