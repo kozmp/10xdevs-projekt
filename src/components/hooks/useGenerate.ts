@@ -79,8 +79,14 @@ export function useGenerate({ ids }: UseGenerateParams): UseGenerateReturn {
       console.log('API response:', response);
 
       const data = await response.json();
+
+      // Validate response data
+      if (!data.results || !Array.isArray(data.results)) {
+        throw new Error('Invalid response format: missing or invalid results');
+      }
+
       setResults(data.results);
-      setSummary(data.summary);
+      setSummary(data.summary || null);
       setProgress(100);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');

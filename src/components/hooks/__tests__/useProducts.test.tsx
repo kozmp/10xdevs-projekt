@@ -26,7 +26,7 @@ describe("useProducts Hook", () => {
   });
 
   describe("Initialization and Data Fetching", () => {
-    it("should initialize with default values", () => {
+    it("should initialize with default values", async () => {
       const { result } = renderHook(() => useProducts());
 
       expect(result.current.products).toEqual([]);
@@ -37,6 +37,11 @@ describe("useProducts Hook", () => {
         page: 1,
         limit: 10,
         total: 0,
+      });
+
+      // Wait for initial fetch to complete
+      await vi.waitFor(() => {
+        expect(result.current.loading).toBe(false);
       });
     });
 

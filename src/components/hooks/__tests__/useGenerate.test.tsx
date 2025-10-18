@@ -61,19 +61,25 @@ describe("useGenerate Hook", () => {
     it("should prevent concurrent generations", async () => {
       const { result } = renderHook(() => useGenerate({ ids: mockIds }));
 
-      // Start first generation
-      const firstGeneration = result.current.generate(mockStyle, mockLanguage);
+      let firstGeneration: Promise<void>;
 
-      // Try to start second generation
-      await act(async () => {
-        await result.current.generate(mockStyle, mockLanguage);
+      // Start first generation
+      act(() => {
+        firstGeneration = result.current.generate(mockStyle, mockLanguage);
       });
 
-      // Only one fetch should have been called
-      expect(mockFetch).toHaveBeenCalledTimes(1);
+      // Try to start second generation immediately (should be blocked)
+      act(() => {
+        result.current.generate(mockStyle, mockLanguage);
+      });
 
       // Wait for first generation to complete
-      await firstGeneration;
+      await act(async () => {
+        await firstGeneration!;
+      });
+
+      // Only one fetch should have been called (second was blocked)
+      expect(mockFetch).toHaveBeenCalledTimes(1);
     });
 
     it("should send correct request payload", async () => {
@@ -142,7 +148,10 @@ describe("useGenerate Hook", () => {
         await result.current.generate(mockStyle, mockLanguage);
       });
 
-      expect(result.current.error).toBeTruthy();
+      // Hook validates response and sets error on invalid format
+      expect(result.current.error).toBe('Invalid response format: missing or invalid results');
+      expect(result.current.isGenerating).toBe(false);
+      expect(result.current.progress).toBe(0);
     });
   });
 
@@ -175,23 +184,28 @@ describe("useGenerate Hook", () => {
           })
       );
 
+      let generatePromise: Promise<void>;
+
       // Start generation
-      const generatePromise = act(async () => {
-        await result.current.generate(mockStyle, mockLanguage);
+      await act(async () => {
+        generatePromise = result.current.generate(mockStyle, mockLanguage);
+        // Wait a tick for the state to update
+        await Promise.resolve();
       });
 
-      // Check initial state
+      // Check generating state
       expect(result.current.isGenerating).toBe(true);
       expect(result.current.progress).toBe(0);
 
       // Resolve the fetch
-      resolveProgress!({
-        ok: true,
-        json: () => Promise.resolve({ results: mockResults, summary: mockSummary }),
+      await act(async () => {
+        resolveProgress!({
+          ok: true,
+          json: () => Promise.resolve({ results: mockResults, summary: mockSummary }),
+        });
+        // Wait for generation to complete
+        await generatePromise!;
       });
-
-      // Wait for generation to complete
-      await generatePromise;
 
       // Check final state
       expect(result.current.isGenerating).toBe(false);

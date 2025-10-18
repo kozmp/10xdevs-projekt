@@ -1,30 +1,30 @@
 import { useState, useEffect } from 'react';
-import type { ProductDetailDTO } from '@/types';
+import type { Product } from '@/components/modals/ProductPreviewModal/types';
 
 interface UseProductDetailReturn {
-  product?: ProductDetailDTO;
+  product: Product | null;
   loading: boolean;
-  error?: Error;
+  error: Error | null;
 }
 
 export function useProductDetail(
   productId: string | null
 ): UseProductDetailReturn {
-  const [product, setProduct] = useState<ProductDetailDTO>();
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (!productId) {
-      setProduct(undefined);
+      setProduct(null);
       setLoading(false);
-      setError(undefined);
+      setError(null);
       return;
     }
 
     const fetchProduct = async () => {
       setLoading(true);
-      setError(undefined);
+      setError(null);
 
       try {
         const response = await fetch(`/api/products/${productId}`);
@@ -33,7 +33,7 @@ export function useProductDetail(
           throw new Error(`Failed to fetch product: ${response.statusText}`);
         }
 
-        const data: ProductDetailDTO = await response.json();
+        const data = await response.json();
         setProduct(data);
       } catch (err) {
         setError(
