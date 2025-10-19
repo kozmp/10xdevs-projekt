@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
-import { useDashboardData } from '@/components/hooks/useDashboardData';
-import { StatusCard } from '@/components/StatusCard';
-import { ProductsCountCard } from '@/components/ProductsCountCard';
-import { RecentJobsTable } from '@/components/RecentJobsTable';
-import { ApiKeyModal } from '@/components/ApiKeyModal';
-import { Toaster } from '@/components/ui/sonner';
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { useDashboardData } from "@/components/hooks/useDashboardData";
+import { StatusCard } from "@/components/StatusCard";
+import { ProductsCountCard } from "@/components/ProductsCountCard";
+import { RecentJobsTable } from "@/components/RecentJobsTable";
+import { ApiKeyModal } from "@/components/ApiKeyModal";
+import { Toaster } from "@/components/ui/sonner";
 
 export function DashboardPage() {
   const { data, loading, error, refetch } = useDashboardData();
@@ -15,8 +15,8 @@ export function DashboardPage() {
   useEffect(() => {
     if (data && !data.shop.shopifyDomain) {
       setIsModalOpen(true);
-      toast.info('Skonfiguruj klucz API', {
-        description: 'Aby korzystać z aplikacji, musisz wprowadzić klucz API Shopify',
+      toast.info("Skonfiguruj klucz API", {
+        description: "Aby korzystać z aplikacji, musisz wprowadzić klucz API Shopify",
       });
     }
   }, [data]);
@@ -24,7 +24,7 @@ export function DashboardPage() {
   // Show toast on error
   useEffect(() => {
     if (error) {
-      toast.error('Błąd podczas ładowania danych', {
+      toast.error("Błąd podczas ładowania danych", {
         description: error.message,
       });
     }
@@ -53,9 +53,7 @@ export function DashboardPage() {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center max-w-md">
             <div className="text-red-500 text-5xl mb-4">⚠️</div>
-            <h2 className="text-xl font-semibold mb-2">
-              Wystąpił błąd podczas ładowania danych
-            </h2>
+            <h2 className="text-xl font-semibold mb-2">Wystąpił błąd podczas ładowania danych</h2>
             <p className="text-muted-foreground mb-4">{error.message}</p>
             <button
               onClick={refetch}
@@ -98,10 +96,7 @@ export function DashboardPage() {
 
       {/* Grid with cards */}
       <section className="grid gap-6 md:grid-cols-2 mb-6">
-        <StatusCard
-          status={hasShop}
-          shopName={data.shop.shopifyDomain || undefined}
-        />
+        <StatusCard status={hasShop} shopName={data.shop.shopifyDomain || undefined} />
         <ProductsCountCard count={data.count} />
       </section>
 
@@ -111,11 +106,7 @@ export function DashboardPage() {
       </section>
 
       {/* API Key Modal */}
-      <ApiKeyModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSuccess={refetch}
-      />
+      <ApiKeyModal open={isModalOpen} onClose={() => setIsModalOpen(false)} onSuccess={refetch} />
 
       {/* Toast notifications */}
       <Toaster />

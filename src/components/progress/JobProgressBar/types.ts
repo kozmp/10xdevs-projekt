@@ -1,4 +1,4 @@
-export type JobStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
+export type JobStatus = "pending" | "processing" | "completed" | "failed" | "cancelled";
 
 export interface JobProgressBarProps {
   progress: number;

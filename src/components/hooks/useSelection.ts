@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from "react";
 
 interface UseSelectionReturn<T> {
   selected: T[];
@@ -11,9 +11,7 @@ interface UseSelectionReturn<T> {
   maxLimit: number;
 }
 
-export function useSelection<T = string>(
-  maxLimit: number = 50
-): UseSelectionReturn<T> {
+export function useSelection<T = string>(maxLimit = 50): UseSelectionReturn<T> {
   const [selected, setSelected] = useState<T[]>([]);
 
   const isSelected = useCallback(
@@ -67,10 +65,7 @@ export function useSelection<T = string>(
     setSelected([]);
   }, []);
 
-  const isMaxReached = useMemo(
-    () => selected.length >= maxLimit,
-    [selected.length, maxLimit]
-  );
+  const isMaxReached = useMemo(() => selected.length >= maxLimit, [selected.length, maxLimit]);
 
   return {
     selected,

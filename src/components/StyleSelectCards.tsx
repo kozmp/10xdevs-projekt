@@ -8,11 +8,11 @@ interface StyleSelectCardsProps {
   onSelect: (style: GenerationStyle) => void;
 }
 
-const styles: Array<{
+const styles: {
   id: GenerationStyle;
   name: string;
   description: string;
-}> = [
+}[] = [
   {
     id: "professional",
     name: "Profesjonalny",

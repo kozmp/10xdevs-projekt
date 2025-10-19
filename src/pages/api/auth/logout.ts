@@ -1,4 +1,4 @@
-import type { APIRoute } from 'astro';
+import type { APIRoute } from "astro";
 
 export const prerender = false;
 
@@ -13,29 +13,29 @@ export const POST: APIRoute = async ({ locals }) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
     }
 
     return new Response(
       JSON.stringify({
-        message: 'Logout successful',
+        message: "Logout successful",
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
   } catch (err) {
-    console.error('Logout error:', err);
+    console.error("Logout error:", err);
     return new Response(
       JSON.stringify({
-        error: 'Internal server error',
+        error: "Internal server error",
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
   }

@@ -1,23 +1,17 @@
-import { useId } from 'react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import type { ProductStatus } from '@/types';
+import { useId } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import type { ProductStatus } from "@/types";
 
 interface FilterDropdownProps {
-  value: ProductStatus | 'all';
-  onChange: (value: ProductStatus | 'all') => void;
+  value: ProductStatus | "all";
+  onChange: (value: ProductStatus | "all") => void;
 }
 
-const statusOptions: { value: ProductStatus | 'all'; label: string }[] = [
-  { value: 'all', label: 'Wszystkie' },
-  { value: 'published', label: 'Opublikowane' },
-  { value: 'draft', label: 'Szkice' },
+const statusOptions: { value: ProductStatus | "all"; label: string }[] = [
+  { value: "all", label: "Wszystkie" },
+  { value: "published", label: "Opublikowane" },
+  { value: "draft", label: "Szkice" },
 ];
 
 export function FilterDropdown({ value, onChange }: FilterDropdownProps) {

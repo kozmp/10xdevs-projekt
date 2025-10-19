@@ -1,5 +1,5 @@
-export type JobStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
-export type JobStatusValue = JobStatus | 'all';
+export type JobStatus = "pending" | "processing" | "completed" | "failed" | "cancelled";
+export type JobStatusValue = JobStatus | "all";
 
 export interface StatusOption {
   value: JobStatusValue;

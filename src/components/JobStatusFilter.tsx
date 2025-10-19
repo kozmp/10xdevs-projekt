@@ -1,26 +1,20 @@
-import { useId } from 'react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import type { JobStatus } from '@/types';
+import { useId } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import type { JobStatus } from "@/types";
 
 interface JobStatusFilterProps {
-  value: JobStatus | 'all';
-  onChange: (value: JobStatus | 'all') => void;
+  value: JobStatus | "all";
+  onChange: (value: JobStatus | "all") => void;
 }
 
-const statusOptions: { value: JobStatus | 'all'; label: string }[] = [
-  { value: 'all', label: 'Wszystkie' },
-  { value: 'pending', label: 'Oczekujące' },
-  { value: 'processing', label: 'W trakcie' },
-  { value: 'completed', label: 'Zakończone' },
-  { value: 'failed', label: 'Błąd' },
-  { value: 'cancelled', label: 'Anulowane' },
+const statusOptions: { value: JobStatus | "all"; label: string }[] = [
+  { value: "all", label: "Wszystkie" },
+  { value: "pending", label: "Oczekujące" },
+  { value: "processing", label: "W trakcie" },
+  { value: "completed", label: "Zakończone" },
+  { value: "failed", label: "Błąd" },
+  { value: "cancelled", label: "Anulowane" },
 ];
 
 export function JobStatusFilter({ value, onChange }: JobStatusFilterProps) {

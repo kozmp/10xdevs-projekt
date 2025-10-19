@@ -1,8 +1,8 @@
-import { OpenRouterService } from './openrouter.service';
-import { OpenRouterConfig } from './openrouter.types';
+import { OpenRouterService } from "./openrouter.service";
+import { OpenRouterConfig } from "./openrouter.types";
 
-export type GenerationStyle = 'professional' | 'casual' | 'sales-focused';
-export type GenerationLanguage = 'pl' | 'en';
+export type GenerationStyle = "professional" | "casual" | "sales-focused";
+export type GenerationLanguage = "pl" | "en";
 
 export interface GenerationConfig {
   style: GenerationStyle;
@@ -18,33 +18,30 @@ export interface GeneratedDescription {
 export class ProductDescriptionGeneratorService {
   private openRouter: OpenRouterService;
   private readonly stylePrompts: Record<GenerationStyle, string> = {
-    professional: 'Używaj profesjonalnego, technicznego języka. Skup się na specyfikacji i szczegółach technicznych.',
-    casual: 'Używaj przyjaznego, konwersacyjnego tonu. Pisz tak, jakbyś rozmawiał z przyjacielem.',
-    'sales-focused': 'Podkreślaj korzyści i wartość produktu. Używaj języka nakierowanego na sprzedaż i przekonywanie.'
+    professional: "Używaj profesjonalnego, technicznego języka. Skup się na specyfikacji i szczegółach technicznych.",
+    casual: "Używaj przyjaznego, konwersacyjnego tonu. Pisz tak, jakbyś rozmawiał z przyjacielem.",
+    "sales-focused": "Podkreślaj korzyści i wartość produktu. Używaj języka nakierowanego na sprzedaż i przekonywanie.",
   };
 
   private readonly languageInstructions: Record<GenerationLanguage, string> = {
-    pl: 'Generuj opis w języku polskim.',
-    en: 'Generate description in English.'
+    pl: "Generuj opis w języku polskim.",
+    en: "Generate description in English.",
   };
 
   constructor(config: OpenRouterConfig) {
     this.openRouter = new OpenRouterService({
       ...config,
-      defaultModel: 'openai/gpt-4o-mini',
+      defaultModel: "openai/gpt-4o-mini",
       maxRetries: 3,
-      timeout: 60000
+      timeout: 60000,
     });
   }
 
-  private async generateWithFallback(
-    productData: any,
-    config: GenerationConfig
-  ): Promise<GeneratedDescription> {
+  private async generateWithFallback(productData: any, config: GenerationConfig): Promise<GeneratedDescription> {
     try {
       return await this.generateUsingOpenRouter(productData, config);
     } catch (error) {
-      console.error('OpenRouter generation failed:', error);
+      console.error("OpenRouter generation failed:", error);
       return this.generateFallbackDescription(productData);
     }
   }
@@ -54,22 +51,19 @@ export class ProductDescriptionGeneratorService {
     return {
       shortDescription: `${productData.name} - wysokiej jakości produkt`,
       longDescription: `${productData.name} to produkt wysokiej jakości, który spełni Twoje oczekiwania.`,
-      metaDescription: `Odkryj ${productData.name} - produkt, który zmieni Twoje życie. Sprawdź już teraz!`
+      metaDescription: `Odkryj ${productData.name} - produkt, który zmieni Twoje życie. Sprawdź już teraz!`,
     };
   }
 
-  private async generateUsingOpenRouter(
-    productData: any,
-    config: GenerationConfig
-  ): Promise<GeneratedDescription> {
+  private async generateUsingOpenRouter(productData: any, config: GenerationConfig): Promise<GeneratedDescription> {
     const { style, language } = config;
-    
-    console.log('Generating description for product:', {
+
+    console.log("Generating description for product:", {
       productId: productData.id,
       style,
-      language
+      language,
     });
-    
+
     const systemPrompt = `
       Jesteś ekspertem w tworzeniu opisów produktów.
       ${this.stylePrompts[style]}
@@ -93,9 +87,9 @@ export class ProductDescriptionGeneratorService {
     const productContext = `
       Nazwa: ${productData.name}
       SKU: ${productData.sku}
-      ${productData.metadata ? `Metadane: ${JSON.stringify(productData.metadata)}` : ''}
-      ${productData.categories?.length ? `Kategorie: ${productData.categories.map(c => c.name).join(', ')}` : ''}
-      ${productData.collections?.length ? `Kolekcje: ${productData.collections.map(c => c.name).join(', ')}` : ''}
+      ${productData.metadata ? `Metadane: ${JSON.stringify(productData.metadata)}` : ""}
+      ${productData.categories?.length ? `Kategorie: ${productData.categories.map((c) => c.name).join(", ")}` : ""}
+      ${productData.collections?.length ? `Kolekcje: ${productData.collections.map((c) => c.name).join(", ")}` : ""}
     `.trim();
 
     this.openRouter.setSystemMessage(systemPrompt);
@@ -103,37 +97,37 @@ export class ProductDescriptionGeneratorService {
     const response = await this.openRouter.chat({
       messages: [
         {
-          role: 'user',
-          content: productContext
-        }
-      ]
+          role: "user",
+          content: productContext,
+        },
+      ],
     });
 
     const content = response.choices[0].message.content;
-    const parts = content.split('\n');
+    const parts = content.split("\n");
 
-    let shortDescription = '';
-    let longDescription = '';
-    let metaDescription = '';
+    let shortDescription = "";
+    let longDescription = "";
+    let metaDescription = "";
 
-    let currentSection = '';
+    let currentSection = "";
     for (const part of parts) {
-      if (part.startsWith('SHORT:')) {
-        currentSection = 'short';
-      } else if (part.startsWith('LONG:')) {
-        currentSection = 'long';
-      } else if (part.startsWith('META:')) {
-        currentSection = 'meta';
+      if (part.startsWith("SHORT:")) {
+        currentSection = "short";
+      } else if (part.startsWith("LONG:")) {
+        currentSection = "long";
+      } else if (part.startsWith("META:")) {
+        currentSection = "meta";
       } else {
         switch (currentSection) {
-          case 'short':
-            shortDescription += part + '\n';
+          case "short":
+            shortDescription += part + "\n";
             break;
-          case 'long':
-            longDescription += part + '\n';
+          case "long":
+            longDescription += part + "\n";
             break;
-          case 'meta':
-            metaDescription += part + '\n';
+          case "meta":
+            metaDescription += part + "\n";
             break;
         }
       }
@@ -142,14 +136,11 @@ export class ProductDescriptionGeneratorService {
     return {
       shortDescription: shortDescription.trim(),
       longDescription: longDescription.trim(),
-      metaDescription: metaDescription.trim()
+      metaDescription: metaDescription.trim(),
     };
   }
 
-  public async generateDescription(
-    productData: any,
-    config: GenerationConfig
-  ): Promise<GeneratedDescription> {
+  public async generateDescription(productData: any, config: GenerationConfig): Promise<GeneratedDescription> {
     return this.generateWithFallback(productData, config);
   }
 }

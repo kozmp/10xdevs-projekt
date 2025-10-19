@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useId } from 'react';
-import type { UseSearchInputReturn } from './types';
+import { useState, useEffect, useCallback, useId } from "react";
+import type { UseSearchInputReturn } from "./types";
 
 export function useSearchInput(
   value: string,
@@ -37,8 +37,8 @@ export function useSearchInput(
   );
 
   const handleClear = useCallback(() => {
-    setLocalValue('');
-    onChange('');
+    setLocalValue("");
+    onChange("");
   }, [onChange]);
 
   const characterCount = `${localValue.length}/${maxLength} znaków`;

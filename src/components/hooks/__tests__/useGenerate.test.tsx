@@ -149,7 +149,7 @@ describe("useGenerate Hook", () => {
       });
 
       // Hook validates response and sets error on invalid format
-      expect(result.current.error).toBe('Invalid response format: missing or invalid results');
+      expect(result.current.error).toBe("Invalid response format: missing or invalid results");
       expect(result.current.isGenerating).toBe(false);
       expect(result.current.progress).toBe(0);
     });

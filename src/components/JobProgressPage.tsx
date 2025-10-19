@@ -1,10 +1,10 @@
-import { useMemo, useState, useCallback } from 'react';
-import { toast } from 'sonner';
-import { useJobProgress } from '@/components/hooks/useJobProgress';
-import { JobProgressBar } from '@/components/JobProgressBar';
-import { JobProductsList } from '@/components/JobProductsList';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { useMemo, useState, useCallback } from "react";
+import { toast } from "sonner";
+import { useJobProgress } from "@/components/hooks/useJobProgress";
+import { JobProgressBar } from "@/components/JobProgressBar";
+import { JobProductsList } from "@/components/JobProductsList";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,8 +12,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Toaster } from '@/components/ui/sonner';
+} from "@/components/ui/dialog";
+import { Toaster } from "@/components/ui/sonner";
 
 interface JobProgressPageProps {
   jobId: string;
@@ -25,7 +25,7 @@ export function JobProgressPage({ jobId }: JobProgressPageProps) {
 
   const completedProducts = useMemo(() => {
     if (!products) return 0;
-    return products.filter((p) => p.status === 'completed').length;
+    return products.filter((p) => p.status === "completed").length;
   }, [products]);
 
   const totalCost = useMemo(() => {
@@ -34,10 +34,10 @@ export function JobProgressPage({ jobId }: JobProgressPageProps) {
   }, [products]);
 
   const formattedDate = useMemo(() => {
-    if (!job?.createdAt) return '-';
-    return new Intl.DateTimeFormat('pl-PL', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
+    if (!job?.createdAt) return "-";
+    return new Intl.DateTimeFormat("pl-PL", {
+      dateStyle: "medium",
+      timeStyle: "short",
     }).format(new Date(job.createdAt));
   }, [job]);
 
@@ -48,14 +48,14 @@ export function JobProgressPage({ jobId }: JobProgressPageProps) {
   const handleConfirmCancel = useCallback(async () => {
     const success = await cancel();
     if (success) {
-      toast.success('Zlecenie zostało anulowane');
+      toast.success("Zlecenie zostało anulowane");
     } else {
-      toast.error('Nie udało się anulować zlecenia');
+      toast.error("Nie udało się anulować zlecenia");
     }
     setShowCancelModal(false);
   }, [cancel]);
 
-  const canCancel = job?.status === 'processing';
+  const canCancel = job?.status === "processing";
 
   // Loading state
   if (loading && !job) {
@@ -80,13 +80,9 @@ export function JobProgressPage({ jobId }: JobProgressPageProps) {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center max-w-md">
             <div className="text-red-500 text-5xl mb-4">⚠️</div>
-            <h2 className="text-xl font-semibold mb-2">
-              Wystąpił błąd podczas ładowania
-            </h2>
+            <h2 className="text-xl font-semibold mb-2">Wystąpił błąd podczas ładowania</h2>
             <p className="text-muted-foreground mb-4">{error.message}</p>
-            <Button onClick={() => (window.location.href = '/jobs')}>
-              Wróć do listy zleceń
-            </Button>
+            <Button onClick={() => (window.location.href = "/jobs")}>Wróć do listy zleceń</Button>
           </div>
         </div>
         <Toaster />
@@ -117,10 +113,7 @@ export function JobProgressPage({ jobId }: JobProgressPageProps) {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => (window.location.href = '/jobs')}
-          >
+          <Button variant="outline" onClick={() => (window.location.href = "/jobs")}>
             Wróć do listy
           </Button>
           {canCancel && (
@@ -163,15 +156,11 @@ export function JobProgressPage({ jobId }: JobProgressPageProps) {
               </div>
               <div>
                 <div className="text-sm text-muted-foreground">Tryb publikacji</div>
-                <div className="font-medium">
-                  {job.publicationMode === 'draft' ? 'Szkic' : 'Opublikuj'}
-                </div>
+                <div className="font-medium">{job.publicationMode === "draft" ? "Szkic" : "Opublikuj"}</div>
               </div>
               <div>
                 <div className="text-sm text-muted-foreground">Szacowany koszt</div>
-                <div className="font-medium">
-                  ${job.totalCostEstimate?.toFixed(2) || '0.00'}
-                </div>
+                <div className="font-medium">${job.totalCostEstimate?.toFixed(2) || "0.00"}</div>
               </div>
               <div>
                 <div className="text-sm text-muted-foreground">Rzeczywisty koszt</div>
@@ -195,15 +184,11 @@ export function JobProgressPage({ jobId }: JobProgressPageProps) {
           <DialogHeader>
             <DialogTitle>Anuluj zlecenie</DialogTitle>
             <DialogDescription>
-              Czy na pewno chcesz anulować to zlecenie? Ta operacja nie może być
-              cofnięta.
+              Czy na pewno chcesz anulować to zlecenie? Ta operacja nie może być cofnięta.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowCancelModal(false)}
-            >
+            <Button variant="outline" onClick={() => setShowCancelModal(false)}>
               Nie, kontynuuj
             </Button>
             <Button variant="destructive" onClick={handleConfirmCancel}>

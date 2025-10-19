@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from 'react';
-import { BUTTON_ARIA_LABELS, COLORS } from './constants';
-import type { UseBulkActionsBarReturn } from './types';
+import { useCallback, useMemo } from "react";
+import { BUTTON_ARIA_LABELS, COLORS } from "./constants";
+import type { UseBulkActionsBarReturn } from "./types";
 
 export function useBulkActionsBar(
   selectedCount: number,
@@ -21,7 +21,7 @@ export function useBulkActionsBar(
   }, [isMaxReached]);
 
   const generateButtonLabel = useMemo(() => {
-    return BUTTON_ARIA_LABELS.GENERATE.replace('{count}', String(selectedCount));
+    return BUTTON_ARIA_LABELS.GENERATE.replace("{count}", String(selectedCount));
   }, [selectedCount]);
 
   const shouldRender = selectedCount > 0;

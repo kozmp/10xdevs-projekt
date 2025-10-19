@@ -1,5 +1,5 @@
-import { useState, useCallback, useMemo } from 'react';
-import type { Product, UseProductsTableReturn } from './types';
+import { useState, useCallback, useMemo } from "react";
+import type { Product, UseProductsTableReturn } from "./types";
 
 export function useProductsTable(
   products: Product[],
@@ -17,11 +17,7 @@ export function useProductsTable(
 
   const handleSelectOne = useCallback(
     (checked: boolean, id: string) => {
-      onSelectIds(
-        checked
-          ? [...selectedIds, id]
-          : selectedIds.filter((selectedId) => selectedId !== id)
-      );
+      onSelectIds(checked ? [...selectedIds, id] : selectedIds.filter((selectedId) => selectedId !== id));
     },
     [selectedIds, onSelectIds]
   );
@@ -31,10 +27,7 @@ export function useProductsTable(
     [selectedIds, products]
   );
 
-  const isSelected = useCallback(
-    (id: string) => selectedIds.includes(id),
-    [selectedIds]
-  );
+  const isSelected = useCallback((id: string) => selectedIds.includes(id), [selectedIds]);
 
   return {
     handleSelectAll,

@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class JobsPage {
   readonly page: Page;
@@ -12,13 +12,15 @@ export class JobsPage {
     this.page = page;
     this.pageTitle = page.locator('h1:has-text("Historia zleceń")');
     this.refreshButton = page.locator('button:has-text("Odśwież")');
-    this.statusFilter = page.locator('[role="combobox"]').or(page.locator('select'));
-    this.jobsTable = page.locator('table');
-    this.pagination = page.locator('nav').or(page.locator('div:has(button:has-text("Previous"), button:has-text("Next"))'));
+    this.statusFilter = page.locator('[role="combobox"]').or(page.locator("select"));
+    this.jobsTable = page.locator("table");
+    this.pagination = page
+      .locator("nav")
+      .or(page.locator('div:has(button:has-text("Previous"), button:has-text("Next"))'));
   }
 
   async goto() {
-    await this.page.goto('/jobs');
+    await this.page.goto("/jobs");
   }
 
   async isLoaded(): Promise<boolean> {
@@ -30,7 +32,7 @@ export class JobsPage {
   }
 
   async clickJobRow(index: number) {
-    const row = this.jobsTable.locator('tbody tr').nth(index);
+    const row = this.jobsTable.locator("tbody tr").nth(index);
     await row.click();
   }
 }

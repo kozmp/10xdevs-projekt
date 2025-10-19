@@ -6,10 +6,10 @@ interface LanguageSelectProps {
   onSelect: (language: GenerationLanguage) => void;
 }
 
-const languages: Array<{
+const languages: {
   id: GenerationLanguage;
   name: string;
-}> = [
+}[] = [
   { id: "pl", name: "Polski" },
   { id: "en", name: "English" },
 ];

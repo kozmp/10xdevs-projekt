@@ -1,4 +1,4 @@
-import type { JobStatus } from '@/types';
+import type { JobStatus } from "@/types";
 
 export interface JobProgressPageProps {
   jobId: string;
@@ -10,14 +10,14 @@ export interface Job {
   progress: number;
   style: string;
   language: string;
-  publicationMode: 'draft' | 'publish';
+  publicationMode: "draft" | "publish";
   createdAt: string;
   totalCostEstimate: number | null;
 }
 
 export interface Product {
   id: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   cost: number | null;
 }
 

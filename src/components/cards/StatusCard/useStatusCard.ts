@@ -1,16 +1,8 @@
-import { useCallback, useMemo } from 'react';
-import {
-  CARD_TEXTS,
-  STATUS_COLORS,
-  STATUS_ARIA_LABELS,
-} from './constants';
-import type { UseStatusCardReturn } from './types';
+import { useCallback, useMemo } from "react";
+import { CARD_TEXTS, STATUS_COLORS, STATUS_ARIA_LABELS } from "./constants";
+import type { UseStatusCardReturn } from "./types";
 
-export function useStatusCard(
-  status: boolean,
-  shopName?: string,
-  onStatusClick?: () => void
-): UseStatusCardReturn {
+export function useStatusCard(status: boolean, shopName?: string, onStatusClick?: () => void): UseStatusCardReturn {
   const getStatusColor = useCallback(() => {
     return status ? STATUS_COLORS.ACTIVE : STATUS_COLORS.ERROR;
   }, [status]);
@@ -25,7 +17,7 @@ export function useStatusCard(
 
   const getDescription = useCallback(() => {
     if (shopName) {
-      return CARD_TEXTS.DESCRIPTION_WITH_SHOP.replace('{shopName}', shopName);
+      return CARD_TEXTS.DESCRIPTION_WITH_SHOP.replace("{shopName}", shopName);
     }
     return CARD_TEXTS.DESCRIPTION_DEFAULT;
   }, [shopName]);

@@ -1,48 +1,35 @@
-import { useMemo, useCallback } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import type { JobListDTO } from '@/types';
+import { useMemo, useCallback } from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { JobListDTO } from "@/types";
 
 interface RecentJobsTableProps {
   jobs: JobListDTO[];
 }
 
 const statusLabels: Record<string, string> = {
-  pending: 'Oczekujący',
-  processing: 'W trakcie',
-  completed: 'Zakończony',
-  failed: 'Błąd',
-  cancelled: 'Anulowany',
+  pending: "Oczekujący",
+  processing: "W trakcie",
+  completed: "Zakończony",
+  failed: "Błąd",
+  cancelled: "Anulowany",
 };
 
 const statusColors: Record<string, string> = {
-  pending: 'text-yellow-600',
-  processing: 'text-blue-600',
-  completed: 'text-green-600',
-  failed: 'text-red-600',
-  cancelled: 'text-gray-600',
+  pending: "text-yellow-600",
+  processing: "text-blue-600",
+  completed: "text-green-600",
+  failed: "text-red-600",
+  cancelled: "text-gray-600",
 };
 
 export function RecentJobsTable({ jobs }: RecentJobsTableProps) {
   const formatDate = useCallback((dateString: string | null) => {
-    if (!dateString) return '-';
+    if (!dateString) return "-";
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('pl-PL', {
-      dateStyle: 'short',
-      timeStyle: 'short',
+    return new Intl.DateTimeFormat("pl-PL", {
+      dateStyle: "short",
+      timeStyle: "short",
     }).format(date);
   }, []);
 
@@ -60,7 +47,7 @@ export function RecentJobsTable({ jobs }: RecentJobsTableProps) {
         >
           <TableCell className="font-medium">{job.jobId.slice(0, 8)}</TableCell>
           <TableCell>
-            <span className={statusColors[job.status] || 'text-gray-600'}>
+            <span className={statusColors[job.status] || "text-gray-600"}>
               {statusLabels[job.status] || job.status}
             </span>
           </TableCell>

@@ -1,6 +1,6 @@
-import { useId, useMemo } from 'react';
-import { FILTER_OPTIONS } from './constants';
-import type { FilterValue, UseFilterDropdownReturn } from './types';
+import { useId, useMemo } from "react";
+import { FILTER_OPTIONS } from "./constants";
+import type { FilterValue, UseFilterDropdownReturn } from "./types";
 
 export function useFilterDropdown(value: FilterValue): UseFilterDropdownReturn {
   const selectId = useId();
@@ -11,7 +11,7 @@ export function useFilterDropdown(value: FilterValue): UseFilterDropdownReturn {
 
   const getOptionLabel = useMemo(() => {
     return (value: FilterValue) => {
-      return FILTER_OPTIONS.find((option) => option.value === value)?.label || '';
+      return FILTER_OPTIONS.find((option) => option.value === value)?.label || "";
     };
   }, []);
 

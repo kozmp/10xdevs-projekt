@@ -1,6 +1,6 @@
-import type { APIRoute } from 'astro';
-import { signupSchema } from '@/lib/schemas/auth';
-import { createSupabaseServerInstance } from '@/db/supabase.client';
+import type { APIRoute } from "astro";
+import { signupSchema } from "@/lib/schemas/auth";
+import { createSupabaseServerInstance } from "@/db/supabase.client";
 
 export const prerender = false;
 
@@ -24,12 +24,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     // 4. Obsługa błędów rejestracji
     if (error) {
-      console.error('Signup error:', error);
+      console.error("Signup error:", error);
 
       // Mapowanie błędów Supabase na przyjazne dla użytkownika komunikaty
-      const userMessage = error.message === 'User already registered'
-        ? 'Użytkownik o tym adresie email już istnieje'
-        : error.message;
+      const userMessage =
+        error.message === "User already registered" ? "Użytkownik o tym adresie email już istnieje" : error.message;
 
       return new Response(
         JSON.stringify({
@@ -37,7 +36,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
     }
@@ -47,15 +46,15 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       JSON.stringify({
         user: data.user,
         requiresEmailVerification: true,
-        message: 'Sprawdź swoją skrzynkę email, aby potwierdzić rejestrację.',
+        message: "Sprawdź swoją skrzynkę email, aby potwierdzić rejestrację.",
       }),
       {
         status: 201,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
   } catch (err) {
-    console.error('Signup processing error:', err);
+    console.error("Signup processing error:", err);
 
     // Obsługa błędów walidacji
     if (err instanceof Error) {
@@ -65,7 +64,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         }),
         {
           status: 400,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
     }
@@ -73,11 +72,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     // Nieznany błąd
     return new Response(
       JSON.stringify({
-        error: 'Wystąpił błąd podczas rejestracji. Spróbuj ponownie później.',
+        error: "Wystąpił błąd podczas rejestracji. Spróbuj ponownie później.",
       }),
       {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
   }

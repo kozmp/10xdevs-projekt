@@ -1,9 +1,5 @@
-import { useState, useEffect } from 'react';
-import type {
-  ShopResponseDTO,
-  ProductSummaryDTO,
-  JobListDTO,
-} from '@/types';
+import { useState, useEffect } from "react";
+import type { ShopResponseDTO, ProductSummaryDTO, JobListDTO } from "@/types";
 
 interface DashboardData {
   shop: ShopResponseDTO;
@@ -29,24 +25,22 @@ export function useDashboardData(): UseDashboardDataReturn {
 
     try {
       // Fetch shop data
-      const shopResponse = await fetch('/api/shops');
+      const shopResponse = await fetch("/api/shops");
       if (!shopResponse.ok) {
         throw new Error(`Failed to fetch shop: ${shopResponse.statusText}`);
       }
       const shop: ShopResponseDTO = await shopResponse.json();
 
       // Fetch products count (limit=1 to get meta with minimal data)
-      const productsResponse = await fetch('/api/products?page=1&limit=1');
+      const productsResponse = await fetch("/api/products?page=1&limit=1");
       if (!productsResponse.ok) {
-        throw new Error(
-          `Failed to fetch products: ${productsResponse.statusText}`
-        );
+        throw new Error(`Failed to fetch products: ${productsResponse.statusText}`);
       }
       const productsData = await productsResponse.json();
       const count = productsData.meta?.total || 0;
 
       // Fetch recent 5 jobs
-      const jobsResponse = await fetch('/api/jobs?limit=5');
+      const jobsResponse = await fetch("/api/jobs?limit=5");
       if (!jobsResponse.ok) {
         throw new Error(`Failed to fetch jobs: ${jobsResponse.statusText}`);
       }
@@ -55,9 +49,7 @@ export function useDashboardData(): UseDashboardDataReturn {
 
       setData({ shop, count, jobs });
     } catch (err) {
-      setError(
-        err instanceof Error ? err : new Error('Unknown error occurred')
-      );
+      setError(err instanceof Error ? err : new Error("Unknown error occurred"));
     } finally {
       setLoading(false);
     }

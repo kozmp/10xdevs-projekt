@@ -1,12 +1,9 @@
-import { useCallback, useMemo } from 'react';
-import type { UseProductsCountReturn } from './types';
+import { useCallback, useMemo } from "react";
+import type { UseProductsCountReturn } from "./types";
 
-export function useProductsCount(
-  count: number,
-  onCountClick?: () => void
-): UseProductsCountReturn {
+export function useProductsCount(count: number, onCountClick?: () => void): UseProductsCountReturn {
   const formattedCount = useMemo(() => {
-    return new Intl.NumberFormat('pl-PL').format(count);
+    return new Intl.NumberFormat("pl-PL").format(count);
   }, [count]);
 
   const handleCountClick = useCallback(() => {

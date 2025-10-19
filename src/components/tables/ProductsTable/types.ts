@@ -2,11 +2,11 @@ export interface Product {
   id: string;
   name: string;
   sku: string;
-  status: 'active' | 'draft' | 'archived';
-  categories: Array<{
+  status: "active" | "draft" | "archived";
+  categories: {
     id: string;
     name: string;
-  }>;
+  }[];
   updated_at: string;
   description?: string;
   price?: number;

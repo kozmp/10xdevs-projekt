@@ -1,31 +1,27 @@
-import { useId } from 'react';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import type { PublicationMode } from '@/types';
+import { useId } from "react";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import type { PublicationMode } from "@/types";
 
 interface PublicationModeSelectProps {
   value: PublicationMode;
   onChange: (mode: PublicationMode) => void;
 }
 
-const modes: { value: PublicationMode; label: string; description: string }[] =
-  [
-    {
-      value: 'draft',
-      label: 'Szkic',
-      description: 'Zapisz jako szkic do późniejszego przeglądu',
-    },
-    {
-      value: 'published',
-      label: 'Opublikuj',
-      description: 'Opublikuj od razu po wygenerowaniu',
-    },
-  ];
+const modes: { value: PublicationMode; label: string; description: string }[] = [
+  {
+    value: "draft",
+    label: "Szkic",
+    description: "Zapisz jako szkic do późniejszego przeglądu",
+  },
+  {
+    value: "published",
+    label: "Opublikuj",
+    description: "Opublikuj od razu po wygenerowaniu",
+  },
+];
 
-export function PublicationModeSelect({
-  value,
-  onChange,
-}: PublicationModeSelectProps) {
+export function PublicationModeSelect({ value, onChange }: PublicationModeSelectProps) {
   const groupId = useId();
 
   return (
@@ -42,9 +38,7 @@ export function PublicationModeSelect({
               >
                 {mode.label}
               </label>
-              <p className="text-sm text-muted-foreground">
-                {mode.description}
-              </p>
+              <p className="text-sm text-muted-foreground">{mode.description}</p>
             </div>
           </div>
         ))}

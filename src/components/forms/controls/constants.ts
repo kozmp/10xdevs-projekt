@@ -1,4 +1,4 @@
-import type { Language, Style } from './types';
+import type { Language, Style } from "./types";
 
 export const LANGUAGES: Language[] = [
   { id: "pl", name: "Polski" },

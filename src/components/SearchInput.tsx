@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, useId } from 'react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useState, useEffect, useCallback, useId } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface SearchInputProps {
   value: string;
@@ -13,7 +13,7 @@ interface SearchInputProps {
 export function SearchInput({
   value,
   onChange,
-  placeholder = 'Szukaj produktów...',
+  placeholder = "Szukaj produktów...",
   debounceMs = 300,
   maxLength = 50,
 }: SearchInputProps) {
@@ -47,8 +47,8 @@ export function SearchInput({
   );
 
   const handleClear = useCallback(() => {
-    setLocalValue('');
-    onChange('');
+    setLocalValue("");
+    onChange("");
   }, [onChange]);
 
   return (

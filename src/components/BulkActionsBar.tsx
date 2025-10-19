@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 interface BulkActionsBarProps {
   selectedCount: number;
@@ -9,12 +9,7 @@ interface BulkActionsBarProps {
   onClear: () => void;
 }
 
-export function BulkActionsBar({
-  selectedCount,
-  maxLimit,
-  onGenerate,
-  onClear,
-}: BulkActionsBarProps) {
+export function BulkActionsBar({ selectedCount, maxLimit, onGenerate, onClear }: BulkActionsBarProps) {
   const isDisabled = selectedCount === 0;
   const isMaxReached = selectedCount >= maxLimit;
 
@@ -34,13 +29,7 @@ export function BulkActionsBar({
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">Zaznaczono:</span>
-          <span
-            className={`text-lg font-bold ${
-              isMaxReached ? 'text-red-500' : 'text-primary'
-            }`}
-          >
-            {selectedCount}
-          </span>
+          <span className={`text-lg font-bold ${isMaxReached ? "text-red-500" : "text-primary"}`}>{selectedCount}</span>
           <span className="text-sm text-muted-foreground">/ {maxLimit}</span>
         </div>
 
@@ -51,12 +40,7 @@ export function BulkActionsBar({
         )}
 
         <div className="flex gap-2 ml-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onClear}
-            aria-label="Wyczyść zaznaczenie"
-          >
+          <Button variant="outline" size="sm" onClick={onClear} aria-label="Wyczyść zaznaczenie">
             Wyczyść
           </Button>
           <Button

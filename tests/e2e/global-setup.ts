@@ -1,4 +1,4 @@
-import { FullConfig } from '@playwright/test';
+import { FullConfig } from "@playwright/test";
 
 /**
  * Global setup for Playwright tests
@@ -7,7 +7,7 @@ import { FullConfig } from '@playwright/test';
  * Authentication is handled per-test via LoginPage to ensure test isolation.
  */
 export default async function globalSetup(config: FullConfig) {
-  console.log('🚀 Konfiguracja środowiska testowego...\n');
+  console.log("🚀 Konfiguracja środowiska testowego...\n");
 
   // Verify required environment variables
   const supabaseUrl = process.env.PUBLIC_SUPABASE_URL;
@@ -16,12 +16,12 @@ export default async function globalSetup(config: FullConfig) {
   const password = process.env.E2E_PASSWORD;
 
   if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Brak konfiguracji Supabase w zmiennych środowiskowych');
+    throw new Error("Brak konfiguracji Supabase w zmiennych środowiskowych");
   }
 
   if (!username || !password) {
-    throw new Error('Brak danych użytkownika E2E w zmiennych środowiskowych');
+    throw new Error("Brak danych użytkownika E2E w zmiennych środowiskowych");
   }
 
-  console.log('✅ Weryfikacja zmiennych środowiskowych zakończona pomyślnie\n');
+  console.log("✅ Weryfikacja zmiennych środowiskowych zakończona pomyślnie\n");
 }

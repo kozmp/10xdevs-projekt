@@ -1,4 +1,4 @@
-import type { GenerateFormData } from './schema';
+import type { GenerateFormData } from "./schema";
 
 export interface GenerateFormProps {
   selectedProductIds: string[];
@@ -8,7 +8,7 @@ export interface GenerateFormProps {
 
 export interface GenerateFormResult {
   productId: string;
-  status: 'success' | 'error';
+  status: "success" | "error";
   data?: {
     shortDescription: string;
     longDescription: string;

@@ -1,14 +1,14 @@
-import { useCallback } from 'react';
-import { STATUS_LABELS, STATUS_COLORS } from './constants';
-import type { JobProduct, TokenUsageDetails, UseJobProductsListReturn } from './types';
+import { useCallback } from "react";
+import { STATUS_LABELS, STATUS_COLORS } from "./constants";
+import type { JobProduct, TokenUsageDetails, UseJobProductsListReturn } from "./types";
 
 export function useJobProductsList(): UseJobProductsListReturn {
-  const getStatusLabel = useCallback((status: JobProduct['status']) => {
+  const getStatusLabel = useCallback((status: JobProduct["status"]) => {
     return STATUS_LABELS[status] || status;
   }, []);
 
-  const getStatusColor = useCallback((status: JobProduct['status']) => {
-    return STATUS_COLORS[status] || 'text-gray-600';
+  const getStatusColor = useCallback((status: JobProduct["status"]) => {
+    return STATUS_COLORS[status] || "text-gray-600";
   }, []);
 
   const getTokenCount = useCallback((details: string | null) => {
@@ -22,11 +22,11 @@ export function useJobProductsList(): UseJobProductsListReturn {
   }, []);
 
   const formatCost = useCallback((cost: number | null) => {
-    return cost ? `$${cost.toFixed(4)}` : '-';
+    return cost ? `$${cost.toFixed(4)}` : "-";
   }, []);
 
   const formatTokens = useCallback((count: number | null) => {
-    return count ? count.toLocaleString() : '-';
+    return count ? count.toLocaleString() : "-";
   }, []);
 
   return {

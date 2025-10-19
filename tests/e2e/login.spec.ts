@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from './page-objects/LoginPage';
-import { DashboardPage } from './page-objects/DashboardPage';
+import { test, expect } from "@playwright/test";
+import { LoginPage } from "./page-objects/LoginPage";
+import { DashboardPage } from "./page-objects/DashboardPage";
 
-test.describe('Login Flow', () => {
+test.describe("Login Flow", () => {
   let loginPage: LoginPage;
   let dashboardPage: DashboardPage;
 
@@ -12,11 +12,11 @@ test.describe('Login Flow', () => {
     await loginPage.goto();
   });
 
-  test('should display login page correctly', async ({ page }) => {
+  test("should display login page correctly", async ({ page }) => {
     // Arrange & Act - page is loaded in beforeEach
 
     // Assert
-    await expect(page).toHaveURL('/login');
+    await expect(page).toHaveURL("/login");
     await expect(loginPage.emailInput).toBeVisible();
     await expect(loginPage.passwordInput).toBeVisible();
     await expect(loginPage.submitButton).toBeVisible();
@@ -24,10 +24,10 @@ test.describe('Login Flow', () => {
     await expect(loginPage.forgotPasswordLink).toBeVisible();
   });
 
-  test('should show error with invalid credentials', async ({ page }) => {
+  test("should show error with invalid credentials", async ({ page }) => {
     // Arrange
-    const invalidEmail = 'invalid@example.com';
-    const invalidPassword = 'wrongpassword123';
+    const invalidEmail = "invalid@example.com";
+    const invalidPassword = "wrongpassword123";
 
     // Act
     await loginPage.login(invalidEmail, invalidPassword);
@@ -38,10 +38,10 @@ test.describe('Login Flow', () => {
     expect(errorText).toBeTruthy();
   });
 
-  test('should successfully login with valid credentials', async ({ page }) => {
+  test("should successfully login with valid credentials", async ({ page }) => {
     // Arrange
-    const email = process.env.E2E_USERNAME || '';
-    const password = process.env.E2E_PASSWORD || '';
+    const email = process.env.E2E_USERNAME || "";
+    const password = process.env.E2E_PASSWORD || "";
 
     expect(email).toBeTruthy();
     expect(password).toBeTruthy();
@@ -50,48 +50,48 @@ test.describe('Login Flow', () => {
     await loginPage.login(email, password);
 
     // Assert
-    await page.waitForURL('/', { timeout: 10000 });
-    await expect(page).toHaveURL('/');
+    await page.waitForURL("/", { timeout: 10000 });
+    await expect(page).toHaveURL("/");
   });
 
-  test('should redirect to dashboard after successful login', async ({ page }) => {
+  test("should redirect to dashboard after successful login", async ({ page }) => {
     // Arrange
-    const email = process.env.E2E_USERNAME || '';
-    const password = process.env.E2E_PASSWORD || '';
+    const email = process.env.E2E_USERNAME || "";
+    const password = process.env.E2E_PASSWORD || "";
 
     // Act
     await loginPage.login(email, password);
 
     // Assert
-    await page.waitForURL('/', { timeout: 10000 });
+    await page.waitForURL("/", { timeout: 10000 });
     const isDashboardLoaded = await dashboardPage.isLoaded();
     expect(isDashboardLoaded).toBeTruthy();
   });
 
-  test('should navigate to signup page', async ({ page }) => {
+  test("should navigate to signup page", async ({ page }) => {
     // Arrange & Act
     await loginPage.signUpLink.click();
 
     // Assert
-    await expect(page).toHaveURL('/signup');
+    await expect(page).toHaveURL("/signup");
   });
 
-  test('should navigate to forgot password page', async ({ page }) => {
+  test("should navigate to forgot password page", async ({ page }) => {
     // Arrange & Act
     await loginPage.forgotPasswordLink.click();
 
     // Assert
-    await expect(page).toHaveURL('/forgot-password');
+    await expect(page).toHaveURL("/forgot-password");
   });
 
-  test('should clear error message on form resubmission', async ({ page }) => {
+  test("should clear error message on form resubmission", async ({ page }) => {
     // Arrange - First submit with invalid credentials
-    await loginPage.login('invalid@example.com', 'wrongpassword');
+    await loginPage.login("invalid@example.com", "wrongpassword");
     await expect(loginPage.errorMessage).toBeVisible({ timeout: 5000 });
     const firstError = await loginPage.getErrorMessage();
 
     // Act - Submit again with different credentials
-    await loginPage.login('another@example.com', 'anotherpassword');
+    await loginPage.login("another@example.com", "anotherpassword");
 
     // Assert - New error message should appear
     await expect(loginPage.errorMessage).toBeVisible({ timeout: 5000 });

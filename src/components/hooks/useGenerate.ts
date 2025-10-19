@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import type { GenerationStyle, GenerationLanguage } from '@/lib/services/product-description-generator.service';
+import { useState } from "react";
+import type { GenerationStyle, GenerationLanguage } from "@/lib/services/product-description-generator.service";
 
 interface UseGenerateParams {
   ids: string[];
@@ -7,7 +7,7 @@ interface UseGenerateParams {
 
 interface GenerationResult {
   productId: string;
-  status: 'success' | 'error';
+  status: "success" | "error";
   data?: {
     shortDescription: string;
     longDescription: string;
@@ -48,16 +48,16 @@ export function useGenerate({ ids }: UseGenerateParams): UseGenerateReturn {
       setResults([]);
       setSummary(null);
 
-      console.log('Sending request to generate descriptions:', {
+      console.log("Sending request to generate descriptions:", {
         productIds: ids,
         style,
         language,
       });
 
-      const response = await fetch('/api/products/generate-descriptions', {
-        method: 'POST',
+      const response = await fetch("/api/products/generate-descriptions", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           productIds: ids,
@@ -68,28 +68,28 @@ export function useGenerate({ ids }: UseGenerateParams): UseGenerateReturn {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('API error response:', {
+        console.error("API error response:", {
           status: response.status,
           statusText: response.statusText,
-          errorData
+          errorData,
         });
-        throw new Error(errorData.error || 'Failed to generate descriptions');
+        throw new Error(errorData.error || "Failed to generate descriptions");
       }
-      
-      console.log('API response:', response);
+
+      console.log("API response:", response);
 
       const data = await response.json();
 
       // Validate response data
       if (!data.results || !Array.isArray(data.results)) {
-        throw new Error('Invalid response format: missing or invalid results');
+        throw new Error("Invalid response format: missing or invalid results");
       }
 
       setResults(data.results);
       setSummary(data.summary || null);
       setProgress(100);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error occurred');
+      setError(err instanceof Error ? err.message : "Unknown error occurred");
     } finally {
       setIsGenerating(false);
     }
