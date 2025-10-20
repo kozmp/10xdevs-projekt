@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { CreateJobCommand, JobResponseDTO, JobDetailDTO, JobProductDTO, JobStatus } from "../../types";
+import type { CreateJobCommand, JobResponseDTO, JobDetailDTO, JobProductDTO } from "../../types";
 
 // Schema dla stylu generowania opisu
 export const jobStyleSchema = z.enum(["Professional", "Casual", "Sales-focused"]);

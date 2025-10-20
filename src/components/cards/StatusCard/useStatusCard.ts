@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { CARD_TEXTS, STATUS_COLORS, STATUS_ARIA_LABELS } from "./constants";
 import type { UseStatusCardReturn } from "./types";
 

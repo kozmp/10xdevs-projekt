@@ -2,6 +2,7 @@ import React from "react";
 import { JobProgressBar } from "@/components/JobProgressBar";
 import { JobProductsList } from "@/components/JobProductsList";
 import { Toaster } from "@/components/ui/sonner";
+import { Button } from "@/components/ui/button";
 import { JobProgressHeader } from "./JobProgressHeader";
 import { JobProgressDetails } from "./JobProgressDetails";
 import { JobProgressCancelModal } from "./JobProgressCancelModal";

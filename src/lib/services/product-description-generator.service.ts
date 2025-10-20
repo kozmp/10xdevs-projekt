@@ -37,7 +37,7 @@ export class ProductDescriptionGeneratorService {
     });
   }
 
-  private async generateWithFallback(productData: any, config: GenerationConfig): Promise<GeneratedDescription> {
+  private async generateWithFallback(productData: unknown, config: GenerationConfig): Promise<GeneratedDescription> {
     try {
       return await this.generateUsingOpenRouter(productData, config);
     } catch (error) {
@@ -46,7 +46,7 @@ export class ProductDescriptionGeneratorService {
     }
   }
 
-  private generateFallbackDescription(productData: any): GeneratedDescription {
+  private generateFallbackDescription(productData: { name?: string }): GeneratedDescription {
     // Fallback do mocków w przypadku błędu
     return {
       shortDescription: `${productData.name} - wysokiej jakości produkt`,

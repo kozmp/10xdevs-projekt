@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { encryptApiKey, decryptApiKey } from "@/lib/encryption";
 import {
   OpenRouterConfig,
   Message,
@@ -57,7 +56,7 @@ export class OpenRouterService {
   private async validateRequest(params: ChatParams): Promise<void> {
     try {
       await chatParamsSchema.parseAsync(params);
-    } catch (error) {
+    } catch {
       throw new OpenRouterError("Invalid request parameters", "VALIDATION_ERROR", 400);
     }
   }
@@ -95,7 +94,7 @@ export class OpenRouterService {
     return await response.json();
   }
 
-  private async retryWithBackoff(fn: () => Promise<any>, attempt = 0): Promise<any> {
+  private async retryWithBackoff<T>(fn: () => Promise<T>, attempt = 0): Promise<T> {
     try {
       return await fn();
     } catch (error) {

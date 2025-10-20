@@ -2,11 +2,10 @@ import React from "react";
 import { Button } from "./ui/button";
 
 interface NavbarProps {
-  isAuthenticated?: boolean;
   userEmail?: string | null;
 }
 
-export function Navbar({ isAuthenticated, userEmail }: NavbarProps) {
+export function Navbar({ userEmail }: NavbarProps) {
   return (
     <nav className="border-b">
       <div className="container mx-auto px-6 py-4">

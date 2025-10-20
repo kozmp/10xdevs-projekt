@@ -3,9 +3,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Checkbox } from "./ui/checkbox";
 import { PaginationControls } from "./PaginationControls";
 import { ProductPreviewModal } from "./ProductPreviewModal";
+import type { ProductSummaryDTO } from "@/types";
 
 interface ProductsTableProps {
-  products: any[];
+  products: ProductSummaryDTO[];
   loading: boolean;
   selectedIds: string[];
   onSelectIds: (ids: string[]) => void;
@@ -25,7 +26,7 @@ export function ProductsTable({
   pagination,
   onPaginationChange,
 }: ProductsTableProps) {
-  const [previewProduct, setPreviewProduct] = React.useState<any>(null);
+  const [previewProduct, setPreviewProduct] = React.useState<ProductSummaryDTO | null>(null);
 
   const handleSelectAll = (checked: boolean) => {
     onSelectIds(checked ? products.map((p) => p.id) : []);

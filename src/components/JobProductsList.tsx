@@ -53,7 +53,7 @@ export function JobProductsList({ products }: JobProductsListProps) {
           </TableHeader>
           <TableBody>
             {products.map((product) => {
-              const tokens = product.tokenUsageDetails ? JSON.parse(product.tokenUsageDetails as any) : null;
+              const tokens = product.tokenUsageDetails ? JSON.parse(product.tokenUsageDetails as string) : null;
               const totalTokens = tokens ? (tokens.input || 0) + (tokens.output || 0) : null;
 
               return (

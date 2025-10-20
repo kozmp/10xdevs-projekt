@@ -11,15 +11,23 @@ if (!supabaseAnonKey) throw new Error("PUBLIC_SUPABASE_ANON_KEY is required");
 export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 // Klient dla serwera
+interface CookieSetOptions {
+  path?: string;
+  httpOnly?: boolean;
+  sameSite?: "lax" | "strict" | "none";
+  secure?: boolean;
+  expires?: Date;
+}
+
 interface ServerClientOptions {
   cookies: {
     get: (name: string) => string | undefined;
-    set: (name: string, value: string, options: any) => void;
+    set: (name: string, value: string, options: CookieSetOptions) => void;
   };
   headers: Headers;
 }
 
-export function createSupabaseServerInstance({ cookies, headers }: ServerClientOptions) {
+export function createSupabaseServerInstance({ cookies }: ServerClientOptions) {
   return createClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: {
       autoRefreshToken: false,

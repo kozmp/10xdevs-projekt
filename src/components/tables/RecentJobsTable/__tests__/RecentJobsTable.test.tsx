@@ -79,7 +79,7 @@ describe("RecentJobsTable", () => {
 
   it("handles row click with default navigation", async () => {
     const { location } = window;
-    // @ts-ignore
+    // @ts-expect-error - Testing requires modifying readonly window.location
     delete window.location;
     window.location = { href: "" } as Location;
 

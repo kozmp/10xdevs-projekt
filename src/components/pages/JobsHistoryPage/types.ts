@@ -1,4 +1,4 @@
-import type { JobStatus } from "@/types";
+import type { JobStatus, JobListDTO } from "@/types";
 
 export interface JobsHistoryPageProps {
   initialPage?: number;
@@ -15,7 +15,7 @@ export interface JobsHistoryMeta {
 export interface UseJobsHistoryPageReturn {
   page: number;
   statusFilter: JobStatus | "all";
-  jobs: any[]; // TODO: Replace with proper Job type
+  jobs: JobListDTO[];
   meta: JobsHistoryMeta | null;
   loading: boolean;
   error: Error | null;

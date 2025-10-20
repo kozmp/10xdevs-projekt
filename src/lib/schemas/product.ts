@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { ListProductsQuery, ProductSummaryDTO, ProductDetailDTO, ProductStatus } from "../../types";
+import type { ListProductsQuery, ProductSummaryDTO, ProductDetailDTO } from "../../types";
 
 // Schema dla parametrów zapytania
 export const listProductsQuerySchema = z.object({

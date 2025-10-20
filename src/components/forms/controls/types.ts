@@ -1,9 +1,9 @@
 import type { GenerationStyle, GenerationLanguage } from "@/lib/services/product-description-generator.service";
-import type { Control } from "react-hook-form";
+import type { Control, FieldValues } from "react-hook-form";
 
-export interface FormControlProps<T> {
+export interface FormControlProps {
   name: string;
-  control: Control<any>;
+  control: Control<FieldValues>;
   label?: string;
   description?: string;
   error?: string;

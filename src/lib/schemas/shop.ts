@@ -7,7 +7,7 @@ export const updateShopSchema = z.object({
     .string()
     .min(1, "API key is required")
     .max(256, "API key is too long")
-    .regex(/^[a-zA-Z0-9_\-]+$/, "API key can only contain letters, numbers, underscores and hyphens"),
+    .regex(/^[a-zA-Z0-9_-]+$/, "API key can only contain letters, numbers, underscores and hyphens"),
 }) satisfies z.ZodType<UpdateShopCommand>;
 
 // Schema dla walidacji odpowiedzi

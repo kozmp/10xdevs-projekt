@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import type { ProductSummaryDTO } from "@/types";
 
 interface Pagination {
   page: number;
@@ -12,7 +13,7 @@ interface Filters {
 }
 
 export function useProducts() {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<ProductSummaryDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

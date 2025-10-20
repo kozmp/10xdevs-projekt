@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { ShopResponseDTO, ProductSummaryDTO, JobListDTO } from "@/types";
+import type { ShopResponseDTO, JobListDTO } from "@/types";
 
 interface DashboardData {
   shop: ShopResponseDTO;
