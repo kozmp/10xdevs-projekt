@@ -1,10 +1,17 @@
 import type { APIRoute } from "astro";
 import { signupSchema } from "@/lib/schemas/auth";
 import { createSupabaseServerInstance } from "@/db/supabase.client";
+import { guardApiFeature } from "@/features/api-helpers";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies, ...context }) => {
+  // Feature flag guard - sprawdź czy auth feature jest włączony
+  const guardResponse = guardApiFeature(context as any, 'auth', {
+    disabledStatus: 503,
+    disabledMessage: 'Rejestracja jest tymczasowo niedostępna'
+  });
+  if (guardResponse) return guardResponse;
   try {
     // 1. Parsowanie i walidacja danych wejściowych
     const body = await request.json();

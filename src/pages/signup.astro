@@ -5,6 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { guardAstroFeature } from "@/features/astro-helpers";
+
+// Feature flag guard - sprawdź czy auth feature jest włączony
+const guardResponse = guardAstroFeature(Astro, 'auth', {
+  redirectTo: '/404'
+});
+if (guardResponse) return guardResponse;
 ---
 
 <Layout title="Sign Up - AI Product Description Generator">

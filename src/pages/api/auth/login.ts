@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
+import { guardApiFeature } from "@/features/api-helpers";
 
 export const prerender = false;
 
@@ -8,7 +9,13 @@ const LoginSchema = z.object({
   password: z.string().min(1, "Hasło jest wymagane"),
 });
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request, locals, ...context }) => {
+  // Feature flag guard - sprawdź czy auth feature jest włączony
+  const guardResponse = guardApiFeature(context as any, 'auth', {
+    disabledStatus: 503,
+    disabledMessage: 'Funkcja autoryzacji jest tymczasowo niedostępna'
+  });
+  if (guardResponse) return guardResponse;
   try {
     const body = await request.json();
 

@@ -1,5 +1,6 @@
 ﻿import type { APIRoute } from "astro";
 import { z } from "zod";
+import { guardApiFeature } from "@/features/api-helpers";
 
 export const prerender = false;
 
@@ -7,7 +8,13 @@ const ForgotPasswordSchema = z.object({
   email: z.string().email("Nieprawidłowy adres email").min(1, "Email jest wymagany"),
 });
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request, locals, ...context }) => {
+  // Feature flag guard - sprawdź czy auth feature jest włączony
+  const guardResponse = guardApiFeature(context as any, 'auth', {
+    disabledStatus: 503,
+    disabledMessage: 'Resetowanie hasła jest tymczasowo niedostępne'
+  });
+  if (guardResponse) return guardResponse;
   try {
     const body = await request.json();
 

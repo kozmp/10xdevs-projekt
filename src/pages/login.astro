@@ -4,6 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { guardAstroFeature } from "@/features/astro-helpers";
+
+// Feature flag guard - sprawdź czy auth feature jest włączony
+const guardResponse = guardAstroFeature(Astro, 'auth', {
+  redirectTo: '/404'
+});
+if (guardResponse) return guardResponse;
 ---
 
 <Layout title="Login - AI Product Description Generator">
