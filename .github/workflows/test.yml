@@ -10,6 +10,7 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    if: false  # Temporarily disabled - use pull-request.yml workflow instead
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
