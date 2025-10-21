@@ -66,11 +66,7 @@ function murmurHash3(key: string, seed = 0): number {
  * }
  * ```
  */
-export function getUserBucket(
-  userId: string,
-  featureName: string,
-  salt = 'feature-flags'
-): number {
+export function getUserBucket(userId: string, featureName: string, salt = "feature-flags"): number {
   // Combine userId + featureName + salt for unique hash per feature
   const key = `${salt}:${featureName}:${userId}`;
 
@@ -102,11 +98,7 @@ export function getUserBucket(
  * }
  * ```
  */
-export function isUserInRollout(
-  userId: string,
-  featureName: string,
-  rolloutPercentage: number
-): boolean {
+export function isUserInRollout(userId: string, featureName: string, rolloutPercentage: number): boolean {
   const bucket = getUserBucket(userId, featureName);
   return bucket < rolloutPercentage;
 }

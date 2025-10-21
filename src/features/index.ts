@@ -1,12 +1,6 @@
-import { featuresConfig, DEFAULT_FEATURE_CONFIG } from './config';
-import { isUserInRollout } from './hash';
-import type {
-  Environment,
-  FeatureName,
-  FeatureCheckResult,
-  FeatureCheckOptions,
-  FeatureConfig,
-} from './types';
+import { featuresConfig, DEFAULT_FEATURE_CONFIG } from "./config";
+import { isUserInRollout } from "./hash";
+import type { Environment, FeatureName, FeatureCheckResult, FeatureCheckOptions, FeatureConfig } from "./types";
 
 /**
  * Feature Flags Manager
@@ -22,39 +16,34 @@ function getCurrentEnvironment(): Environment {
   const envName = import.meta.env.ENV_NAME as string | undefined;
 
   // Walidacja i fallback
-  if (envName === 'local' || envName === 'integration' || envName === 'production') {
+  if (envName === "local" || envName === "integration" || envName === "production") {
     return envName;
   }
 
   // Fallback na podstawie NODE_ENV
   if (import.meta.env.PROD) {
-    return 'production';
+    return "production";
   }
 
   if (import.meta.env.DEV) {
-    return 'local';
+    return "local";
   }
 
   // Default fallback
   console.warn(
     `[FeatureFlags] Unknown ENV_NAME: "${envName}". Falling back to "local". Set ENV_NAME to one of: local, integration, production`
   );
-  return 'local';
+  return "local";
 }
 
 /**
  * Pobiera konfigurację dla danej flagi i środowiska
  */
-function getFeatureConfig(
-  featureName: FeatureName,
-  environment: Environment
-): FeatureConfig {
+function getFeatureConfig(featureName: FeatureName, environment: Environment): FeatureConfig {
   const feature = featuresConfig[featureName];
 
   if (!feature) {
-    console.warn(
-      `[FeatureFlags] Feature "${featureName}" not found in config. Using default (disabled).`
-    );
+    console.warn(`[FeatureFlags] Feature "${featureName}" not found in config. Using default (disabled).`);
     return DEFAULT_FEATURE_CONFIG;
   }
 
@@ -101,10 +90,7 @@ function getFeatureConfig(
  * }
  * ```
  */
-export function isFeatureEnabled(
-  featureName: FeatureName,
-  options: FeatureCheckOptions = {}
-): FeatureCheckResult {
+export function isFeatureEnabled(featureName: FeatureName, options: FeatureCheckOptions = {}): FeatureCheckResult {
   const { userId, environment = getCurrentEnvironment(), allowAnonymous = false } = options;
 
   // Pobierz konfigurację dla środowiska
@@ -114,7 +100,7 @@ export function isFeatureEnabled(
   if (!config.enabled) {
     return {
       enabled: false,
-      reason: 'feature_disabled',
+      reason: "feature_disabled",
     };
   }
 
@@ -122,7 +108,7 @@ export function isFeatureEnabled(
   if (userId && config.blacklist && config.blacklist.includes(userId)) {
     return {
       enabled: false,
-      reason: 'user_blacklisted',
+      reason: "user_blacklisted",
     };
   }
 
@@ -130,7 +116,7 @@ export function isFeatureEnabled(
   if (userId && config.whitelist && config.whitelist.includes(userId)) {
     return {
       enabled: true,
-      reason: 'user_whitelisted',
+      reason: "user_whitelisted",
     };
   }
 
@@ -139,12 +125,12 @@ export function isFeatureEnabled(
     if (allowAnonymous) {
       return {
         enabled: true,
-        reason: 'anonymous_allowed',
+        reason: "anonymous_allowed",
       };
     }
     return {
       enabled: false,
-      reason: 'no_user_id',
+      reason: "no_user_id",
     };
   }
 
@@ -153,7 +139,7 @@ export function isFeatureEnabled(
 
   return {
     enabled: isInRollout,
-    reason: isInRollout ? 'rollout_included' : 'rollout_excluded',
+    reason: isInRollout ? "rollout_included" : "rollout_excluded",
   };
 }
 
@@ -171,10 +157,7 @@ export function isFeatureEnabled(
  * }
  * ```
  */
-export function isEnabled(
-  featureName: FeatureName,
-  options: FeatureCheckOptions = {}
-): boolean {
+export function isEnabled(featureName: FeatureName, options: FeatureCheckOptions = {}): boolean {
   return isFeatureEnabled(featureName, options).enabled;
 }
 
@@ -195,11 +178,8 @@ export function isEnabled(
  * // }
  * ```
  */
-export function getAllFeatures(
-  userId?: string,
-  environment?: Environment
-): Record<FeatureName, FeatureCheckResult> {
-  const features: FeatureName[] = ['auth', 'collections'];
+export function getAllFeatures(userId?: string, environment?: Environment): Record<FeatureName, FeatureCheckResult> {
+  const features: FeatureName[] = ["auth", "collections"];
 
   return features.reduce(
     (acc, featureName) => {

@@ -1,6 +1,6 @@
-import type { APIContext } from 'astro';
-import { isFeatureEnabled } from './index';
-import type { FeatureName } from './types';
+import type { APIContext } from "astro";
+import { isFeatureEnabled } from "./index";
+import type { FeatureName } from "./types";
 
 /**
  * API Helpers for Feature Flags
@@ -86,12 +86,7 @@ export function guardApiFeature(
   featureName: FeatureName,
   options: ApiFeatureGuardOptions = {}
 ): Response | null {
-  const {
-    disabledStatus = 503,
-    disabledMessage,
-    debug = import.meta.env.DEV,
-    allowAnonymous = false,
-  } = options;
+  const { disabledStatus = 503, disabledMessage, debug = import.meta.env.DEV, allowAnonymous = false } = options;
 
   // Pobierz userId z context (jeśli user zalogowany)
   const userId = context.locals.user?.id;
@@ -104,7 +99,7 @@ export function guardApiFeature(
     console.log(`[FeatureFlags API] ${featureName}:`, {
       enabled: result.enabled,
       reason: result.reason,
-      userId: userId || 'anonymous',
+      userId: userId || "anonymous",
       endpoint: context.url.pathname,
     });
   }
@@ -116,8 +111,8 @@ export function guardApiFeature(
 
   // Feature wyłączony - przygotuj error response
   const defaultMessages = {
-    404: 'Not Found',
-    503: 'Service Temporarily Unavailable',
+    404: "Not Found",
+    503: "Service Temporarily Unavailable",
   };
 
   const message = disabledMessage || defaultMessages[disabledStatus];
@@ -132,9 +127,9 @@ export function guardApiFeature(
     {
       status: disabledStatus,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         // Dla 503 dodaj Retry-After header (sugeruj sprawdzenie za 1h)
-        ...(disabledStatus === 503 && { 'Retry-After': '3600' }),
+        ...(disabledStatus === 503 && { "Retry-After": "3600" }),
       },
     }
   );

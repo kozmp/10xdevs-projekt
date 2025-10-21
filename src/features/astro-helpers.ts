@@ -1,6 +1,6 @@
-import type { AstroGlobal } from 'astro';
-import { isFeatureEnabled } from './index';
-import type { FeatureName } from './types';
+import type { AstroGlobal } from "astro";
+import { isFeatureEnabled } from "./index";
+import type { FeatureName } from "./types";
 
 /**
  * Astro Page Helpers for Feature Flags
@@ -69,7 +69,7 @@ export function guardAstroFeature(
   featureName: FeatureName,
   options: AstroFeatureGuardOptions = {}
 ): Response | null {
-  const { redirectTo = '/404', debug = import.meta.env.DEV } = options;
+  const { redirectTo = "/404", debug = import.meta.env.DEV } = options;
 
   // Pobierz userId z Astro.locals (jeśli user zalogowany)
   const userId = Astro.locals.user?.id;
@@ -82,7 +82,7 @@ export function guardAstroFeature(
     console.log(`[FeatureFlags Astro] ${featureName}:`, {
       enabled: result.enabled,
       reason: result.reason,
-      userId: userId || 'anonymous',
+      userId: userId || "anonymous",
       page: Astro.url.pathname,
     });
   }
@@ -118,10 +118,7 @@ export function guardAstroFeature(
  * </div>
  * ```
  */
-export function isAstroFeatureEnabled(
-  Astro: AstroGlobal,
-  featureName: FeatureName
-): boolean {
+export function isAstroFeatureEnabled(Astro: AstroGlobal, featureName: FeatureName): boolean {
   const userId = Astro.locals.user?.id;
   return isFeatureEnabled(featureName, { userId }).enabled;
 }
@@ -180,7 +177,7 @@ export function featureClass(
   Astro: AstroGlobal,
   featureName: FeatureName,
   enabledClass: string,
-  disabledClass = ''
+  disabledClass = ""
 ): string {
   const isEnabled = isAstroFeatureEnabled(Astro, featureName);
   return isEnabled ? enabledClass : disabledClass;

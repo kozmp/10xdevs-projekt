@@ -10,12 +10,12 @@
 /**
  * Dostępne środowiska
  */
-export type Environment = 'local' | 'integration' | 'production';
+export type Environment = "local" | "integration" | "production";
 
 /**
  * Nazwy feature flags w systemie
  */
-export type FeatureName = 'auth' | 'collections';
+export type FeatureName = "auth" | "collections";
 
 /**
  * Konfiguracja pojedynczej flagi dla danego środowiska
@@ -57,9 +57,7 @@ export interface FeatureEnvironments {
 /**
  * Mapa wszystkich feature flags w systemie
  */
-export type FeaturesConfig = {
-  [K in FeatureName]: FeatureEnvironments;
-};
+export type FeaturesConfig = Record<FeatureName, FeatureEnvironments>;
 
 /**
  * Wynik sprawdzenia feature flag
@@ -74,13 +72,13 @@ export interface FeatureCheckResult {
    * Powód decyzji (do debugowania)
    */
   reason:
-    | 'feature_disabled'        // Flaga wyłączona globalnie
-    | 'user_blacklisted'        // User na blacklist
-    | 'user_whitelisted'        // User na whitelist
-    | 'rollout_included'        // User w zakresie % rollout
-    | 'rollout_excluded'        // User poza zakresem % rollout
-    | 'no_user_id'              // Brak userId (anonimowy)
-    | 'anonymous_allowed';      // Anonimowy dostęp dozwolony
+    | "feature_disabled" // Flaga wyłączona globalnie
+    | "user_blacklisted" // User na blacklist
+    | "user_whitelisted" // User na whitelist
+    | "rollout_included" // User w zakresie % rollout
+    | "rollout_excluded" // User poza zakresem % rollout
+    | "no_user_id" // Brak userId (anonimowy)
+    | "anonymous_allowed"; // Anonimowy dostęp dozwolony
 }
 
 /**

@@ -5,9 +5,9 @@ export const prerender = false;
 
 export const POST: APIRoute = async (context) => {
   // Feature flag guard - sprawdź czy auth feature jest włączony
-  const guardResponse = guardApiFeature(context, 'auth', {
+  const guardResponse = guardApiFeature(context, "auth", {
     disabledStatus: 503,
-    disabledMessage: 'Wylogowanie jest tymczasowo niedostępne'
+    disabledMessage: "Wylogowanie jest tymczasowo niedostępne",
     // Note: allowAnonymous = false (default) - logout wymaga zalogowanego użytkownika
   });
   if (guardResponse) return guardResponse;

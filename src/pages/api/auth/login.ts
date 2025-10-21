@@ -11,10 +11,10 @@ const LoginSchema = z.object({
 
 export const POST: APIRoute = async (context) => {
   // Feature flag guard - sprawdź czy auth feature jest włączony
-  const guardResponse = guardApiFeature(context, 'auth', {
+  const guardResponse = guardApiFeature(context, "auth", {
     disabledStatus: 503,
-    disabledMessage: 'Funkcja autoryzacji jest tymczasowo niedostępna',
-    allowAnonymous: true  // Login endpoint musi być dostępny dla niezalogowanych
+    disabledMessage: "Funkcja autoryzacji jest tymczasowo niedostępna",
+    allowAnonymous: true, // Login endpoint musi być dostępny dla niezalogowanych
   });
   if (guardResponse) return guardResponse;
 

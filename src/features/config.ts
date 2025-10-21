@@ -1,4 +1,4 @@
-import type { FeaturesConfig } from './types';
+import type { FeaturesConfig } from "./types";
 
 /**
  * Feature Flags Configuration

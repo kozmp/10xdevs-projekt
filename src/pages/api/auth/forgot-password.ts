@@ -10,10 +10,10 @@ const ForgotPasswordSchema = z.object({
 
 export const POST: APIRoute = async (context) => {
   // Feature flag guard - sprawdź czy auth feature jest włączony
-  const guardResponse = guardApiFeature(context, 'auth', {
+  const guardResponse = guardApiFeature(context, "auth", {
     disabledStatus: 503,
-    disabledMessage: 'Resetowanie hasła jest tymczasowo niedostępne',
-    allowAnonymous: true  // Forgot password endpoint musi być dostępny dla niezalogowanych
+    disabledMessage: "Resetowanie hasła jest tymczasowo niedostępne",
+    allowAnonymous: true, // Forgot password endpoint musi być dostępny dla niezalogowanych
   });
   if (guardResponse) return guardResponse;
 
