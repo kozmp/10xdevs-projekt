@@ -5,13 +5,18 @@ import { guardApiFeature } from "@/features/api-helpers";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, cookies, ...context }) => {
+export const POST: APIRoute = async (context) => {
   // Feature flag guard - sprawdź czy auth feature jest włączony
-  const guardResponse = guardApiFeature(context as any, 'auth', {
+  const guardResponse = guardApiFeature(context, 'auth', {
     disabledStatus: 503,
-    disabledMessage: 'Rejestracja jest tymczasowo niedostępna'
+    disabledMessage: 'Rejestracja jest tymczasowo niedostępna',
+    allowAnonymous: true  // Signup endpoint musi być dostępny dla niezalogowanych
   });
   if (guardResponse) return guardResponse;
+
+  // Destructure context after guard check
+  const { request, cookies } = context;
+
   try {
     // 1. Parsowanie i walidacja danych wejściowych
     const body = await request.json();

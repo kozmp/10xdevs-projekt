@@ -3,13 +3,18 @@ import { guardApiFeature } from "@/features/api-helpers";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ locals, ...context }) => {
+export const POST: APIRoute = async (context) => {
   // Feature flag guard - sprawdź czy auth feature jest włączony
-  const guardResponse = guardApiFeature(context as any, 'auth', {
+  const guardResponse = guardApiFeature(context, 'auth', {
     disabledStatus: 503,
     disabledMessage: 'Wylogowanie jest tymczasowo niedostępne'
+    // Note: allowAnonymous = false (default) - logout wymaga zalogowanego użytkownika
   });
   if (guardResponse) return guardResponse;
+
+  // Destructure context after guard check
+  const { locals } = context;
+
   try {
     const { error } = await locals.supabase.auth.signOut();
 

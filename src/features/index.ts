@@ -105,7 +105,7 @@ export function isFeatureEnabled(
   featureName: FeatureName,
   options: FeatureCheckOptions = {}
 ): FeatureCheckResult {
-  const { userId, environment = getCurrentEnvironment() } = options;
+  const { userId, environment = getCurrentEnvironment(), allowAnonymous = false } = options;
 
   // Pobierz konfigurację dla środowiska
   const config = getFeatureConfig(featureName, environment);
@@ -118,7 +118,7 @@ export function isFeatureEnabled(
     };
   }
 
-  // 2. Sprawdź blacklist (najwyższy priorytet)
+  // 2. Sprawdź blacklist (najwyższy priorytet) - tylko dla zalogowanych
   if (userId && config.blacklist && config.blacklist.includes(userId)) {
     return {
       enabled: false,
@@ -126,7 +126,7 @@ export function isFeatureEnabled(
     };
   }
 
-  // 3. Sprawdź whitelist (drugi priorytet)
+  // 3. Sprawdź whitelist (drugi priorytet) - tylko dla zalogowanych
   if (userId && config.whitelist && config.whitelist.includes(userId)) {
     return {
       enabled: true,
@@ -134,8 +134,14 @@ export function isFeatureEnabled(
     };
   }
 
-  // 4. Brak userId - domyślnie wyłączone dla anonimowych
+  // 4. Brak userId - sprawdź czy allowAnonymous
   if (!userId) {
+    if (allowAnonymous) {
+      return {
+        enabled: true,
+        reason: 'anonymous_allowed',
+      };
+    }
     return {
       enabled: false,
       reason: 'no_user_id',

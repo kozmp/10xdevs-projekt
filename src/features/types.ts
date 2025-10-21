@@ -79,7 +79,8 @@ export interface FeatureCheckResult {
     | 'user_whitelisted'        // User na whitelist
     | 'rollout_included'        // User w zakresie % rollout
     | 'rollout_excluded'        // User poza zakresem % rollout
-    | 'no_user_id';             // Brak userId (anonimowy)
+    | 'no_user_id'              // Brak userId (anonimowy)
+    | 'anonymous_allowed';      // Anonimowy dostęp dozwolony
 }
 
 /**
@@ -95,4 +96,11 @@ export interface FeatureCheckOptions {
    * Override środowiska (domyślnie z ENV_NAME)
    */
   environment?: Environment;
+
+  /**
+   * Czy zezwolić na anonimowy dostęp (bez userId)
+   * Użyj dla publicznych endpointów jak login, signup
+   * @default false
+   */
+  allowAnonymous?: boolean;
 }

@@ -28,6 +28,13 @@ export interface ApiFeatureGuardOptions {
    * Czy logować sprawdzenia flag do konsoli (debugging)
    */
   debug?: boolean;
+
+  /**
+   * Czy zezwolić na anonimowy dostęp (bez userId)
+   * Ustaw na true dla publicznych endpointów jak login, signup
+   * @default false
+   */
+  allowAnonymous?: boolean;
 }
 
 /**
@@ -83,13 +90,14 @@ export function guardApiFeature(
     disabledStatus = 503,
     disabledMessage,
     debug = import.meta.env.DEV,
+    allowAnonymous = false,
   } = options;
 
   // Pobierz userId z context (jeśli user zalogowany)
   const userId = context.locals.user?.id;
 
   // Sprawdź feature flag
-  const result = isFeatureEnabled(featureName, { userId });
+  const result = isFeatureEnabled(featureName, { userId, allowAnonymous });
 
   // Debug logging
   if (debug) {
@@ -184,8 +192,9 @@ export function requireApiFeature(
  */
 export function isApiFeatureEnabled(
   context: APIContext,
-  featureName: FeatureName
+  featureName: FeatureName,
+  options: { allowAnonymous?: boolean } = {}
 ): boolean {
   const userId = context.locals.user?.id;
-  return isFeatureEnabled(featureName, { userId }).enabled;
+  return isFeatureEnabled(featureName, { userId, allowAnonymous: options.allowAnonymous }).enabled;
 }

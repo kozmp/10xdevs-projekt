@@ -9,13 +9,18 @@ const LoginSchema = z.object({
   password: z.string().min(1, "Hasło jest wymagane"),
 });
 
-export const POST: APIRoute = async ({ request, locals, ...context }) => {
+export const POST: APIRoute = async (context) => {
   // Feature flag guard - sprawdź czy auth feature jest włączony
-  const guardResponse = guardApiFeature(context as any, 'auth', {
+  const guardResponse = guardApiFeature(context, 'auth', {
     disabledStatus: 503,
-    disabledMessage: 'Funkcja autoryzacji jest tymczasowo niedostępna'
+    disabledMessage: 'Funkcja autoryzacji jest tymczasowo niedostępna',
+    allowAnonymous: true  // Login endpoint musi być dostępny dla niezalogowanych
   });
   if (guardResponse) return guardResponse;
+
+  // Destructure context after guard check
+  const { request, locals } = context;
+
   try {
     const body = await request.json();
 

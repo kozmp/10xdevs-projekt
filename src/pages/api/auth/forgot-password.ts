@@ -8,13 +8,18 @@ const ForgotPasswordSchema = z.object({
   email: z.string().email("Nieprawidłowy adres email").min(1, "Email jest wymagany"),
 });
 
-export const POST: APIRoute = async ({ request, locals, ...context }) => {
+export const POST: APIRoute = async (context) => {
   // Feature flag guard - sprawdź czy auth feature jest włączony
-  const guardResponse = guardApiFeature(context as any, 'auth', {
+  const guardResponse = guardApiFeature(context, 'auth', {
     disabledStatus: 503,
-    disabledMessage: 'Resetowanie hasła jest tymczasowo niedostępne'
+    disabledMessage: 'Resetowanie hasła jest tymczasowo niedostępne',
+    allowAnonymous: true  // Forgot password endpoint musi być dostępny dla niezalogowanych
   });
   if (guardResponse) return guardResponse;
+
+  // Destructure context after guard check
+  const { request, locals } = context;
+
   try {
     const body = await request.json();
 

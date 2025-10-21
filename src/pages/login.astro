@@ -4,13 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { guardAstroFeature } from "@/features/astro-helpers";
 
-// Feature flag guard - sprawdź czy auth feature jest włączony
-const guardResponse = guardAstroFeature(Astro, 'auth', {
-  redirectTo: '/404'
-});
-if (guardResponse) return guardResponse;
+// Note: Login page is public (no feature flag guard needed)
+// Feature flags are enforced at API level (/api/auth/*)
 ---
 
 <Layout title="Login - AI Product Description Generator">
@@ -25,7 +21,7 @@ if (guardResponse) return guardResponse;
         <form id="login-form" class="space-y-4" novalidate>
           <div class="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" placeholder="your@email.com" required autocomplete="email" />
+            <Input id="email" name="email" type="email" placeholder="your@email.com" required autoComplete="email" />
           </div>
 
           <div class="space-y-2">
@@ -38,8 +34,8 @@ if (guardResponse) return guardResponse;
               name="password"
               type="password"
               required
-              minlength="8"
-              autocomplete="current-password"
+              minLength="8"
+              autoComplete="current-password"
             />
           </div>
 
