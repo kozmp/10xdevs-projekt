@@ -1,4 +1,9 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+
+// Set ENCRYPTION_KEY before importing the encryption module
+// This must be done at the top level before the module loads
+vi.stubEnv("ENCRYPTION_KEY", "hnFa4rPytuPZdBzjqBS5PYJFvQjeqWBnMzSRDaxVWyw=");
+
 import { encryptApiKey, decryptApiKey } from "../encryption";
 
 describe("Encryption Module", () => {

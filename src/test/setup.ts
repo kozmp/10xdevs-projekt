@@ -8,8 +8,12 @@ declare module "vitest" {
   interface AsymmetricMatchersContaining extends CustomMatchers<any> {}
 }
 
-// Mock window.matchMedia
+// Mock environment variables for tests
 beforeAll(() => {
+  // Set ENCRYPTION_KEY for encryption tests - must be a valid 32-byte base64 string
+  process.env.ENCRYPTION_KEY = "hnFa4rPytuPZdBzjqBS5PYJFvQjeqWBnMzSRDaxVWyw=";
+
+  // Mock window.matchMedia
   Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({

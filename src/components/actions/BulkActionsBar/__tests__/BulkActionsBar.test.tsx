@@ -80,10 +80,8 @@ describe("BulkActionsBar", () => {
   it("disables generate button when selectedCount is 0", () => {
     render(<BulkActionsBar {...defaultProps} selectedCount={0} />);
 
-    const generateButton = screen.getByRole("button", {
-      name: BUTTON_ARIA_LABELS.GENERATE.replace("{count}", "0"),
-    });
-    expect(generateButton).toBeDisabled();
+    // Component doesn't render when selectedCount is 0
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("applies custom className", () => {

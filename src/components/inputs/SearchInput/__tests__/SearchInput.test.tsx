@@ -55,14 +55,15 @@ describe("SearchInput", () => {
   });
 
   it("calls onChange after debounce delay", async () => {
+    const user = userEvent.setup({ delay: null });
     render(<SearchInput {...defaultProps} />);
 
     const input = screen.getByRole("searchbox");
-    await userEvent.type(input, "test");
+    await user.type(input, "test");
 
     expect(defaultProps.onChange).not.toHaveBeenCalled();
 
-    act(() => {
+    await act(async () => {
       vi.advanceTimersByTime(DEFAULT_VALUES.DEBOUNCE_MS);
     });
 
@@ -70,21 +71,23 @@ describe("SearchInput", () => {
   });
 
   it("clears input when clear button is clicked", async () => {
+    const user = userEvent.setup({ delay: null });
     render(<SearchInput {...defaultProps} value="test" />);
 
     const clearButton = screen.getByRole("button", {
       name: BUTTON_LABELS.CLEAR,
     });
-    await userEvent.click(clearButton);
+    await user.click(clearButton);
 
     expect(defaultProps.onChange).toHaveBeenCalledWith("");
   });
 
   it("prevents input beyond maxLength", async () => {
+    const user = userEvent.setup({ delay: null });
     render(<SearchInput {...defaultProps} maxLength={5} />);
 
     const input = screen.getByRole("searchbox");
-    await userEvent.type(input, "123456");
+    await user.type(input, "123456");
 
     expect(input).toHaveValue("12345");
   });

@@ -47,4 +47,4 @@ CLAUDE.md
 
 # database backups and local config
 *.sqlite
-*.sqlite-journal
+*.sqlite-journaltest-output.txt

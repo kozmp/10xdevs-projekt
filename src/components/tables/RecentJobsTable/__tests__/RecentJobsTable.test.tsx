@@ -40,7 +40,7 @@ describe("RecentJobsTable", () => {
       expect(screen.getByText(job.jobId.slice(0, 8))).toBeInTheDocument();
       expect(screen.getByText(STATUS_LABELS[job.status])).toBeInTheDocument();
       expect(screen.getByText(job.style)).toBeInTheDocument();
-      expect(screen.getByText(job.language.toUpperCase())).toBeInTheDocument();
+      expect(screen.getByText(job.language)).toBeInTheDocument(); // Component uses lowercase with CSS uppercase
     });
   });
 

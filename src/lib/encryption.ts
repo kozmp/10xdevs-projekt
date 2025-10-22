@@ -1,6 +1,9 @@
 import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || randomBytes(32);
+// Handle ENCRYPTION_KEY from env (string) or generate random 32 bytes
+const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY
+  ? Buffer.from(process.env.ENCRYPTION_KEY, "base64")
+  : randomBytes(32);
 const ALGORITHM = "aes-256-gcm";
 
 export function encryptApiKey(apiKey: string): { encrypted: string; iv: string } {
