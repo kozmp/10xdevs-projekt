@@ -1,3 +1,11 @@
+/**
+ * @fileoverview OpenRouter API service for AI chat completions.
+ * Provides a robust client for interacting with OpenRouter's AI models with
+ * automatic retries, validation, and error handling.
+ *
+ * @module openrouter.service
+ */
+
 import { z } from "zod";
 import {
   OpenRouterConfig,
@@ -9,7 +17,10 @@ import {
   RateLimitError,
 } from "./openrouter.types";
 
-// Validation schemas
+/**
+ * Zod schema for validating chat parameters.
+ * @internal
+ */
 const chatParamsSchema = z.object({
   messages: z.array(
     z.object({
@@ -22,6 +33,45 @@ const chatParamsSchema = z.object({
   max_tokens: z.number().positive().optional(),
 });
 
+/**
+ * Service for communicating with OpenRouter API.
+ *
+ * This service provides a high-level interface for AI chat completions with:
+ * - Automatic request validation using Zod schemas
+ * - Exponential backoff retry mechanism for failed requests
+ * - Rate limit handling with retry-after support
+ * - System message and response format configuration
+ * - Comprehensive error handling and logging
+ *
+ * @class OpenRouterService
+ *
+ * @example
+ * ```typescript
+ * const service = new OpenRouterService({
+ *   apiKey: process.env.OPENROUTER_API_KEY,
+ *   defaultModel: "openai/gpt-4o-mini",
+ *   maxRetries: 3,
+ *   timeout: 60000
+ * });
+ *
+ * // Set system instructions
+ * service.setSystemMessage("You are a helpful coding assistant.");
+ *
+ * // Make a chat request
+ * const response = await service.chat({
+ *   messages: [
+ *     { role: "user", content: "Explain TypeScript interfaces" }
+ *   ],
+ *   temperature: 0.7
+ * });
+ *
+ * console.log(response.choices[0].message.content);
+ * ```
+ *
+ * @see {@link OpenRouterConfig} for configuration options
+ * @see {@link ChatParams} for request parameters
+ * @see {@link ChatResponse} for response structure
+ */
 export class OpenRouterService {
   private apiKey: string;
   private baseUrl: string;
