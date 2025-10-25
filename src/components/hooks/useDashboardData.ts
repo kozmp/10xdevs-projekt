@@ -26,26 +26,41 @@ export function useDashboardData(): UseDashboardDataReturn {
     try {
       // Fetch shop data
       const shopResponse = await fetch("/api/shops");
-      if (!shopResponse.ok) {
-        throw new Error(`Failed to fetch shop: ${shopResponse.statusText}`);
+
+      // Handle authentication errors (401) - these are real errors
+      if (shopResponse.status === 401) {
+        throw new Error("Unauthorized - Please log in");
       }
+
+      // Handle server errors (500+) - these are real errors
+      if (shopResponse.status >= 500) {
+        throw new Error(`Server error: ${shopResponse.statusText}`);
+      }
+
+      // Parse shop data - now always returns 200 OK with isConnected flag
       const shop: ShopResponseDTO = await shopResponse.json();
 
       // Fetch products count (limit=1 to get meta with minimal data)
-      const productsResponse = await fetch("/api/products?page=1&limit=1");
-      if (!productsResponse.ok) {
-        throw new Error(`Failed to fetch products: ${productsResponse.statusText}`);
-      }
-      const productsData = await productsResponse.json();
-      const count = productsData.meta?.total || 0;
+      // Only fetch if shop is connected
+      let count = 0;
+      let jobs: JobListDTO[] = [];
 
-      // Fetch recent 5 jobs
-      const jobsResponse = await fetch("/api/jobs?limit=5");
-      if (!jobsResponse.ok) {
-        throw new Error(`Failed to fetch jobs: ${jobsResponse.statusText}`);
+      if (shop.isConnected) {
+        const productsResponse = await fetch("/api/products?page=1&limit=1");
+        if (!productsResponse.ok) {
+          throw new Error(`Failed to fetch products: ${productsResponse.statusText}`);
+        }
+        const productsData = await productsResponse.json();
+        count = productsData.meta?.total || 0;
+
+        // Fetch recent 5 jobs
+        const jobsResponse = await fetch("/api/jobs?limit=5");
+        if (!jobsResponse.ok) {
+          throw new Error(`Failed to fetch jobs: ${jobsResponse.statusText}`);
+        }
+        const jobsData = await jobsResponse.json();
+        jobs = jobsData.data || [];
       }
-      const jobsData = await jobsResponse.json();
-      const jobs: JobListDTO[] = jobsData.data || [];
 
       setData({ shop, count, jobs });
     } catch (err) {

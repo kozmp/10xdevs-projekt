@@ -13,7 +13,7 @@ export function DashboardPage() {
 
   // Check if shop is not configured and open modal
   useEffect(() => {
-    if (data && !data.shop.shopifyDomain) {
+    if (data && !data.shop.isConnected) {
       setIsModalOpen(true);
       toast.info("Skonfiguruj klucz API", {
         description: "Aby korzystać z aplikacji, musisz wprowadzić klucz API Shopify",
@@ -79,7 +79,9 @@ export function DashboardPage() {
     );
   }
 
-  const hasShop = data.shop && data.shop.shopifyDomain;
+  // Check if shop is connected (defensive programming with optional chaining)
+  const isShopConnected = data.shop?.isConnected ?? false;
+  const shopName = data.shop?.shopifyDomain;
 
   return (
     <main className="container mx-auto p-6">
@@ -96,7 +98,7 @@ export function DashboardPage() {
 
       {/* Grid with cards */}
       <section className="grid gap-6 md:grid-cols-2 mb-6">
-        <StatusCard status={hasShop} shopName={data.shop.shopifyDomain || undefined} />
+        <StatusCard status={isShopConnected} shopName={shopName} />
         <ProductsCountCard count={data.count} />
       </section>
 

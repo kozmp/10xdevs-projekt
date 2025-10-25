@@ -401,6 +401,54 @@ export interface Database {
           },
         ];
       };
+      description_versions: {
+        Row: {
+          version_id: string;
+          product_id: string;
+          job_id: string;
+          content: string;
+          format: "html" | "markdown";
+          version_note: string | null;
+          version: number;
+          created_at: string;
+        };
+        Insert: {
+          version_id?: string;
+          product_id: string;
+          job_id: string;
+          content: string;
+          format?: "html" | "markdown";
+          version_note?: string | null;
+          version: number;
+          created_at?: string;
+        };
+        Update: {
+          version_id?: string;
+          product_id?: string;
+          job_id?: string;
+          content?: string;
+          format?: "html" | "markdown";
+          version_note?: string | null;
+          version?: number;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "description_versions_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "description_versions_job_id_fkey";
+            columns: ["job_id"];
+            isOneToOne: false;
+            referencedRelation: "jobs";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;

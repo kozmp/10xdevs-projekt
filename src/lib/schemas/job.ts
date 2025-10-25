@@ -18,7 +18,8 @@ export const createJobSchema = z.object({
     .max(50, "Maximum 50 products can be processed in one batch"),
   style: jobStyleSchema,
   language: languageSchema,
-  publicationMode: publicationModeSchema,
+  publicationMode: publicationModeSchema.optional(),
+  model: z.string().optional(),
 }) satisfies z.ZodType<CreateJobCommand>;
 
 // Schema dla JobResponseDTO
@@ -46,6 +47,7 @@ export const jobDetailSchema = z.object({
   startedAt: z.string().datetime().nullable(),
   completedAt: z.string().datetime().nullable(),
   totalCostEstimate: z.number().nullable(),
+  estimatedTokensTotal: z.number().nullable().optional(),
   products: z.array(jobProductSchema),
   progress: z.number().min(0).max(100),
 }) satisfies z.ZodType<JobDetailDTO>;

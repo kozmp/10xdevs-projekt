@@ -1,12 +1,19 @@
 import type { APIRoute } from "astro";
-import { jobDetailSchema } from "../../../lib/schemas/job";
-import type { JobDetailDTO } from "../../../types";
+import { JobService } from "../../../lib/services/job.service";
 
 export const prerender = false;
 
+/**
+ * GET /api/jobs/[id]
+ *
+ * Pobiera szczegóły joba z bazy danych.
+ * Wymaga autoryzacji. RLS zapewnia dostęp tylko do własnych jobów.
+ *
+ * Response: JobDTO (ze zmienionymi polami camelCase)
+ */
 export const GET: APIRoute = async ({ locals, params }) => {
   try {
-    // Walidacja ID zlecenia - dopuszczamy również mock job IDs
+    // 1. Walidacja ID
     if (!params.id) {
       return new Response(
         JSON.stringify({
@@ -19,54 +26,24 @@ export const GET: APIRoute = async ({ locals, params }) => {
       );
     }
 
-    // MVP: Mockowane zlecenia
-    const mockJobsDetail: Record<string, JobDetailDTO> = {
-      "job-1234567890-abc123": {
-        jobId: "job-1234567890-abc123",
-        status: "in_progress",
-        style: "Professional",
-        language: "pl",
-        publicationMode: "draft",
-        createdAt: "2025-01-15T10:00:00Z",
-        startedAt: "2025-01-15T10:05:00Z",
-        completedAt: null,
-        totalCostEstimate: 15.5,
-        products: [
-          {
-            productId: "11111111-1111-1111-1111-111111111111",
-            status: "completed",
-            cost: 5.0,
-            tokenUsageDetails: { input: 100, output: 200 },
-          },
-          {
-            productId: "22222222-2222-2222-2222-222222222222",
-            status: "in_progress",
-            cost: null,
-            tokenUsageDetails: null,
-          },
-        ],
-        progress: 50,
-      },
-    };
-
-    // Jeśli job ID zaczyna się od "job-", zwracamy mock
-    const jobDetail = params.id.startsWith("job-")
-      ? mockJobsDetail[params.id] || {
-          jobId: params.id,
-          status: "pending",
-          style: "Professional",
-          language: "pl",
-          publicationMode: "draft",
-          createdAt: new Date().toISOString(),
-          startedAt: null,
-          completedAt: null,
-          totalCostEstimate: null,
-          products: [],
-          progress: 0,
+    // 2. Weryfikacja autoryzacji
+    if (!locals.user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized - Please log in",
+        }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
         }
-      : null;
+      );
+    }
 
-    if (!jobDetail) {
+    // 3. Pobierz job z bazy
+    const jobService = new JobService(locals.supabase);
+    const job = await jobService.getJob(params.id);
+
+    if (!job) {
       return new Response(
         JSON.stringify({
           error: "Job not found",
@@ -78,22 +55,8 @@ export const GET: APIRoute = async ({ locals, params }) => {
       );
     }
 
-    // Walidacja odpowiedzi
-    const responseValidation = jobDetailSchema.safeParse(jobDetail);
-    if (!responseValidation.success) {
-      console.error("Invalid job data format:", responseValidation.error);
-      return new Response(
-        JSON.stringify({
-          error: "Internal server error",
-        }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-
-    return new Response(JSON.stringify(jobDetail), {
+    // 4. Zwróć job (JobDTO używa camelCase)
+    return new Response(JSON.stringify(job), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
@@ -102,6 +65,7 @@ export const GET: APIRoute = async ({ locals, params }) => {
     return new Response(
       JSON.stringify({
         error: "Internal server error",
+        details: err instanceof Error ? err.message : "Unknown error",
       }),
       {
         status: 500,
