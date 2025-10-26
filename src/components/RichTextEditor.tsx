@@ -6,18 +6,7 @@ import CharacterCount from "@tiptap/extension-character-count";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import {
-  Bold,
-  Italic,
-  List,
-  ListOrdered,
-  Undo,
-  Redo,
-  Heading2,
-  Quote,
-  Minus,
-  Code,
-} from "lucide-react";
+import { Bold, Italic, List, ListOrdered, Undo, Redo, Heading2, Quote, Minus, Code } from "lucide-react";
 import "./RichTextEditor.css";
 
 /**
@@ -146,8 +135,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     },
     editorProps: {
       attributes: {
-        class:
-          "prose prose-sm max-w-none focus:outline-none min-h-[200px] px-4 py-3 text-sm leading-relaxed",
+        class: "prose prose-sm max-w-none focus:outline-none min-h-[200px] px-4 py-3 text-sm leading-relaxed",
         "aria-label": label,
       },
     },

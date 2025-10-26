@@ -137,7 +137,7 @@ export class CostEstimateService {
    * Output tokens = Estimated length based on style * product count
    */
   private estimateTokens(
-    products: Array<{ name: string; short_description: string | null; long_description: string | null }>,
+    products: { name: string; short_description: string | null; long_description: string | null }[],
     request: CostEstimateRequest
   ): { inputTokens: number; outputTokens: number } {
     // Input tokens estimation
@@ -169,12 +169,12 @@ export class CostEstimateService {
   /**
    * Pobiera dostępne modele z cenami
    */
-  static getAvailableModels(): Array<{
+  static getAvailableModels(): {
     model: string;
     inputCost: number;
     outputCost: number;
     speed: string;
-  }> {
+  }[] {
     return Object.entries(MODEL_PRICING).map(([model, pricing]) => ({
       model,
       inputCost: pricing.inputCostPer1M,

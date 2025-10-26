@@ -143,8 +143,7 @@ export function useShopConnection(): UseShopConnectionReturn {
 
       if (!response.ok) {
         const errorData = await response.json();
-        const errorMessage =
-          errorData.details || errorData.error || "Failed to connect shop";
+        const errorMessage = errorData.details || errorData.error || "Failed to connect shop";
         throw new Error(errorMessage);
       }
 

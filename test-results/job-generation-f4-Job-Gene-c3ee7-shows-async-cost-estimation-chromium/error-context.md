@@ -1,0 +1,90 @@
+# Page snapshot
+
+```yaml
+- generic:
+  - generic:
+    - navigation:
+      - generic:
+        - generic:
+          - generic:
+            - link:
+              - /url: /
+              - text: 10x Devs
+          - generic:
+            - link:
+              - /url: /products
+              - text: Produkty
+            - link:
+              - /url: /jobs
+              - text: Zadania
+            - link:
+              - /url: /add-shop
+              - text: Dodaj sklep
+            - generic: kozmp.dev@gmail.com
+            - button: Wyloguj
+  - main:
+    - generic:
+      - main:
+        - generic:
+          - heading [level=1]: Dashboard
+          - button: Odśwież
+        - generic:
+          - article:
+            - generic:
+              - generic: Status połączenia
+              - generic: Sprawdź połączenie z API
+            - generic:
+              - generic:
+                - generic: Nieskonfigurowany
+          - article:
+            - generic:
+              - generic: Produkty
+              - generic: Łączna liczba produktów w sklepie
+            - generic:
+              - generic: "0"
+        - generic:
+          - article:
+            - generic:
+              - generic: Ostatnie zlecenia
+              - generic: 5 ostatnich batch jobów
+            - generic:
+              - paragraph: Brak zleceń
+        - region "Notifications alt+T":
+          - list:
+            - listitem:
+              - generic:
+                - img
+              - generic:
+                - generic: Skonfiguruj klucz API
+                - generic: Aby korzystać z aplikacji, musisz wprowadzić klucz API Shopify
+  - generic [ref=e3]:
+    - button [ref=e4]:
+      - img [ref=e6]
+      - generic: Menu
+    - button [ref=e10]:
+      - img [ref=e12]
+      - generic: Inspect
+    - button [ref=e14]:
+      - generic [ref=e15]:
+        - img [ref=e16]
+        - img [ref=e19]
+      - generic: Audit
+    - button [ref=e22]:
+      - img [ref=e24]
+      - generic: Settings
+  - dialog "Konfiguracja klucza API" [ref=e28]:
+    - generic [ref=e29]:
+      - heading "Konfiguracja klucza API" [level=2] [ref=e30]
+      - paragraph [ref=e31]: Wprowadź klucz API Shopify, aby połączyć się ze sklepem.
+    - generic [ref=e33]:
+      - generic [ref=e34]: Klucz API Shopify
+      - textbox "Klucz API Shopify" [active] [ref=e35]:
+        - /placeholder: Wprowadź klucz API...
+      - paragraph [ref=e36]: Klucz musi zawierać co najmniej 8 znaków
+    - generic [ref=e37]:
+      - button "Usuń" [ref=e38]
+      - button "Zapisz" [disabled]
+    - button "Close" [ref=e39]:
+      - img
+      - generic [ref=e40]: Close
+```

@@ -48,6 +48,8 @@ export class JobService {
         style: command.style,
         language: command.language,
         publication_mode: command.publicationMode || "draft",
+        model: command.model || "openai/gpt-4o-mini",
+        system_message: command.systemMessage,
       })
       .select()
       .single();
@@ -171,6 +173,8 @@ export class JobService {
       totalCostEstimate: job.total_cost_estimate,
       estimatedTokensTotal: job.estimated_tokens_total,
       publicationMode: job.publication_mode,
+      model: job.model,
+      systemMessage: job.system_message,
       createdAt: job.created_at,
       startedAt: job.started_at,
       completedAt: job.completed_at,

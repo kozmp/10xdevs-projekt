@@ -92,6 +92,7 @@ export interface CreateJobCommand {
   language: JobLanguage;
   publicationMode?: PublicationMode;
   model?: string;
+  systemMessage?: string;
 }
 
 export interface JobDTO {
@@ -103,6 +104,8 @@ export interface JobDTO {
   totalCostEstimate?: number;
   estimatedTokensTotal?: number;
   publicationMode: PublicationMode;
+  model?: string;
+  systemMessage?: string;
   createdAt: string;
   startedAt?: string;
   completedAt?: string;

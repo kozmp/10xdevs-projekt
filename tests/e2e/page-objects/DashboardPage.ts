@@ -31,7 +31,7 @@ export class DashboardPage {
     // Status Card
     this.statusCardTitle = page.locator('text="Status połączenia"');
     this.statusIndicator = page.locator('[aria-label*="Połączono"], [aria-label*="Nieskonfigurowany"]').first();
-    this.statusLabel = page.locator('text=/^(Aktywne|Nieskonfigurowany)$/').first();
+    this.statusLabel = page.locator("text=/^(Aktywne|Nieskonfigurowany)$/").first();
 
     // API Key Modal
     this.apiKeyModal = page.locator('[role="dialog"]');
@@ -106,7 +106,7 @@ export class DashboardPage {
    */
   async getShopName(): Promise<string | null> {
     try {
-      const shopNameElement = this.page.locator('text=/Sklep: (.+)$/').first();
+      const shopNameElement = this.page.locator("text=/Sklep: (.+)$/").first();
       const text = await shopNameElement.textContent({ timeout: 2000 });
       return text?.replace("Sklep: ", "") || null;
     } catch {

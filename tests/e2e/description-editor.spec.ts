@@ -93,20 +93,20 @@ test.describe("Product Description Editor - E2E", () => {
     await page.click('button:has-text("Zapisz z komentarzem")');
 
     // Wait for dialog
-    await page.waitForSelector('dialog[open]');
+    await page.waitForSelector("dialog[open]");
 
     // Fill version note
-    const versionNoteInput = page.locator('input#version-note');
+    const versionNoteInput = page.locator("input#version-note");
     await versionNoteInput.fill("Dodano sekcję kluczowych cech produktu");
 
     // Click save in dialog
     await page.click('dialog[open] button:has-text("Zapisz")');
 
     // ASSERT: Wait for success toast
-    await expect(page.locator('text=Opis zapisany pomyślnie')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator("text=Opis zapisany pomyślnie")).toBeVisible({ timeout: 5000 });
 
     // ASSERT: Dialog should close
-    await expect(page.locator('dialog[open]')).not.toBeVisible();
+    await expect(page.locator("dialog[open]")).not.toBeVisible();
 
     // ASSERT: Save button should be disabled (no unsaved changes)
     const saveButton = page.locator('button:has-text("Zapisano")');
@@ -114,14 +114,14 @@ test.describe("Product Description Editor - E2E", () => {
 
     // ASSERT: Version history should show new version
     await page.click('button:has-text("Historia")');
-    await page.waitForSelector('dialog[open]');
+    await page.waitForSelector("dialog[open]");
 
     // Check if version note is visible in history
-    const historyDialog = page.locator('dialog[open]');
-    await expect(historyDialog.locator('text=Dodano sekcję kluczowych cech produktu')).toBeVisible();
+    const historyDialog = page.locator("dialog[open]");
+    await expect(historyDialog.locator("text=Dodano sekcję kluczowych cech produktu")).toBeVisible();
 
     // ASSERT: Character count should reflect content
-    const characterCounter = page.locator('text=/\\d+ \\/ 50,000/');
+    const characterCounter = page.locator("text=/\\d+ \\/ 50,000/");
     await expect(characterCounter).toBeVisible();
     const counterText = await characterCounter.textContent();
     expect(counterText).toMatch(/\d{2,} \/ 50,000/); // At least 10 characters
@@ -161,7 +161,7 @@ test.describe("Product Description Editor - E2E", () => {
 
     // Save new version
     await page.click('button:has-text("Zapisz")');
-    await expect(page.locator('text=Opis zapisany pomyślnie')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator("text=Opis zapisany pomyślnie")).toBeVisible({ timeout: 5000 });
 
     // Get modified content
     const modifiedContent = await page.locator(".ProseMirror").textContent();
@@ -170,13 +170,13 @@ test.describe("Product Description Editor - E2E", () => {
 
     // ACT: Open version history
     await page.click('button:has-text("Historia")');
-    await page.waitForSelector('dialog[open]');
+    await page.waitForSelector("dialog[open]");
 
     // Wait for version list to load
-    await page.waitForSelector('dialog[open] .cursor-pointer');
+    await page.waitForSelector("dialog[open] .cursor-pointer");
 
     // Get all version cards
-    const versionCards = page.locator('dialog[open] .cursor-pointer');
+    const versionCards = page.locator("dialog[open] .cursor-pointer");
     const versionCount = await versionCards.count();
     expect(versionCount).toBeGreaterThanOrEqual(2); // At least 2 versions
 
@@ -184,10 +184,10 @@ test.describe("Product Description Editor - E2E", () => {
     await versionCards.nth(1).click();
 
     // ASSERT: Toast notification for loaded version
-    await expect(page.locator('text=Wczytano wersję')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator("text=Wczytano wersję")).toBeVisible({ timeout: 5000 });
 
     // ASSERT: Dialog should close
-    await expect(page.locator('dialog[open]')).not.toBeVisible();
+    await expect(page.locator("dialog[open]")).not.toBeVisible();
 
     // ASSERT: Content should be reverted to previous version
     const revertedContent = await page.locator(".ProseMirror").textContent();
@@ -200,12 +200,12 @@ test.describe("Product Description Editor - E2E", () => {
 
     // ASSERT: Can save reverted version as new version
     await saveButton.click();
-    await expect(page.locator('text=Opis zapisany pomyślnie')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator("text=Opis zapisany pomyślnie")).toBeVisible({ timeout: 5000 });
 
     // Verify version count increased
     await page.click('button:has-text("Historia")');
-    await page.waitForSelector('dialog[open] .cursor-pointer');
-    const newVersionCount = await page.locator('dialog[open] .cursor-pointer').count();
+    await page.waitForSelector("dialog[open] .cursor-pointer");
+    const newVersionCount = await page.locator("dialog[open] .cursor-pointer").count();
     expect(newVersionCount).toBe(versionCount + 1);
   });
 
@@ -223,20 +223,17 @@ test.describe("Product Description Editor - E2E", () => {
 
     // Generate text exceeding 50000 characters
     const longText = "A".repeat(50100); // 50100 characters
-    await page.evaluate(
-      (text) => {
-        const editor = document.querySelector(".ProseMirror");
-        if (editor) {
-          editor.innerHTML = `<p>${text}</p>`;
-          // Trigger input event to update character count
-          editor.dispatchEvent(new Event("input", { bubbles: true }));
-        }
-      },
-      longText
-    );
+    await page.evaluate((text) => {
+      const editor = document.querySelector(".ProseMirror");
+      if (editor) {
+        editor.innerHTML = `<p>${text}</p>`;
+        // Trigger input event to update character count
+        editor.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    }, longText);
 
     // ASSERT: Error message should appear
-    await expect(page.locator('text=Przekroczono limit znaków')).toBeVisible({ timeout: 3000 });
+    await expect(page.locator("text=Przekroczono limit znaków")).toBeVisible({ timeout: 3000 });
 
     // ASSERT: Character counter should be red
     const characterCounter = page.locator('[role="progressbar"]');

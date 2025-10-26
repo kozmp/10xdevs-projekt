@@ -98,9 +98,7 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({
                   )}
                 </div>
 
-                {modelInfo.description && (
-                  <p className="text-xs text-muted-foreground">{modelInfo.description}</p>
-                )}
+                {modelInfo.description && <p className="text-xs text-muted-foreground">{modelInfo.description}</p>}
 
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">

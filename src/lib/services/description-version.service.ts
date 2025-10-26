@@ -68,9 +68,7 @@ export class DescriptionVersionService {
       .single();
 
     if (insertError || !newVersion) {
-      throw new Error(
-        `Failed to save description version: ${insertError?.message || "Unknown error"}`
-      );
+      throw new Error(`Failed to save description version: ${insertError?.message || "Unknown error"}`);
     }
 
     // 4. Mapuj do DTO

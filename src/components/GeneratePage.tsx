@@ -9,6 +9,9 @@ import { CostPreviewBadge } from "./CostPreviewBadge";
 import type { GenerationStyle, GenerationLanguage } from "@/lib/services/product-description-generator.service";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
+import { Textarea } from "./ui/textarea";
+import { Label } from "./ui/label";
+import type { ShopResponseDTO } from "../types";
 
 interface GeneratePageProps {
   selectedProductIds: string[];
@@ -18,8 +21,11 @@ export function GeneratePage({ selectedProductIds }: GeneratePageProps) {
   const [selectedStyle, setSelectedStyle] = React.useState<GenerationStyle>("professional");
   const [selectedLanguage, setSelectedLanguage] = React.useState<GenerationLanguage>("pl");
   const [selectedModel, setSelectedModel] = React.useState<string>("openai/gpt-4o-mini");
+  const [systemMessage, setSystemMessage] = React.useState<string>("");
+  const [connectionStatus, setConnectionStatus] = React.useState<ShopResponseDTO | null>(null);
+  const [isLoadingConnection, setIsLoadingConnection] = React.useState(true);
 
-  const { generate, isGenerating, progress, results, summary, error } = useGenerate({ ids: selectedProductIds });
+  const { isGenerating, progress, results, summary, error: generateError } = useGenerate({ ids: selectedProductIds });
 
   // Cost estimation hook
   const {
@@ -33,6 +39,30 @@ export function GeneratePage({ selectedProductIds }: GeneratePageProps) {
     openDialog,
     closeDialog,
   } = useCostEstimate();
+
+  // F5: Sprawdzanie statusu połączenia ze sklepem
+  React.useEffect(() => {
+    const fetchConnectionStatus = async () => {
+      try {
+        setIsLoadingConnection(true);
+        const response = await fetch("/api/shops");
+        if (response.ok) {
+          const data: ShopResponseDTO = await response.json();
+          setConnectionStatus(data);
+        } else {
+          console.error("Failed to fetch connection status:", response.statusText);
+          setConnectionStatus({ isConnected: false });
+        }
+      } catch (error) {
+        console.error("Error fetching connection status:", error);
+        setConnectionStatus({ isConnected: false });
+      } finally {
+        setIsLoadingConnection(false);
+      }
+    };
+
+    fetchConnectionStatus();
+  }, []);
 
   // Kalkulacja kosztów przed rozpoczęciem
   const handleCalculateCost = async () => {
@@ -53,25 +83,45 @@ export function GeneratePage({ selectedProductIds }: GeneratePageProps) {
         model: selectedModel,
       });
       // Dialog już jest otwarty, pokaże estimate gdy się pojawi
-    } catch (error) {
+    } catch (calcError) {
       // Dialog już jest otwarty, pokaże error state
       // Hook ustawił error state, więc dialog wyświetli komunikat błędu
+      console.error("Cost calculation error:", calcError);
     }
   };
 
-  // Rozpoczęcie generowania (po zatwierdzeniu kosztów)
+  // F4: Rozpoczęcie generowania przez POST /api/jobs (po zatwierdzeniu kosztów)
   const handleConfirmAndGenerate = async () => {
     closeDialog();
-    console.log("Starting generation with:", {
-      style: selectedStyle,
-      language: selectedLanguage,
-      productIds: selectedProductIds,
-      model: selectedModel,
-    });
+
     try {
-      await generate(selectedStyle, selectedLanguage);
-    } catch (error) {
-      console.error("Generation error:", error);
+      // POST /api/jobs - asynchroniczne tworzenie joba
+      const response = await fetch("/api/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productIds: selectedProductIds,
+          style: selectedStyle,
+          language: selectedLanguage,
+          model: selectedModel,
+          systemMessage: systemMessage || undefined, // Nie wysyłaj pustego stringa
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create job");
+      }
+
+      const { jobId } = await response.json();
+
+      // F2: Przekieruj do /jobs/:id (job będzie przetwarzany asynchronicznie)
+      window.location.href = `/jobs/${jobId}`;
+    } catch (jobCreationError) {
+      console.error("Job creation error:", jobCreationError);
+      // Możesz dodać tutaj wyświetlenie błędu w UI
     }
   };
 
@@ -103,10 +153,13 @@ export function GeneratePage({ selectedProductIds }: GeneratePageProps) {
               <p className="font-medium">Brak wybranych produktów</p>
               <p className="mt-1">
                 Najpierw wybierz produkty ze{" "}
-                <a href="/products" className="font-semibold underline hover:text-yellow-800 dark:hover:text-yellow-200">
+                <a
+                  href="/products"
+                  className="font-semibold underline hover:text-yellow-800 dark:hover:text-yellow-200"
+                >
                   strony produktów
                 </a>
-                , a następnie kliknij "Generuj opisy".
+                , a następnie kliknij &quot;Generuj opisy&quot;.
               </p>
             </div>
           </div>
@@ -122,6 +175,32 @@ export function GeneratePage({ selectedProductIds }: GeneratePageProps) {
         <div>
           <h2 className="text-xl font-semibold mb-4">Język</h2>
           <LanguageSelect selected={selectedLanguage} onSelect={setSelectedLanguage} />
+        </div>
+
+        {/* F4: System Message (własny prompt) */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <Label htmlFor="system-message" className="text-xl font-semibold">
+              Własny prompt
+            </Label>
+            <span className={`text-sm ${systemMessage.length > 6000 ? "text-red-600 font-semibold" : "text-gray-500"}`}>
+              {systemMessage.length}/6000
+            </span>
+          </div>
+          <Textarea
+            id="system-message"
+            placeholder='Dodaj własne instrukcje dla modelu AI, np. "Pisz w stylu młodzieżowym" lub "Skup się na aspektach technicznych"...'
+            value={systemMessage}
+            onChange={(e) => setSystemMessage(e.target.value)}
+            maxLength={6000}
+            rows={6}
+            disabled={isGenerating}
+            aria-invalid={systemMessage.length > 6000}
+            className="resize-none"
+          />
+          <p className="text-sm text-gray-500 mt-1">
+            Opcjonalny prompt systemowy pozwala dostosować styl i ton generowanych opisów (max 6000 znaków).
+          </p>
         </div>
 
         <div>
@@ -155,14 +234,56 @@ export function GeneratePage({ selectedProductIds }: GeneratePageProps) {
           </div>
         )}
 
+        {/* F5: Ostrzeżenie o braku połączenia */}
+        {!isLoadingConnection && connectionStatus && !connectionStatus.isConnected && (
+          <div className="rounded-md border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-950">
+            <div className="flex gap-3">
+              <svg
+                className="h-5 w-5 flex-shrink-0 text-red-600 dark:text-red-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <div className="text-sm text-red-700 dark:text-red-300">
+                <p className="font-medium">Brak połączenia ze sklepem</p>
+                <p className="mt-1">
+                  Aby rozpocząć generowanie opisów, najpierw{" "}
+                  <a href="/dashboard" className="font-semibold underline hover:text-red-800 dark:hover:text-red-200">
+                    podłącz swój sklep Shopify
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-4">
           <Button
             onClick={handleCalculateCost}
-            disabled={isGenerating || isCalculating || selectedProductIds.length === 0}
+            disabled={
+              isGenerating ||
+              isCalculating ||
+              selectedProductIds.length === 0 ||
+              isLoadingConnection ||
+              (connectionStatus && !connectionStatus.isConnected) ||
+              systemMessage.length > 6000
+            }
             className="w-full"
             size="lg"
           >
-            {isCalculating ? "Kalkulowanie kosztów..." : "Oblicz koszt i rozpocznij generowanie"}
+            {isCalculating
+              ? "Kalkulowanie kosztów..."
+              : isLoadingConnection
+                ? "Sprawdzanie połączenia..."
+                : "Oblicz koszt i rozpocznij generowanie"}
           </Button>
 
           {isGenerating && (
@@ -172,7 +293,7 @@ export function GeneratePage({ selectedProductIds }: GeneratePageProps) {
             </div>
           )}
 
-          {error && <div className="p-4 bg-red-50 text-red-600 rounded-md">{error}</div>}
+          {generateError && <div className="p-4 bg-red-50 text-red-600 rounded-md">{generateError}</div>}
 
           {summary && (
             <div className="p-4 bg-green-50 rounded-md">

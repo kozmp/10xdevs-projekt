@@ -20,6 +20,7 @@ export const createJobSchema = z.object({
   language: languageSchema,
   publicationMode: publicationModeSchema.optional(),
   model: z.string().optional(),
+  systemMessage: z.string().max(6000, "System message cannot exceed 6000 characters").optional(),
 }) satisfies z.ZodType<CreateJobCommand>;
 
 // Schema dla JobResponseDTO

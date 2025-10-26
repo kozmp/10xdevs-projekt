@@ -16,17 +16,8 @@ import { Badge } from "./ui/badge";
  * - Wyświetlanie aktualnego statusu połączenia
  */
 export function ShopSettingsPage() {
-  const {
-    shop,
-    isLoading,
-    error,
-    isDialogOpen,
-    connectShop,
-    disconnectShop,
-    fetchShop,
-    openDialog,
-    closeDialog,
-  } = useShopConnection();
+  const { shop, isLoading, error, isDialogOpen, connectShop, disconnectShop, fetchShop, openDialog, closeDialog } =
+    useShopConnection();
 
   // Pobierz dane sklepu przy montowaniu komponentu
   useEffect(() => {
@@ -37,9 +28,7 @@ export function ShopSettingsPage() {
     <main className="container mx-auto p-6 max-w-4xl" data-testid="shop-settings-page">
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Shop Settings</h1>
-        <p className="text-muted-foreground">
-          Manage your Shopify store connection and API credentials
-        </p>
+        <p className="text-muted-foreground">Manage your Shopify store connection and API credentials</p>
       </div>
 
       {/* Connection Status Card */}
@@ -58,7 +47,9 @@ export function ShopSettingsPage() {
               Connected
             </Badge>
           ) : (
-            <Badge variant="secondary" data-testid="connection-badge">Not Connected</Badge>
+            <Badge variant="secondary" data-testid="connection-badge">
+              Not Connected
+            </Badge>
           )}
         </div>
 
@@ -135,8 +126,8 @@ export function ShopSettingsPage() {
           </li>
           <li>Create a new app or use an existing one</li>
           <li>
-            Configure <strong>Admin API access scopes</strong> (required: <code className="text-xs">read_products</code>,{" "}
-            <code className="text-xs">write_products</code>)
+            Configure <strong>Admin API access scopes</strong> (required: <code className="text-xs">read_products</code>
+            , <code className="text-xs">write_products</code>)
           </li>
           <li>
             Generate an <strong>Admin API access token</strong> (starts with <code className="text-xs">shpat_</code>)

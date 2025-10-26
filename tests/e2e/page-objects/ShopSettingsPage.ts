@@ -34,25 +34,25 @@ export class ShopSettingsPage {
     this.page = page;
 
     // Status Card
-    this.connectionStatusBadge = page.getByTestId('connection-badge');
-    this.shopDomainDisplay = page.locator('text=Shop Domain:').locator('..').locator('span.font-medium');
-    this.connectButton = page.getByTestId('connect-button');
-    this.updateApiKeyButton = page.getByTestId('update-api-key-button');
-    this.refreshButton = page.getByTestId('refresh-button');
+    this.connectionStatusBadge = page.getByTestId("connection-badge");
+    this.shopDomainDisplay = page.locator("text=Shop Domain:").locator("..").locator("span.font-medium");
+    this.connectButton = page.getByTestId("connect-button");
+    this.updateApiKeyButton = page.getByTestId("update-api-key-button");
+    this.refreshButton = page.getByTestId("refresh-button");
 
     // Modal (Dialog)
-    this.modal = page.getByTestId('shop-connection-modal');
-    this.modalTitle = page.getByTestId('modal-title');
-    this.shopifyDomainInput = page.getByTestId('shopify-domain-input');
-    this.apiKeyInput = page.getByTestId('api-key-input');
-    this.modalSubmitButton = page.getByTestId('submit-button');
-    this.modalCancelButton = page.getByTestId('cancel-button');
-    this.disconnectButton = page.getByTestId('disconnect-button');
-    this.confirmDisconnectButton = page.getByTestId('confirm-disconnect-button');
+    this.modal = page.getByTestId("shop-connection-modal");
+    this.modalTitle = page.getByTestId("modal-title");
+    this.shopifyDomainInput = page.getByTestId("shopify-domain-input");
+    this.apiKeyInput = page.getByTestId("api-key-input");
+    this.modalSubmitButton = page.getByTestId("submit-button");
+    this.modalCancelButton = page.getByTestId("cancel-button");
+    this.disconnectButton = page.getByTestId("disconnect-button");
+    this.confirmDisconnectButton = page.getByTestId("confirm-disconnect-button");
 
     // Messages
     this.apiErrorMessage = this.modal.locator('[role="alert"]').first();
-    this.validationError = page.getByTestId('domain-error').or(page.getByTestId('apikey-error'));
+    this.validationError = page.getByTestId("domain-error").or(page.getByTestId("apikey-error"));
     this.toast = page.locator('[data-sonner-toast], [role="status"], .sonner-toast');
   }
 

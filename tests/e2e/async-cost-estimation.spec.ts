@@ -89,31 +89,31 @@ test.describe("Async Cost Estimation Feature (F2 - Async Model)", () => {
     const visibleCard = (await costCard.count()) > 0 ? costCard : costCardAlt;
 
     // ASSERT 3: Stan "Pending" - pokazuje "Szacowanie kosztów..."
-    const pendingIndicator = page.locator('text=/Szacowanie kosztów|Obliczanie|Calculating/i');
+    const pendingIndicator = page.locator("text=/Szacowanie kosztów|Obliczanie|Calculating/i");
     await expect(pendingIndicator).toBeVisible({ timeout: 3000 });
 
     // Badge "Obliczanie..." powinien być widoczny
-    const pendingBadge = page.locator('text=/Obliczanie|Pending/i');
+    const pendingBadge = page.locator("text=/Obliczanie|Pending/i");
     await expect(pendingBadge).toBeVisible({ timeout: 2000 });
 
     // ASSERT 4: Po 1-2 sekundach koszty się aktualizują
     // Czekamy na zmianę stanu z "Pending" na "Success"
-    const successBadge = page.locator('text=/Obliczono|Completed/i');
+    const successBadge = page.locator("text=/Obliczono|Completed/i");
     await expect(successBadge).toBeVisible({ timeout: 10000 }); // Max 10s na polling
 
     // Weryfikuj że koszt jest teraz wyświetlany
-    const costDisplay = page.locator('text=/\\$0\\.\\d+/');
+    const costDisplay = page.locator("text=/\\$0\\.\\d+/");
     await expect(costDisplay).toBeVisible({ timeout: 2000 });
 
     // Weryfikuj że liczba tokenów jest wyświetlana
-    const tokensDisplay = page.locator('text=/\\d+.*token/i');
+    const tokensDisplay = page.locator("text=/\\d+.*token/i");
     await expect(tokensDisplay).toBeVisible({ timeout: 2000 });
 
     // ASSERT 5: Job status pozostaje "pending" lub przechodzi do "processing"
     const jobStatus = page.locator('[data-testid="job-status"], text=/Status:/i');
     await expect(jobStatus).toBeVisible();
     // Status powinien być "pending" lub "processing", nie "failed"
-    await expect(page.locator('text=/failed|błąd/i')).not.toBeVisible();
+    await expect(page.locator("text=/failed|błąd/i")).not.toBeVisible();
 
     console.log(`✓ E2E-F2-01 PASSED: Job ${jobId} created instantly, costs loaded asynchronously`);
   });
@@ -179,23 +179,23 @@ test.describe("Async Cost Estimation Feature (F2 - Async Model)", () => {
     await expect(page).toHaveURL(/\/jobs\//, { timeout: 5000 });
 
     // ASSERT 2: JobCostEstimateCard pokazuje stan "Pending" (koszty nie są dostępne)
-    const pendingIndicator = page.locator('text=/Szacowanie kosztów|Obliczanie/i');
+    const pendingIndicator = page.locator("text=/Szacowanie kosztów|Obliczanie/i");
 
     // Czekamy aż komponent się załaduje - może być w stanie pending lub pokazać komunikat o błędzie
     // WAŻNE: Komponent powinien pozostać w stanie "pending" nawet po kilku próbach pollingu
     await expect(pendingIndicator).toBeVisible({ timeout: 5000 });
 
     // Badge "Obliczanie..." powinien pozostać (bo koszty są null)
-    const pendingBadge = page.locator('text=/Obliczanie|Pending/i');
+    const pendingBadge = page.locator("text=/Obliczanie|Pending/i");
     await expect(pendingBadge).toBeVisible({ timeout: 3000 });
 
     // ASSERT 3: Job status to "processing" (MIMO że koszty są null)
     // To jest kluczowa asercja - główna funkcjonalność (generowanie AI) działa niezależnie od estymacji
-    const jobStatus = page.locator('text=/Status.*processing|Przetwarzanie/i');
+    const jobStatus = page.locator("text=/Status.*processing|Przetwarzanie/i");
     await expect(jobStatus).toBeVisible({ timeout: 5000 });
 
     // ASSERT 4: Brak błędu krytycznego - Job NIE jest w stanie "failed"
-    const failedStatus = page.locator('text=/Status.*failed|Błąd/i');
+    const failedStatus = page.locator("text=/Status.*failed|Błąd/i");
     await expect(failedStatus).not.toBeVisible();
 
     // ASSERT 5 (BONUS): Progress bar/indicator generowania AI jest widoczny
@@ -232,7 +232,7 @@ test.describe("Async Cost Estimation Feature (F2 - Async Model)", () => {
     await page.goto("/jobs/test-job-123");
 
     // Wait for costs to load
-    const successBadge = page.locator('text=/Obliczono|Completed/i');
+    const successBadge = page.locator("text=/Obliczono|Completed/i");
     await expect(successBadge).toBeVisible({ timeout: 10000 });
 
     // Record number of API calls until costs loaded

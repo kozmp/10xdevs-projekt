@@ -196,11 +196,7 @@ export class ShopService {
    * @returns Dane sklepu lub null jeśli nie znaleziono
    */
   async getShopByUserId(userId: string): Promise<ShopResponseDTO | null> {
-    const { data: shop, error } = await this.supabase
-      .from("shops")
-      .select("*")
-      .eq("user_id", userId)
-      .single();
+    const { data: shop, error } = await this.supabase.from("shops").select("*").eq("user_id", userId).single();
 
     if (error || !shop) {
       return null;

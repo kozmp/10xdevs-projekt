@@ -193,9 +193,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT & ASSERT
-      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow(
-        "No products found or access denied"
-      );
+      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow("No products found or access denied");
 
       // Verify Supabase was called
       expect(mockSupabase.from).toHaveBeenCalledWith("products");
@@ -219,9 +217,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT & ASSERT
-      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow(
-        /Failed to fetch products/
-      );
+      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow(/Failed to fetch products/);
     });
 
     it("should throw error when some products are missing", async () => {
@@ -249,9 +245,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT & ASSERT
-      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow(
-        /Products not found/
-      );
+      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow(/Products not found/);
     });
 
     it("should throw error for unsupported model", async () => {

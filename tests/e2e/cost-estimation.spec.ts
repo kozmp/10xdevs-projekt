@@ -159,7 +159,7 @@ test.describe("Cost Estimation Feature (FR-017/018)", () => {
 
     // Change to gpt-4o (more expensive model)
     const gpt4oRadio = page.locator('input[type="radio"][value="openai/gpt-4o"]');
-    if (await gpt4oRadio.count() > 0) {
+    if ((await gpt4oRadio.count()) > 0) {
       await gpt4oRadio.check();
 
       // Recalculate

@@ -98,7 +98,11 @@ export const CostEstimateDemo: React.FC = () => {
         <div className="space-y-4">
           <div>
             <p className="mb-2 text-sm text-muted-foreground">Wariant Compact:</p>
-            <CostPreviewBadge estimatedCost={mockEstimate.totalCost} productCount={mockEstimate.productCount} variant="compact" />
+            <CostPreviewBadge
+              estimatedCost={mockEstimate.totalCost}
+              productCount={mockEstimate.productCount}
+              variant="compact"
+            />
           </div>
           <div>
             <p className="mb-2 text-sm text-muted-foreground">Wariant Detailed:</p>

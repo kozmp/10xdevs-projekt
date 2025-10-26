@@ -191,9 +191,7 @@ export const ProductDescriptionEditor: React.FC<ProductDescriptionEditorProps> =
 
       {/* Auto-save indicator */}
       {autoSave && (
-        <p className="text-xs text-muted-foreground">
-          Auto-save włączony • Zmiany zapisują się automatycznie
-        </p>
+        <p className="text-xs text-muted-foreground">Auto-save włączony • Zmiany zapisują się automatycznie</p>
       )}
 
       {/* Save with Version Note Dialog */}
@@ -270,9 +268,7 @@ export const ProductDescriptionEditor: React.FC<ProductDescriptionEditorProps> =
                             </span>
                           )}
                         </div>
-                        {version.versionNote && (
-                          <p className="text-sm text-muted-foreground">{version.versionNote}</p>
-                        )}
+                        {version.versionNote && <p className="text-sm text-muted-foreground">{version.versionNote}</p>}
                         <p className="text-xs text-muted-foreground">{formatDate(version.createdAt)}</p>
                       </div>
                       <div className="text-xs text-muted-foreground">

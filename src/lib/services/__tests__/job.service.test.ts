@@ -129,9 +129,7 @@ describe("JobService", () => {
       };
 
       // ACT & ASSERT
-      await expect(service.createJob(command, TEST_SHOP_ID)).rejects.toThrow(
-        /Products not found or access denied/
-      );
+      await expect(service.createJob(command, TEST_SHOP_ID)).rejects.toThrow(/Products not found or access denied/);
     });
 
     it("should rollback job on job_products insert failure", async () => {
@@ -192,9 +190,7 @@ describe("JobService", () => {
       };
 
       // ACT & ASSERT
-      await expect(service.createJob(command, TEST_SHOP_ID)).rejects.toThrow(
-        /Failed to associate products with job/
-      );
+      await expect(service.createJob(command, TEST_SHOP_ID)).rejects.toThrow(/Failed to associate products with job/);
 
       // Verify rollback was called
       expect(mockDelete).toHaveBeenCalled();

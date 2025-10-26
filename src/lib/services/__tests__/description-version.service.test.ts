@@ -226,9 +226,9 @@ describe("DescriptionVersionService", () => {
       });
 
       // ACT & ASSERT
-      await expect(
-        service.saveDescriptionVersion(DIFFERENT_JOB_ID, TEST_PRODUCT_ID, mockCommand)
-      ).rejects.toThrow("Product not found or access denied");
+      await expect(service.saveDescriptionVersion(DIFFERENT_JOB_ID, TEST_PRODUCT_ID, mockCommand)).rejects.toThrow(
+        "Product not found or access denied"
+      );
     });
 
     it("should throw error when database insert fails (500)", async () => {

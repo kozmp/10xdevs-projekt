@@ -116,7 +116,7 @@ test.describe("Dashboard Regression Tests (F5 - Post F3 Integration)", () => {
 
     // ASSERT 5: Toast informacyjny "Skonfiguruj klucz API" jest wyświetlany
     // (może już zniknąć, więc sprawdzamy historię lub obecność)
-    const toastCount = await page.locator('text=/Skonfiguruj klucz API/i').count();
+    const toastCount = await page.locator("text=/Skonfiguruj klucz API/i").count();
     const modalOpen = await dashboardPage.isApiKeyModalOpen();
 
     // Toast lub modal powinien być widoczny
@@ -184,7 +184,7 @@ test.describe("Dashboard Regression Tests (F5 - Post F3 Integration)", () => {
 
     // ASSERT 6: ProductsCountCard jest widoczny i renderuje się poprawnie
     await expect(dashboardPage.productsCountCard).toBeVisible();
-    const productsCount = await page.locator('text=/Produkty/i').first();
+    const productsCount = await page.locator("text=/Produkty/i").first();
     await expect(productsCount).toBeVisible();
 
     // ASSERT 7: RecentJobsTable jest widoczny i renderuje się poprawnie
@@ -225,7 +225,7 @@ test.describe("Dashboard Regression Tests (F5 - Post F3 Integration)", () => {
     await page.waitForLoadState("networkidle");
 
     // ASSERT: Sklep jest połączony
-    let isConnected = await dashboardPage.isShopConnected();
+    const isConnected = await dashboardPage.isShopConnected();
     expect(isConnected).toBe(true);
 
     // ACT: Usuń sklep (symulacja disconnect)

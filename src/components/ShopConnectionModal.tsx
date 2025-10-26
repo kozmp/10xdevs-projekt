@@ -1,12 +1,5 @@
 import React, { useState, useId } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -188,8 +181,7 @@ export function ShopConnectionModal({
           // Potwierdzenie rozłączenia
           <div className="py-4">
             <p className="text-sm text-muted-foreground mb-4">
-              Are you sure you want to disconnect your store? This will remove all jobs and generated
-              descriptions.
+              Are you sure you want to disconnect your store? This will remove all jobs and generated descriptions.
             </p>
             <div className="flex gap-2 justify-end">
               <Button
@@ -245,7 +237,12 @@ export function ShopConnectionModal({
                   required
                 />
                 {formErrors.shopifyDomain && (
-                  <p id={shopifyDomainErrorId} className="text-sm text-destructive" role="alert" data-testid="domain-error">
+                  <p
+                    id={shopifyDomainErrorId}
+                    className="text-sm text-destructive"
+                    role="alert"
+                    data-testid="domain-error"
+                  >
                     {formErrors.shopifyDomain}
                   </p>
                 )}
@@ -312,11 +309,7 @@ export function ShopConnectionModal({
                     Cancel
                   </Button>
                   <Button type="submit" disabled={isLoading || !shopifyDomain || !apiKey} data-testid="submit-button">
-                    {isLoading
-                      ? "Verifying..."
-                      : currentShop
-                        ? "Update Connection"
-                        : "Connect Store"}
+                    {isLoading ? "Verifying..." : currentShop ? "Update Connection" : "Connect Store"}
                   </Button>
                 </div>
               </div>
