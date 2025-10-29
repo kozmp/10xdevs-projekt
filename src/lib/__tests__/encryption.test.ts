@@ -1,14 +1,22 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-
-// Set ENCRYPTION_KEY before importing the encryption module
-// This must be done at the top level before the module loads
-vi.stubEnv("ENCRYPTION_KEY", "hnFa4rPytuPZdBzjqBS5PYJFvQjeqWBnMzSRDaxVWyw=");
-
-import { encryptApiKey, decryptApiKey } from "../encryption";
+import { describe, it, expect, beforeAll, beforeEach, vi } from "vitest";
 
 describe("Encryption Module", () => {
   const testApiKey = "test-api-key-12345";
   let encryptedData: { encrypted: string; iv: string };
+
+  // Dynamic imports to ensure env vars are set before module loads
+  let encryptApiKey: (apiKey: string) => { encrypted: string; iv: string };
+  let decryptApiKey: (encrypted: string, iv: string) => string;
+
+  beforeAll(async () => {
+    // Set env BEFORE importing the module
+    vi.stubEnv("ENCRYPTION_KEY", "hnFa4rPytuPZdBzjqBS5PYJFvQjeqWBnMzSRDaxVWyw=");
+
+    // Dynamic import AFTER env is set
+    const encryption = await import("../encryption");
+    encryptApiKey = encryption.encryptApiKey;
+    decryptApiKey = encryption.decryptApiKey;
+  });
 
   describe("encryptApiKey", () => {
     it("should encrypt API key and return encrypted string with IV", () => {

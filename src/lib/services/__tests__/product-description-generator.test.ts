@@ -12,6 +12,9 @@ vi.mock("../openrouter.service", () => ({
     chat: vi.fn().mockResolvedValue({
       choices: [{ message: { content: "Mocked description" } }],
     }),
+    setSystemMessage: vi.fn(),
+    setModel: vi.fn(),
+    setResponseFormat: vi.fn(),
   })),
 }));
 
