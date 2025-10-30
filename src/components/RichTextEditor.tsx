@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from "react";
-import { useEditor, EditorContent, type Editor } from "@tiptap/react";
+import React, { useMemo } from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";

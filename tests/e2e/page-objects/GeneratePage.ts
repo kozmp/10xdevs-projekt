@@ -26,17 +26,19 @@ export class GeneratePage {
       .or(page.locator('div:has-text("Styl komunikacji")').locator("..").locator("button"));
     this.languageSelect = page.locator('select, [role="combobox"]');
     this.generateButton = page.locator('button:has-text("Generuj opisy")');
-    this.calculateCostButton = page.locator('button:has-text("Oblicz koszt"), button:has-text("rozpocznij generowanie")');
+    this.calculateCostButton = page.locator(
+      'button:has-text("Oblicz koszt"), button:has-text("rozpocznij generowanie")'
+    );
     this.progressBar = page.locator('[role="progressbar"]');
     this.errorMessage = page.locator(".bg-red-50");
     this.summary = page.locator('.bg-green-50:has-text("Podsumowanie")');
     this.results = page.locator('h3:has-text("Wyniki")');
     this.costDialog = page.locator('[role="dialog"]');
     this.modelSelector = page.locator('[role="radiogroup"]:has(input[value*="openai"])');
-    this.systemMessageTextarea = page.locator('textarea#system-message');
-    this.systemMessageCounter = page.locator('text=/\\d+\\/6000/');
-    this.connectionWarning = page.locator('text=/Brak połączenia ze sklepem/i');
-    this.noProductsWarning = page.locator('text=/Brak wybranych produktów/i');
+    this.systemMessageTextarea = page.locator("textarea#system-message");
+    this.systemMessageCounter = page.locator("text=/\\d+\\/6000/");
+    this.connectionWarning = page.locator("text=/Brak połączenia ze sklepem/i");
+    this.noProductsWarning = page.locator("text=/Brak wybranych produktów/i");
   }
 
   async goto(productIds: string[]) {

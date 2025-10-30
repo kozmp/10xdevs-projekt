@@ -132,7 +132,7 @@ export function ShopSettingsPage() {
           <li>
             Generate an <strong>Admin API access token</strong> (starts with <code className="text-xs">shpat_</code>)
           </li>
-          <li>Copy your store domain and API token, then click "Connect Shopify Store" above</li>
+          <li>Copy your store domain and API token, then click &quot;Connect Shopify Store&quot; above</li>
         </ol>
       </Card>
 

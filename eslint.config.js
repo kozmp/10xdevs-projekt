@@ -142,7 +142,12 @@ const testSetupConfig = tseslint.config({
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   {
-    ignores: ["src/pages/forgot-password.astro", "src/pages/login.astro", "src/pages/signup.astro"],
+    ignores: [
+      "src/pages/forgot-password.astro",
+      "src/pages/login.astro",
+      "src/pages/signup.astro",
+      "src/pages/demo-editor.astro",
+    ],
   },
   baseConfig,
   jsxA11yConfig,

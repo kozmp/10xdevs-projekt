@@ -93,7 +93,7 @@ export default function JobCostEstimateDemo() {
                 (asynchronicznie).
               </p>
               <p>
-                W tym stanie komponent wyświetla animowany spinner i informację "Szacowanie kosztów...". Hook{" "}
+                W tym stanie komponent wyświetla animowany spinner i informację &quot;Szacowanie kosztów...&quot;. Hook{" "}
                 <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">useJobCostEstimate</code> robi polling
                 co 2 sekundy.
               </p>
@@ -110,7 +110,7 @@ export default function JobCostEstimateDemo() {
                   <li>Całkowity koszt (formatowany jako USD)</li>
                   <li>Koszt per produkt</li>
                   <li>Łączną liczbę tokenów</li>
-                  <li>Badge "Obliczono"</li>
+                  <li>Badge &quot;Obliczono&quot;</li>
                 </ul>
               </p>
             </div>

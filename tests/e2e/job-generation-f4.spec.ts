@@ -268,7 +268,7 @@ test.describe("Job Generation with Model Selection and System Message (F4)", () 
     expect(charCount).toBe(6000);
 
     // Przycisk powinien być enabled (bo 6000 to OK)
-    let isDisabled = await generatePage.isGenerateButtonDisabled();
+    const isDisabled = await generatePage.isGenerateButtonDisabled();
     expect(isDisabled).toBe(false);
 
     // ASSERT 2: Spróbuj wypełnić 6001 znaków (textarea ma maxLength, więc nie powinno się udać)
@@ -350,12 +350,12 @@ test.describe("Job Generation with Model Selection and System Message (F4)", () 
 
     // ASSERT 2: Karta kosztów jest w stanie "Szacowanie kosztów..." lub pokazuje już koszty
     // (może się załadować szybko w testach, ale sprawdzamy że nie ma błędu)
-    const costCard = page.locator('text=/koszt/i, text=/szacowanie/i, text=/\\$/i');
+    const costCard = page.locator("text=/koszt/i, text=/szacowanie/i, text=/\\$/i");
     const costCardVisible = await costCard.isVisible();
     expect(costCardVisible).toBe(true);
 
     // ASSERT 3: Brak błędów na stronie
-    const errorElement = page.locator('.bg-red-50, text=/error/i, text=/błąd/i');
+    const errorElement = page.locator(".bg-red-50, text=/error/i, text=/błąd/i");
     const hasError = await errorElement.isVisible().catch(() => false);
     expect(hasError).toBe(false);
 
@@ -364,7 +364,7 @@ test.describe("Job Generation with Model Selection and System Message (F4)", () 
     await page.waitForTimeout(3000); // Poczekaj 3 sekundy na async kalkulację
 
     // Sprawdź czy pojawił się rzeczywisty koszt (format $0.XX lub podobny)
-    const costValue = page.locator('text=/\\$\\d+\\.\\d+/');
+    const costValue = page.locator("text=/\\$\\d+\\.\\d+/");
     const costValueVisible = await costValue.isVisible().catch(() => false);
 
     // Koszt może się pojawić lub nie (zależy od implementacji async), ale strona nie powinna crashnąć

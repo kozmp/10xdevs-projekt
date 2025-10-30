@@ -57,7 +57,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         model: validation.data.model,
       };
 
-      const estimate = await service.estimateCost(costEstimateRequest, locals.user.id);
+      const estimate = await service.estimateCost(costEstimateRequest);
 
       // 4. Walidacja odpowiedzi
       const responseValidation = costEstimateResponseSchema.safeParse(estimate);

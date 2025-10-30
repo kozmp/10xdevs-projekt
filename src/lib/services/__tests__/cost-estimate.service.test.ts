@@ -63,7 +63,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT: Estimate cost
-      const result = await service.estimateCost(request, TEST_USER_ID);
+      const result = await service.estimateCost(request);
 
       // ASSERT: Verify result structure
       expect(result).toBeDefined();
@@ -124,7 +124,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT
-      const result = await service.estimateCost(request, TEST_USER_ID);
+      const result = await service.estimateCost(request);
 
       // ASSERT
       expect(result.productCount).toBe(10);
@@ -168,7 +168,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT
-      const result = await service.estimateCost(request, TEST_USER_ID);
+      const result = await service.estimateCost(request);
 
       // ASSERT: Sales-focused should have 400 tokens output
       expect(result.breakdown.outputTokens).toBe(400);
@@ -193,7 +193,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT & ASSERT
-      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow("No products found or access denied");
+      await expect(service.estimateCost(request)).rejects.toThrow("No products found or access denied");
 
       // Verify Supabase was called
       expect(mockSupabase.from).toHaveBeenCalledWith("products");
@@ -217,7 +217,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT & ASSERT
-      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow(/Failed to fetch products/);
+      await expect(service.estimateCost(request)).rejects.toThrow(/Failed to fetch products/);
     });
 
     it("should throw error when some products are missing", async () => {
@@ -245,7 +245,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT & ASSERT
-      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow(/Products not found/);
+      await expect(service.estimateCost(request)).rejects.toThrow(/Products not found/);
     });
 
     it("should throw error for unsupported model", async () => {
@@ -274,9 +274,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT & ASSERT
-      await expect(service.estimateCost(request, TEST_USER_ID)).rejects.toThrow(
-        "Unsupported model: unsupported/model-xyz"
-      );
+      await expect(service.estimateCost(request)).rejects.toThrow("Unsupported model: unsupported/model-xyz");
     });
   });
 
@@ -306,7 +304,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT
-      const resultPL = await service.estimateCost(requestPL, TEST_USER_ID);
+      const resultPL = await service.estimateCost(requestPL);
 
       // ASSERT: Input tokens should include base prompt + product data
       expect(resultPL.breakdown.inputTokens).toBeGreaterThan(200); // Base prompt = 200
@@ -338,7 +336,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT
-      const resultEN = await service.estimateCost(requestEN, TEST_USER_ID);
+      const resultEN = await service.estimateCost(requestEN);
 
       // ASSERT
       expect(resultEN.breakdown.inputTokens).toBeGreaterThan(200);
@@ -370,7 +368,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT
-      const result = await service.estimateCost(request, TEST_USER_ID);
+      const result = await service.estimateCost(request);
 
       // ASSERT: Should not throw, should calculate with just name
       expect(result).toBeDefined();
@@ -431,7 +429,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT
-      const result = await service.estimateCost(request, TEST_USER_ID);
+      const result = await service.estimateCost(request);
 
       // ASSERT: Verify pricing formulas
       const expectedInputCost = (result.breakdown.inputTokens / 1_000_000) * 0.15;
@@ -467,7 +465,7 @@ describe("CostEstimateService", () => {
       };
 
       // ACT
-      const result = await service.estimateCost(request, TEST_USER_ID);
+      const result = await service.estimateCost(request);
 
       // ASSERT: Check decimal precision
       const totalCostString = result.totalCost.toString();

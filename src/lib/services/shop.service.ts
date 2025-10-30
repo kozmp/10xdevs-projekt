@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "../../db/supabase.client";
 import type { ShopResponseDTO } from "../../types";
-import { encryptApiKey, decryptApiKey } from "../encryption";
+import { encryptApiKey } from "../encryption";
 
 /**
  * Serwis do zarządzania połączeniami ze sklepami Shopify

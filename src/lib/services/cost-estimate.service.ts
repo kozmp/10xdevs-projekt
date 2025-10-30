@@ -67,7 +67,7 @@ export class CostEstimateService {
    * @returns Szczegółowa kalkulacja kosztów
    * @throws Error jeśli produkty nie istnieją lub brak dostępu
    */
-  async estimateCost(request: CostEstimateRequest, userId: string): Promise<CostEstimateResponse> {
+  async estimateCost(request: CostEstimateRequest): Promise<CostEstimateResponse> {
     // 1. Pobierz produkty z bazy (weryfikacja RLS)
     const { data: products, error } = await this.supabase
       .from("products")

@@ -122,9 +122,7 @@ export class JobService {
         model: model || "openai/gpt-4o-mini",
       };
 
-      // Nie przekazujemy userId, bo używamy shop_id z RLS
-      // Tutaj musimy pobrać userId z sesji lub kontekstu - na razie pomijamy
-      const estimate = await costEstimateService.estimateCost(estimateRequest, job.shop_id);
+      const estimate = await costEstimateService.estimateCost(estimateRequest);
 
       // 4. Zaktualizuj job z wynikami kalkulacji
       const { error: updateError } = await this.supabase
