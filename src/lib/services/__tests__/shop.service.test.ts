@@ -468,8 +468,8 @@ describe("ShopService", () => {
       expect(result).toBeDefined();
       expect(result?.shopId).toBe(TEST_SHOP_ID);
       expect(result?.shopifyDomain).toBe(TEST_SHOP_DOMAIN);
-      expect(result?.createdAt).toBe("2025-01-01T00:00:00Z");
-      expect(result?.updatedAt).toBe("2025-01-24T00:00:00Z");
+      expect(result?.createdAt).toBe("2025-01-01T00:00:00.000Z");
+      expect(result?.updatedAt).toBe("2025-01-24T00:00:00.000Z");
     });
 
     it("should return null when shop doesn't exist", async () => {

@@ -51,6 +51,7 @@ describe("DashboardPage", () => {
       accessToken: "encrypted-token",
       createdAt: "2025-10-15T12:00:00Z",
       updatedAt: "2025-10-15T12:00:00Z",
+      isConnected: true,
     },
     count: 42,
     jobs: [
@@ -184,6 +185,7 @@ describe("DashboardPage", () => {
         shop: {
           ...mockDashboardData.shop,
           shopifyDomain: "",
+          isConnected: false,
         },
       };
 
@@ -265,6 +267,7 @@ describe("DashboardPage", () => {
         shop: {
           ...mockDashboardData.shop,
           shopifyDomain: "",
+          isConnected: false,
         },
       };
 
@@ -288,6 +291,7 @@ describe("DashboardPage", () => {
         shop: {
           ...mockDashboardData.shop,
           shopifyDomain: "",
+          isConnected: false,
         },
       };
 
@@ -320,6 +324,7 @@ describe("DashboardPage", () => {
         shop: {
           ...mockDashboardData.shop,
           shopifyDomain: "",
+          isConnected: false,
         },
       };
 
