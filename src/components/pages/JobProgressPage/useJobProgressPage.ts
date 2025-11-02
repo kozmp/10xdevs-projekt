@@ -1,8 +1,8 @@
-import { useMemo, useState, useCallback } from 'react';
-import { toast } from 'sonner';
-import { useJobProgress } from '@/components/hooks/useJobProgress';
-import { DATE_FORMAT_OPTIONS, TOAST_MESSAGES, ROUTES } from './constants';
-import type { UseJobProgressPageReturn } from './types';
+import { useMemo, useState, useCallback } from "react";
+import { toast } from "sonner";
+import { useJobProgress } from "@/components/hooks/useJobProgress";
+import { DATE_FORMAT_OPTIONS, TOAST_MESSAGES, ROUTES } from "./constants";
+import type { UseJobProgressPageReturn } from "./types";
 
 export function useJobProgressPage(jobId: string): UseJobProgressPageReturn {
   const { job, products, loading, error, cancel } = useJobProgress(jobId);
@@ -10,7 +10,7 @@ export function useJobProgressPage(jobId: string): UseJobProgressPageReturn {
 
   const completedProducts = useMemo(() => {
     if (!products) return 0;
-    return products.filter((p) => p.status === 'completed').length;
+    return products.filter((p) => p.status === "completed").length;
   }, [products]);
 
   const totalCost = useMemo(() => {
@@ -19,9 +19,8 @@ export function useJobProgressPage(jobId: string): UseJobProgressPageReturn {
   }, [products]);
 
   const formattedDate = useMemo(() => {
-    if (!job?.createdAt) return '-';
-    return new Intl.DateTimeFormat('pl-PL', DATE_FORMAT_OPTIONS)
-      .format(new Date(job.createdAt));
+    if (!job?.createdAt) return "-";
+    return new Intl.DateTimeFormat("pl-PL", DATE_FORMAT_OPTIONS).format(new Date(job.createdAt));
   }, [job]);
 
   const handleCancelClick = useCallback(() => {
@@ -42,7 +41,7 @@ export function useJobProgressPage(jobId: string): UseJobProgressPageReturn {
     window.location.href = ROUTES.JOBS_LIST;
   }, []);
 
-  const canCancel = job?.status === 'processing';
+  const canCancel = job?.status === "processing";
 
   return {
     job,

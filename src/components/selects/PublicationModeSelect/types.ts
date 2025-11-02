@@ -1,4 +1,4 @@
-export type PublicationMode = 'draft' | 'published';
+export type PublicationMode = "draft" | "published";
 
 export interface PublicationModeOption {
   value: PublicationMode;

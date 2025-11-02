@@ -42,7 +42,9 @@ describe("ProductsTable", () => {
 
   it("renders loading state", () => {
     render(<ProductsTable {...defaultProps} loading={true} />);
-    expect(screen.getByRole("status")).toBeInTheDocument();
+    // Loading state shows a spinner div, not a status role
+    const spinner = document.querySelector(".animate-spin");
+    expect(spinner).toBeInTheDocument();
   });
 
   it("renders products list", () => {
@@ -84,7 +86,7 @@ describe("ProductsTable", () => {
   it("handles pagination changes", async () => {
     render(<ProductsTable {...defaultProps} />);
 
-    const nextPageButton = screen.getByLabelText("Następna strona");
+    const nextPageButton = screen.getByRole("button", { name: "Następna strona" });
     await userEvent.click(nextPageButton);
 
     expect(defaultProps.onPaginationChange).toHaveBeenCalledWith(2);

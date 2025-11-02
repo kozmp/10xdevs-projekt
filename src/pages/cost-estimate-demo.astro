@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { CostEstimateDemo } from "../components/CostEstimateDemo";
+
+// Ta strona jest używana tylko do celów demonstracyjnych w ETAPIE 3
+// W produkcji komponenty będą zintegrowane w GeneratePage.tsx (ETAP 4)
+---
+
+<Layout title="Cost Estimate Demo - FR-017/018 ETAP 3">
+  <main>
+    <CostEstimateDemo client:load />
+  </main>
+</Layout>

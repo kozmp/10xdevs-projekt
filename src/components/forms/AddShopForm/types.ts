@@ -1,4 +1,4 @@
-import type { AddShopFormData } from './schema';
+import type { AddShopFormData } from "./schema";
 
 export interface AddShopFormProps {
   onSuccess?: () => void;

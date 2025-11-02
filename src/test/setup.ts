@@ -1,18 +1,22 @@
-import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
-import { afterEach, beforeAll, vi } from 'vitest';
+import "@testing-library/jest-dom/vitest";
+import { cleanup } from "@testing-library/react";
+import { afterEach, beforeAll, vi } from "vitest";
 
 // Extend matchers
-declare module 'vitest' {
+declare module "vitest" {
   interface Assertion<T = any> extends CustomMatchers<T> {}
   interface AsymmetricMatchersContaining extends CustomMatchers<any> {}
 }
 
-// Mock window.matchMedia
+// Mock environment variables for tests
 beforeAll(() => {
-  Object.defineProperty(window, 'matchMedia', {
+  // Set ENCRYPTION_KEY for encryption tests - must be a valid 32-byte base64 string
+  process.env.ENCRYPTION_KEY = "hnFa4rPytuPZdBzjqBS5PYJFvQjeqWBnMzSRDaxVWyw=";
+
+  // Mock window.matchMedia
+  Object.defineProperty(window, "matchMedia", {
     writable: true,
-    value: vi.fn().mockImplementation(query => ({
+    value: vi.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,

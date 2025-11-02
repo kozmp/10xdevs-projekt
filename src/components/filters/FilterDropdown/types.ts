@@ -1,5 +1,5 @@
-export type ProductStatus = 'published' | 'draft';
-export type FilterValue = ProductStatus | 'all';
+export type ProductStatus = "published" | "draft";
+export type FilterValue = ProductStatus | "all";
 
 export interface FilterOption {
   value: FilterValue;

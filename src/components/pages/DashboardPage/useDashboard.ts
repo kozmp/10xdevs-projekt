@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import { toast } from 'sonner';
-import { useDashboardData } from '@/components/hooks/useDashboardData';
-import { MESSAGES } from './constants';
-import type { UseDashboardReturn } from './types';
+import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
+import { useDashboardData } from "@/components/hooks/useDashboardData";
+import { MESSAGES } from "./constants";
+import type { UseDashboardReturn } from "./types";
 
 export function useDashboard(): UseDashboardReturn {
   const { data, loading, error, refetch } = useDashboardData();

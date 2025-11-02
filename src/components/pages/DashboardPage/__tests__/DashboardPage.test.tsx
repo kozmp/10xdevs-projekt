@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 import { DashboardPage } from "../index";
 import { useDashboardData } from "@/components/hooks/useDashboardData";
-import { MESSAGES, BUTTON_LABELS, PAGE_TITLE } from "../constants";
+import { MESSAGES, BUTTON_LABELS, BUTTON_ARIA_LABELS, PAGE_TITLE } from "../constants";
 
 // Mock the hooks
 vi.mock("@/components/hooks/useDashboardData");
@@ -108,7 +108,7 @@ describe("DashboardPage", () => {
     render(<DashboardPage />);
 
     const refreshButton = screen.getByRole("button", {
-      name: BUTTON_LABELS.REFRESH,
+      name: BUTTON_ARIA_LABELS.REFRESH,
     });
     await userEvent.click(refreshButton);
 

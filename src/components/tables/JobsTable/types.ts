@@ -1,5 +1,5 @@
-export type JobStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
-export type PublicationMode = 'draft' | 'publish';
+export type JobStatus = "pending" | "processing" | "completed" | "failed" | "cancelled";
+export type PublicationMode = "draft" | "publish";
 
 export interface Job {
   jobId: string;

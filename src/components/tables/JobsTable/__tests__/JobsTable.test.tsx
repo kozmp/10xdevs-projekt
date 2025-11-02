@@ -59,7 +59,7 @@ describe("JobsTable", () => {
     expect(screen.getByText("12345678...")).toBeInTheDocument();
     expect(screen.getByText("Zakończony")).toBeInTheDocument();
     expect(screen.getByText("professional")).toBeInTheDocument();
-    expect(screen.getByText("PL")).toBeInTheDocument();
+    expect(screen.getByText("pl")).toBeInTheDocument(); // lowercase - CSS uppercase not visible in tests
     expect(screen.getByText("Opublikuj")).toBeInTheDocument();
     expect(screen.getByText("$1.23")).toBeInTheDocument();
 
@@ -67,7 +67,7 @@ describe("JobsTable", () => {
     expect(screen.getByText("98765432...")).toBeInTheDocument();
     expect(screen.getByText("Oczekujący")).toBeInTheDocument();
     expect(screen.getByText("casual")).toBeInTheDocument();
-    expect(screen.getByText("EN")).toBeInTheDocument();
+    expect(screen.getByText("en")).toBeInTheDocument(); // lowercase - CSS uppercase not visible in tests
     expect(screen.getByText("Szkic")).toBeInTheDocument();
     expect(screen.getByText("-")).toBeInTheDocument();
   });

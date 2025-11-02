@@ -2,6 +2,7 @@ import React from "react";
 import { JobsTable } from "@/components/tables/JobsTable";
 import { PaginationControls } from "@/components/PaginationControls";
 import { Toaster } from "@/components/ui/sonner";
+import { Button } from "@/components/ui/button";
 import { JobsHistoryHeader } from "./JobsHistoryHeader";
 import { JobsHistoryFilters } from "./JobsHistoryFilters";
 import { JobsHistorySummary } from "./JobsHistorySummary";

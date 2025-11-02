@@ -1,6 +1,6 @@
-import type { JobListDTO } from '@/types';
+import type { JobListDTO } from "@/types";
 
-export type JobStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
+export type JobStatus = "pending" | "processing" | "completed" | "failed" | "cancelled";
 
 export interface RecentJobsTableProps {
   jobs: JobListDTO[];

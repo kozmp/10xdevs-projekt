@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { ShopSettingsPage } from "../components/ShopSettingsPage";
+
+// Wyłącz prerenderowanie - strona musi być renderowana na serwerze
+export const prerender = false;
+
+// Sprawdź czy użytkownik jest zalogowany
+const { user } = Astro.locals;
+
+// Jeśli nie jest zalogowany, przekieruj na stronę logowania
+if (!user) {
+  return Astro.redirect("/login");
+}
+---
+
+<Layout title="Shop Settings - 10x Astro Starter">
+  <ShopSettingsPage client:load />
+</Layout>

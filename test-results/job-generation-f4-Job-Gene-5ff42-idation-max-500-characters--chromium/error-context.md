@@ -1,0 +1,147 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e5]:
+      - link "10x Devs" [ref=e7] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e8]:
+        - link "Produkty" [ref=e9] [cursor=pointer]:
+          - /url: /products
+        - link "Zadania" [ref=e10] [cursor=pointer]:
+          - /url: /jobs
+        - link "Dodaj sklep" [ref=e11] [cursor=pointer]:
+          - /url: /add-shop
+        - generic [ref=e12]: kozmp.dev@gmail.com
+        - button "Wyloguj" [ref=e13]
+  - main [ref=e14]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - heading "Generowanie opisów produktów" [level=1] [ref=e18]
+        - paragraph [ref=e19]: "Wybrane produkty: 2"
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - heading "Styl komunikacji" [level=2] [ref=e22]
+          - radiogroup [ref=e23]:
+            - article [ref=e24] [cursor=pointer]:
+              - radio "Profesjonalny Techniczny język z naciskiem na specyfikację i szczegóły" [checked] [ref=e25]:
+                - img [ref=e26]
+              - generic [ref=e28]:
+                - heading "Profesjonalny" [level=3] [ref=e29]
+                - paragraph [ref=e30]: Techniczny język z naciskiem na specyfikację i szczegóły
+            - article [ref=e31] [cursor=pointer]:
+              - radio "Casualowy Przyjazny i konwersacyjny ton, jak rozmowa z przyjacielem" [ref=e32]
+              - generic [ref=e33]:
+                - heading "Casualowy" [level=3] [ref=e34]
+                - paragraph [ref=e35]: Przyjazny i konwersacyjny ton, jak rozmowa z przyjacielem
+            - article [ref=e36] [cursor=pointer]:
+              - radio "Sprzedażowy Podkreśla korzyści i wartość produktu" [ref=e37]
+              - generic [ref=e38]:
+                - heading "Sprzedażowy" [level=3] [ref=e39]
+                - paragraph [ref=e40]: Podkreśla korzyści i wartość produktu
+        - generic [ref=e41]:
+          - heading "Język" [level=2] [ref=e42]
+          - combobox [ref=e43]:
+            - generic: Polski
+            - img
+        - generic [ref=e44]:
+          - heading "Model AI" [level=2] [ref=e45]
+          - generic [ref=e46]:
+            - generic [ref=e47]: Model AI
+            - radiogroup [ref=e48]:
+              - generic [ref=e49] [cursor=pointer]:
+                - 'radio "gpt-4o-mini Rekomendowany Szybki i ekonomiczny model, idealny do generowania opisów produktów Input: $0.15/1M Output: $0.60/1M Szybkość: ~150 tokens/sec" [checked] [ref=e50]':
+                  - img [ref=e51]
+                - generic [ref=e53]:
+                  - generic [ref=e54]:
+                    - generic [ref=e55]: gpt-4o-mini
+                    - generic [ref=e56]: Rekomendowany
+                  - paragraph [ref=e57]: Szybki i ekonomiczny model, idealny do generowania opisów produktów
+                  - generic [ref=e58]:
+                    - generic [ref=e59]:
+                      - img [ref=e60]
+                      - generic [ref=e62]:
+                        - text: "Input:"
+                        - generic [ref=e63]: $0.15/1M
+                    - generic [ref=e64]:
+                      - img [ref=e65]
+                      - generic [ref=e67]:
+                        - text: "Output:"
+                        - generic [ref=e68]: $0.60/1M
+                    - generic [ref=e69]:
+                      - img [ref=e70]
+                      - generic [ref=e72]: "Szybkość: ~150 tokens/sec"
+              - generic [ref=e73] [cursor=pointer]:
+                - 'radio "gpt-4o Najwyższa jakość, najlepszy dla kreatywnych opisów premium Input: $2.50/1M Output: $10.00/1M Szybkość: ~100 tokens/sec" [ref=e74]'
+                - generic [ref=e75]:
+                  - generic [ref=e77]: gpt-4o
+                  - paragraph [ref=e78]: Najwyższa jakość, najlepszy dla kreatywnych opisów premium
+                  - generic [ref=e79]:
+                    - generic [ref=e80]:
+                      - img [ref=e81]
+                      - generic [ref=e83]:
+                        - text: "Input:"
+                        - generic [ref=e84]: $2.50/1M
+                    - generic [ref=e85]:
+                      - img [ref=e86]
+                      - generic [ref=e88]:
+                        - text: "Output:"
+                        - generic [ref=e89]: $10.00/1M
+                    - generic [ref=e90]:
+                      - img [ref=e91]
+                      - generic [ref=e93]: "Szybkość: ~100 tokens/sec"
+              - generic [ref=e94] [cursor=pointer]:
+                - 'radio "claude-3-haiku Bardzo szybki i naturalny, dobry kompromis jakości i ceny Input: $0.25/1M Output: $1.25/1M Szybkość: ~120 tokens/sec" [ref=e95]'
+                - generic [ref=e96]:
+                  - generic [ref=e98]: claude-3-haiku
+                  - paragraph [ref=e99]: Bardzo szybki i naturalny, dobry kompromis jakości i ceny
+                  - generic [ref=e100]:
+                    - generic [ref=e101]:
+                      - img [ref=e102]
+                      - generic [ref=e104]:
+                        - text: "Input:"
+                        - generic [ref=e105]: $0.25/1M
+                    - generic [ref=e106]:
+                      - img [ref=e107]
+                      - generic [ref=e109]:
+                        - text: "Output:"
+                        - generic [ref=e110]: $1.25/1M
+                    - generic [ref=e111]:
+                      - img [ref=e112]
+                      - generic [ref=e114]: "Szybkość: ~120 tokens/sec"
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e117]: Własny prompt (opcjonalnie)
+            - generic [ref=e118]: 500/500
+          - textbox "Własny prompt (opcjonalnie)" [active] [ref=e119]:
+            - /placeholder: Dodaj własne instrukcje dla modelu AI, np. "Pisz w stylu młodzieżowym" lub "Skup się na aspektach technicznych"...
+            - text: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          - paragraph [ref=e120]: Opcjonalny prompt systemowy pozwala dostosować styl i ton generowanych opisów (max 500 znaków).
+        - generic [ref=e122]:
+          - img [ref=e123]
+          - generic [ref=e125]:
+            - paragraph [ref=e126]: Brak połączenia ze sklepem
+            - paragraph [ref=e127]:
+              - text: Aby rozpocząć generowanie opisów, najpierw
+              - link "podłącz swój sklep Shopify" [ref=e128] [cursor=pointer]:
+                - /url: /dashboard
+              - text: .
+        - generic [ref=e129]:
+          - button "Oblicz koszt i rozpocznij generowanie" [disabled]
+  - generic [ref=e132]:
+    - button "Menu" [ref=e133]:
+      - img [ref=e135]
+      - generic: Menu
+    - button "Inspect" [ref=e139]:
+      - img [ref=e141]
+      - generic: Inspect
+    - button "Audit" [ref=e143]:
+      - generic [ref=e144]:
+        - img [ref=e145]
+        - img [ref=e148]
+      - generic: Audit
+    - button "Settings" [ref=e151]:
+      - img [ref=e153]
+      - generic: Settings
+```

@@ -1,0 +1,79 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e3]:
+    - generic [ref=e5]:
+      - link "10x Devs" [ref=e7] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e8]:
+        - link "Produkty" [ref=e9] [cursor=pointer]:
+          - /url: /products
+        - link "Zadania" [ref=e10] [cursor=pointer]:
+          - /url: /jobs
+        - link "Dodaj sklep" [ref=e11] [cursor=pointer]:
+          - /url: /add-shop
+        - generic [ref=e12]: kozmp.dev@gmail.com
+        - button "Wyloguj" [ref=e13]
+  - main [ref=e14]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - heading "Generowanie opisów produktów" [level=1] [ref=e18]
+        - paragraph [ref=e19]: "Wybrane produkty: 2"
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - heading "Styl komunikacji" [level=2] [ref=e22]
+          - radiogroup [ref=e23]:
+            - article [ref=e24] [cursor=pointer]:
+              - radio "Profesjonalny Techniczny język z naciskiem na specyfikację i szczegóły" [checked] [ref=e25]:
+                - img [ref=e26]
+              - generic [ref=e28]:
+                - heading "Profesjonalny" [level=3] [ref=e29]
+                - paragraph [ref=e30]: Techniczny język z naciskiem na specyfikację i szczegóły
+            - article [ref=e31] [cursor=pointer]:
+              - radio "Casualowy Przyjazny i konwersacyjny ton, jak rozmowa z przyjacielem" [ref=e32]
+              - generic [ref=e33]:
+                - heading "Casualowy" [level=3] [ref=e34]
+                - paragraph [ref=e35]: Przyjazny i konwersacyjny ton, jak rozmowa z przyjacielem
+            - article [ref=e36] [cursor=pointer]:
+              - radio "Sprzedażowy Podkreśla korzyści i wartość produktu" [ref=e37]
+              - generic [ref=e38]:
+                - heading "Sprzedażowy" [level=3] [ref=e39]
+                - paragraph [ref=e40]: Podkreśla korzyści i wartość produktu
+        - generic [ref=e41]:
+          - heading "Język" [level=2] [ref=e42]
+          - combobox [ref=e43]:
+            - generic: Polski
+            - img
+        - generic [ref=e44]:
+          - heading "Model AI" [level=2] [ref=e45]
+          - generic [ref=e46]:
+            - generic [ref=e47]: Model AI
+            - radiogroup
+            - paragraph [ref=e49]: Brak dostępnych modeli
+          - paragraph [ref=e50]: Ładowanie dostępnych modeli...
+        - generic [ref=e51]:
+          - generic [ref=e52]:
+            - generic [ref=e53]: Własny prompt (opcjonalnie)
+            - generic [ref=e54]: 0/500
+          - textbox "Własny prompt (opcjonalnie)" [ref=e55]:
+            - /placeholder: Dodaj własne instrukcje dla modelu AI, np. "Pisz w stylu młodzieżowym" lub "Skup się na aspektach technicznych"...
+          - paragraph [ref=e56]: Opcjonalny prompt systemowy pozwala dostosować styl i ton generowanych opisów (max 500 znaków).
+        - generic [ref=e57]:
+          - button "Sprawdzanie połączenia..." [disabled]
+  - generic [ref=e60]:
+    - button "Menu" [ref=e61]:
+      - img [ref=e63]
+      - generic: Menu
+    - button "Inspect" [ref=e67]:
+      - img [ref=e69]
+      - generic: Inspect
+    - button "Audit" [ref=e71]:
+      - generic [ref=e72]:
+        - img [ref=e73]
+        - img [ref=e76]
+      - generic: Audit
+    - button "Settings" [ref=e79]:
+      - img [ref=e81]
+      - generic: Settings
+```

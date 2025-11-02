@@ -1,11 +1,8 @@
-import { useMemo } from 'react';
-import { STATUS_LABELS, STATUS_COLORS, STATUS_MESSAGES } from './constants';
-import type { JobStatus, UseJobProgressBarReturn } from './types';
+import { useMemo } from "react";
+import { STATUS_LABELS, STATUS_COLORS, STATUS_MESSAGES } from "./constants";
+import type { JobStatus, UseJobProgressBarReturn } from "./types";
 
-export function useJobProgressBar(
-  progress: number,
-  status: JobStatus
-): UseJobProgressBarReturn {
+export function useJobProgressBar(progress: number, status: JobStatus): UseJobProgressBarReturn {
   const progressPercentage = useMemo(() => {
     return Math.min(Math.max(progress, 0), 100);
   }, [progress]);
@@ -15,7 +12,7 @@ export function useJobProgressBar(
   }, [status]);
 
   const statusColor = useMemo(() => {
-    return STATUS_COLORS[status] || 'text-gray-600';
+    return STATUS_COLORS[status] || "text-gray-600";
   }, [status]);
 
   const statusMessage = useMemo(() => {

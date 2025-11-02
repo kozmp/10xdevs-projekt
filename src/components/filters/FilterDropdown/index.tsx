@@ -13,7 +13,7 @@ export function FilterDropdown({
   className = STYLES.CONTAINER,
   disabled,
 }: FilterDropdownProps) {
-  const { selectId, options, getOptionLabel } = useFilterDropdown(value);
+  const { selectId, options } = useFilterDropdown(value);
 
   return (
     <div className={className}>

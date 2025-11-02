@@ -12,7 +12,7 @@ export interface Product {
   id: string;
   name: string;
   sku: string;
-  status: 'published' | 'draft';
+  status: "published" | "draft";
   shortDescription: string | null;
   longDescription: string | null;
   categories: ProductCategory[];

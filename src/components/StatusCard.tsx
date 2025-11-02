@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface StatusCardProps {
   status: boolean;
@@ -16,21 +10,15 @@ export function StatusCard({ status, shopName }: StatusCardProps) {
     <Card>
       <CardHeader>
         <CardTitle>Status połączenia</CardTitle>
-        <CardDescription>
-          {shopName ? `Sklep: ${shopName}` : 'Sprawdź połączenie z API'}
-        </CardDescription>
+        <CardDescription>{shopName ? `Sklep: ${shopName}` : "Sprawdź połączenie z API"}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-2">
           <div
-            className={`h-3 w-3 rounded-full ${
-              status ? 'bg-green-500' : 'bg-red-500'
-            }`}
-            aria-label={status ? 'Połączono' : 'Błąd połączenia'}
+            className={`h-3 w-3 rounded-full ${status ? "bg-green-500" : "bg-yellow-500"}`}
+            aria-label={status ? "Połączono" : "Nieskonfigurowany"}
           />
-          <span className="text-sm font-medium">
-            {status ? 'Aktywne' : 'Błąd połączenia'}
-          </span>
+          <span className="text-sm font-medium">{status ? "Aktywne" : "Nieskonfigurowany"}</span>
         </div>
       </CardContent>
     </Card>

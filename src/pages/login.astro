@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+
+// Note: Login page is public (no feature flag guard needed)
+// Feature flags are enforced at API level (/api/auth/*)
 ---
 
 <Layout title="Login - AI Product Description Generator">
@@ -18,7 +21,7 @@ import { Card } from "@/components/ui/card";
         <form id="login-form" class="space-y-4" novalidate>
           <div class="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" placeholder="your@email.com" required autocomplete="email" />
+            <Input id="email" name="email" type="email" placeholder="your@email.com" required autoComplete="email" />
           </div>
 
           <div class="space-y-2">
@@ -31,8 +34,8 @@ import { Card } from "@/components/ui/card";
               name="password"
               type="password"
               required
-              minlength="8"
-              autocomplete="current-password"
+              minLength="8"
+              autoComplete="current-password"
             />
           </div>
 

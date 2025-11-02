@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import type { JobListDTO, JobStatus } from '@/types';
+import { useState, useEffect, useCallback } from "react";
+import type { JobListDTO, JobStatus } from "@/types";
 
 interface UseJobsHistoryParams {
   page?: number;
@@ -43,11 +43,11 @@ export function useJobsHistory({
     try {
       // Build query params
       const params = new URLSearchParams();
-      params.set('page', page.toString());
-      params.set('limit', limit.toString());
-      if (status) params.set('status', status);
-      if (dateFrom) params.set('dateFrom', dateFrom);
-      if (dateTo) params.set('dateTo', dateTo);
+      params.set("page", page.toString());
+      params.set("limit", limit.toString());
+      if (status) params.set("status", status);
+      if (dateFrom) params.set("dateFrom", dateFrom);
+      if (dateTo) params.set("dateTo", dateTo);
 
       const response = await fetch(`/api/jobs?${params.toString()}`);
 
@@ -59,9 +59,7 @@ export function useJobsHistory({
       setJobs(data.data || []);
       setMeta(data.meta);
     } catch (err) {
-      setError(
-        err instanceof Error ? err : new Error('Unknown error occurred')
-      );
+      setError(err instanceof Error ? err : new Error("Unknown error occurred"));
     } finally {
       setLoading(false);
     }

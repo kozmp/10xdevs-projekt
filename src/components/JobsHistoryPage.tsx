@@ -1,28 +1,28 @@
-import { useState, useCallback } from 'react';
-import { useJobsHistory } from '@/components/hooks/useJobsHistory';
-import { JobsTable } from '@/components/JobsTable';
-import { JobStatusFilter } from '@/components/JobStatusFilter';
-import { PaginationControls } from '@/components/PaginationControls';
-import { Button } from '@/components/ui/button';
-import { Toaster } from '@/components/ui/sonner';
-import type { JobStatus } from '@/types';
+import { useState, useCallback } from "react";
+import { useJobsHistory } from "@/components/hooks/useJobsHistory";
+import { JobsTable } from "@/components/JobsTable";
+import { JobStatusFilter } from "@/components/JobStatusFilter";
+import { PaginationControls } from "@/components/PaginationControls";
+import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+import type { JobStatus } from "@/types";
 
 export function JobsHistoryPage() {
   const [page, setPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState<JobStatus | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<JobStatus | "all">("all");
 
   const { jobs, meta, loading, error, refetch } = useJobsHistory({
     page,
     limit: 20,
-    status: statusFilter === 'all' ? undefined : statusFilter,
+    status: statusFilter === "all" ? undefined : statusFilter,
   });
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const handleFilterChange = useCallback((value: JobStatus | 'all') => {
+  const handleFilterChange = useCallback((value: JobStatus | "all") => {
     setStatusFilter(value);
     setPage(1); // Reset to first page on filter
   }, []);
@@ -50,9 +50,7 @@ export function JobsHistoryPage() {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center max-w-md">
             <div className="text-red-500 text-5xl mb-4">⚠️</div>
-            <h2 className="text-xl font-semibold mb-2">
-              Wystąpił błąd podczas ładowania zleceń
-            </h2>
+            <h2 className="text-xl font-semibold mb-2">Wystąpił błąd podczas ładowania zleceń</h2>
             <p className="text-muted-foreground mb-4">{error.message}</p>
             <Button onClick={refetch}>Spróbuj ponownie</Button>
           </div>
@@ -77,11 +75,7 @@ export function JobsHistoryPage() {
       </section>
 
       {/* Summary */}
-      {meta && (
-        <div className="text-sm text-muted-foreground mb-4">
-          Znaleziono {meta.total} zleceń
-        </div>
-      )}
+      {meta && <div className="text-sm text-muted-foreground mb-4">Znaleziono {meta.total} zleceń</div>}
 
       {/* Jobs Table */}
       <section className="mb-6">

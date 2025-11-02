@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import type { Product } from '@/components/modals/ProductPreviewModal/types';
+import { useState, useEffect } from "react";
+import type { Product } from "@/components/modals/ProductPreviewModal/types";
 
 interface UseProductDetailReturn {
   product: Product | null;
@@ -7,9 +7,7 @@ interface UseProductDetailReturn {
   error: Error | null;
 }
 
-export function useProductDetail(
-  productId: string | null
-): UseProductDetailReturn {
+export function useProductDetail(productId: string | null): UseProductDetailReturn {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -36,9 +34,7 @@ export function useProductDetail(
         const data = await response.json();
         setProduct(data);
       } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error('Unknown error occurred')
-        );
+        setError(err instanceof Error ? err : new Error("Unknown error occurred"));
       } finally {
         setLoading(false);
       }

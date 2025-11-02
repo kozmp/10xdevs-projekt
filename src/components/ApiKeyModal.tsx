@@ -1,5 +1,5 @@
-import { useEffect, useId } from 'react';
-import { toast } from 'sonner';
+import { useEffect, useId } from "react";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -7,11 +7,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { useApiKey } from '@/components/hooks/useApiKey';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useApiKey } from "@/components/hooks/useApiKey";
 
 interface ApiKeyModalProps {
   open: boolean;
@@ -27,9 +27,7 @@ export function ApiKeyModal({ open, onClose, onSuccess }: ApiKeyModalProps) {
     const shop = await save();
     if (shop) {
       toast.success(`Klucz API zapisany pomyślnie`, {
-        description: shop.shopifyDomain
-          ? `Połączono ze sklepem: ${shop.shopifyDomain}`
-          : 'Sklep skonfigurowany',
+        description: shop.shopifyDomain ? `Połączono ze sklepem: ${shop.shopifyDomain}` : "Sklep skonfigurowany",
       });
       onClose();
       onSuccess?.();
@@ -37,25 +35,25 @@ export function ApiKeyModal({ open, onClose, onSuccess }: ApiKeyModalProps) {
   };
 
   const handleRemove = async () => {
-    if (!confirm('Czy na pewno chcesz usunąć klucz API?')) {
+    if (!confirm("Czy na pewno chcesz usunąć klucz API?")) {
       return;
     }
 
     const success = await remove();
     if (success) {
-      toast.success('Klucz API został usunięty');
+      toast.success("Klucz API został usunięty");
       onClose();
       onSuccess?.();
     }
   };
 
-  const isLoading = status === 'loading';
+  const isLoading = status === "loading";
   const isSaveDisabled = key.length < 8 || isLoading;
 
   // Reset error when modal closes
   useEffect(() => {
     if (!open) {
-      setKey('');
+      setKey("");
     }
   }, [open, setKey]);
 
@@ -64,9 +62,7 @@ export function ApiKeyModal({ open, onClose, onSuccess }: ApiKeyModalProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Konfiguracja klucza API</DialogTitle>
-          <DialogDescription>
-            Wprowadź klucz API Shopify, aby połączyć się ze sklepem.
-          </DialogDescription>
+          <DialogDescription>Wprowadź klucz API Shopify, aby połączyć się ze sklepem.</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
@@ -83,31 +79,20 @@ export function ApiKeyModal({ open, onClose, onSuccess }: ApiKeyModalProps) {
               aria-describedby={error ? `${inputId}-error` : undefined}
             />
             {error && (
-              <p
-                id={`${inputId}-error`}
-                className="text-sm text-red-500"
-                role="alert"
-              >
+              <p id={`${inputId}-error`} className="text-sm text-red-500" role="alert">
                 {error}
               </p>
             )}
-            <p className="text-xs text-muted-foreground">
-              Klucz musi zawierać co najmniej 8 znaków
-            </p>
+            <p className="text-xs text-muted-foreground">Klucz musi zawierać co najmniej 8 znaków</p>
           </div>
         </div>
 
         <DialogFooter className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={handleRemove}
-            disabled={isLoading}
-            type="button"
-          >
+          <Button variant="outline" onClick={handleRemove} disabled={isLoading} type="button">
             Usuń
           </Button>
           <Button onClick={handleSave} disabled={isSaveDisabled} type="button">
-            {isLoading ? 'Zapisywanie...' : 'Zapisz'}
+            {isLoading ? "Zapisywanie..." : "Zapisz"}
           </Button>
         </DialogFooter>
       </DialogContent>

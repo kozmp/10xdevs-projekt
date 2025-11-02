@@ -7,7 +7,7 @@ import type { Product } from "../types";
 // Mock useProductDetail hook
 const mockUseProductDetail = vi.fn();
 vi.mock("@/components/hooks/useProductDetail", () => ({
-  useProductDetail: () => mockUseProductDetail()
+  useProductDetail: () => mockUseProductDetail(),
 }));
 
 const mockProduct: Product = {

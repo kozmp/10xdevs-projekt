@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import type { JobDetailDTO, JobProductDTO } from '@/types';
+import { useState, useEffect, useCallback, useRef } from "react";
+import type { JobDetailDTO, JobProductDTO } from "@/types";
 
 interface UseJobProgressReturn {
   job?: JobDetailDTO;
@@ -37,18 +37,14 @@ export function useJobProgress(jobId: string | null): UseJobProgressReturn {
       // Fetch job products
       const productsResponse = await fetch(`/api/jobs/${jobId}/products`);
       if (!productsResponse.ok) {
-        throw new Error(
-          `Failed to fetch job products: ${productsResponse.statusText}`
-        );
+        throw new Error(`Failed to fetch job products: ${productsResponse.statusText}`);
       }
       const productsData = await productsResponse.json();
       setProducts(productsData.data || []);
 
       setError(undefined);
     } catch (err) {
-      setError(
-        err instanceof Error ? err : new Error('Unknown error occurred')
-      );
+      setError(err instanceof Error ? err : new Error("Unknown error occurred"));
     } finally {
       setLoading(false);
     }
@@ -59,22 +55,22 @@ export function useJobProgress(jobId: string | null): UseJobProgressReturn {
 
     try {
       const response = await fetch(`/api/jobs/${jobId}/cancel`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({}),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to cancel job');
+        throw new Error("Failed to cancel job");
       }
 
       // Refetch to get updated status
       await fetchJobData();
       return true;
     } catch (err) {
-      console.error('Failed to cancel job:', err);
+      console.error("Failed to cancel job:", err);
       return false;
     }
   }, [jobId, fetchJobData]);
@@ -89,7 +85,7 @@ export function useJobProgress(jobId: string | null): UseJobProgressReturn {
     if (!job || !jobId) return;
 
     // Stop polling if job is in final state
-    const finalStates = ['completed', 'failed', 'cancelled'];
+    const finalStates = ["completed", "failed", "cancelled"];
     if (finalStates.includes(job.status)) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);

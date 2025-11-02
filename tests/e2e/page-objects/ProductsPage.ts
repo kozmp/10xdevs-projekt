@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class ProductsPage {
   readonly page: Page;
@@ -16,13 +16,13 @@ export class ProductsPage {
     this.searchInput = page.locator('input[placeholder*="Szukaj"]');
     this.filterDropdown = page.locator('button:has-text("Filter")').or(page.locator('[role="combobox"]'));
     this.refreshButton = page.locator('button:has-text("Odśwież")');
-    this.productsTable = page.locator('table');
+    this.productsTable = page.locator("table");
     this.bulkActionsBar = page.locator('div:has-text("selected")');
     this.generateButton = page.locator('button:has-text("Generuj")');
   }
 
   async goto() {
-    await this.page.goto('/products');
+    await this.page.goto("/products");
   }
 
   async isLoaded(): Promise<boolean> {
