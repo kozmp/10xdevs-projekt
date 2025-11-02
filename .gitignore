@@ -14,7 +14,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # environment variables
-.evn.test
+.env.test
 .env
 .env.production
 
@@ -48,3 +48,8 @@ CLAUDE.md
 # database backups and local config
 *.sqlite
 *.sqlite-journaltest-output.txt
+
+# test coverage and reports
+coverage/
+playwright-report/
+test-results/

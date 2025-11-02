@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "build:e2e": "cross-env PUBLIC_SUPABASE_URL=https://suxficwccuswjthvbqcs.supabase.co PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1eGZpY3djY3Vzd2p0aHZicWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA2MjkxNzQsImV4cCI6MjA3NjIwNTE3NH0.urk0NanZLbq-FTeCqGFJKppu7m-QNGJZWB4GSXBZQG8 astro build",
+    "build:e2e": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
