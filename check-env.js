@@ -11,7 +11,7 @@ const requiredVars = {
 let allSet = true;
 for (const [key, value] of Object.entries(requiredVars)) {
   if (value) {
-    console.log(`✓ ${key}: SET (${value.substring(0, 20)}...)`);
+    console.log(`✓ ${key}: SET`);
   } else {
     console.log(`✗ ${key}: NOT SET`);
     allSet = false;
