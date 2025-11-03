@@ -26,8 +26,8 @@ test.describe("Shop Connection Management (F3)", () => {
 
   // Test user credentials
   const TEST_USER = {
-    email: "kozmp.dev@gmail.com",
-    password: "Test1test1",
+    email: process.env.E2E_USERNAME!,
+    password: process.env.E2E_PASSWORD!,
   };
 
   // Test shop data

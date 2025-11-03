@@ -4,8 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../../src/db/database.types";
 
 const TEST_USER = {
-  email: "kozmp.dev@gmail.com",
-  password: "Test1test1",
+  email: process.env.E2E_USERNAME!,
+  password: process.env.E2E_PASSWORD!,
 };
 
 test.describe("Authentication", () => {
