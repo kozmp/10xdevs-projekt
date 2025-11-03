@@ -24,8 +24,8 @@ test.describe("Job Generation with Model Selection and System Message (F4)", () 
 
   // Test user credentials
   const TEST_USER = {
-    email: "kozmp.dev@gmail.com",
-    password: "Test1test1",
+    email: process.env.E2E_USERNAME!,
+    password: process.env.E2E_PASSWORD!,
   };
 
   // Test shop data
