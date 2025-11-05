@@ -85,7 +85,9 @@ export class ShopService {
         shopDomain: data.shop.domain,
       };
     } catch (error) {
-      console.error("[ShopService] Error verifying Shopify API key:", error);
+      // Import logger dynamically to avoid circular dependencies
+      const { logger } = await import("@/lib/utils/logger");
+      logger.error("[ShopService] Error verifying Shopify API key", error);
       return {
         isValid: false,
         errorMessage: error instanceof Error ? error.message : "Failed to verify API key",

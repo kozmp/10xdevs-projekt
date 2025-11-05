@@ -77,9 +77,10 @@ export function guardAstroFeature(
   // Sprawdź feature flag
   const result = isFeatureEnabled(featureName, { userId });
 
-  // Debug logging
+  // Debug logging (only in development via logger)
   if (debug) {
-    console.log(`[FeatureFlags Astro] ${featureName}:`, {
+    const { logger } = await import("@/lib/utils/logger");
+    logger.debug(`[FeatureFlags Astro] ${featureName}`, {
       enabled: result.enabled,
       reason: result.reason,
       userId: userId || "anonymous",

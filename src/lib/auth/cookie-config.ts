@@ -25,10 +25,12 @@ export const cookieOptions: CookieOptions = {
   path: "/",
 };
 
-// Debug info dla deweloperów
+// Debug info dla deweloperów (automatically disabled in production by logger)
 if (isDevelopment) {
-  console.debug("[Auth Config] Cookie options:", {
-    ...cookieOptions,
-    environment: isProduction ? "production" : "development",
+  import("@/lib/utils/logger").then(({ logger }) => {
+    logger.debug("[Auth Config] Cookie options", {
+      ...cookieOptions,
+      environment: isProduction ? "production" : "development",
+    });
   });
 }

@@ -94,9 +94,10 @@ export function guardApiFeature(
   // Sprawdź feature flag
   const result = isFeatureEnabled(featureName, { userId, allowAnonymous });
 
-  // Debug logging
+  // Debug logging (only in development via logger)
   if (debug) {
-    console.log(`[FeatureFlags API] ${featureName}:`, {
+    const { logger } = await import("@/lib/utils/logger");
+    logger.debug(`[FeatureFlags API] ${featureName}`, {
       enabled: result.enabled,
       reason: result.reason,
       userId: userId || "anonymous",

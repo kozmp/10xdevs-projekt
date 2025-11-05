@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { guardApiFeature } from "@/features/api-helpers";
+import { logger } from "@/lib/utils/logger";
 
 export const prerender = false;
 
@@ -40,7 +41,7 @@ export const POST: APIRoute = async (context) => {
       }
     );
   } catch (err) {
-    console.error("Logout error:", err);
+    logger.error("Logout error", err);
     return new Response(
       JSON.stringify({
         error: "Internal server error",

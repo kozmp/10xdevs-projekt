@@ -72,9 +72,8 @@ export const CostEstimateDemo: React.FC = () => {
   };
 
   const handleConfirm = () => {
-    console.log("Starting job with model:", selectedModel);
+    // TODO: ETAP 4 - Wywołanie API do rozpoczęcia job z selectedModel
     setShowDialog(false);
-    // W ETAPIE 4: Wywołanie API do rozpoczęcia job
   };
 
   return (

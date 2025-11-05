@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 import { guardApiFeature } from "@/features/api-helpers";
+import { logger } from "@/lib/utils/logger";
 
 export const prerender = false;
 
@@ -65,7 +66,7 @@ export const POST: APIRoute = async (context) => {
     });
 
     if (sessionError) {
-      console.error("Session error:", sessionError);
+      logger.error("Session error", sessionError);
       return new Response(JSON.stringify({ error: "Błąd podczas ustawiania sesji" }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -83,7 +84,7 @@ export const POST: APIRoute = async (context) => {
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (err) {
-    console.error("Login error:", err);
+    logger.error("Login error", err);
     return new Response(JSON.stringify({ error: "Błąd serwera, spróbuj ponownie" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },

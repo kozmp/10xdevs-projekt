@@ -1,6 +1,7 @@
 ﻿import type { APIRoute } from "astro";
 import { z } from "zod";
 import { guardApiFeature } from "@/features/api-helpers";
+import { logger } from "@/lib/utils/logger";
 
 export const prerender = false;
 
@@ -46,7 +47,7 @@ export const POST: APIRoute = async (context) => {
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   } catch (err) {
-    console.error("Forgot password error:", err);
+    logger.error("Forgot password error", err);
     return new Response(JSON.stringify({ error: "Błąd serwera" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },

@@ -11,10 +11,7 @@ export const GET: APIRoute = async ({ locals, request, url }) => {
     const validationResult = listProductsQuerySchema.safeParse(queryParams);
 
     if (!validationResult.success) {
-      console.debug("[Products API] Invalid query parameters:", {
-        params: queryParams,
-        errors: validationResult.error.errors,
-      });
+      // Invalid query parameters - return error to client
 
       return new Response(
         JSON.stringify({

@@ -18,7 +18,8 @@ const gitignorePath = path.resolve(__dirname, ".gitignore");
 const baseConfig = tseslint.config({
   extends: [eslint.configs.recommended, tseslint.configs.strict, tseslint.configs.stylistic],
   rules: {
-    "no-console": "warn",
+    // Enforce structured logging - only warn and error allowed in production code
+    "no-console": ["error", { allow: ["warn", "error"] }],
     "no-unused-vars": "off",
   },
 });
@@ -139,6 +140,14 @@ const testSetupConfig = tseslint.config({
   },
 });
 
+// Logger utility - must use console methods directly
+const loggerConfig = tseslint.config({
+  files: ["src/lib/utils/logger.ts"],
+  rules: {
+    "no-console": "off",
+  },
+});
+
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
   {
@@ -161,5 +170,6 @@ export default tseslint.config(
   typesConfig,
   componentConfig,
   astroConfig,
-  testSetupConfig
+  testSetupConfig,
+  loggerConfig
 );

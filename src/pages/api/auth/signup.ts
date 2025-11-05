@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { signupSchema } from "@/lib/schemas/auth";
 import { createSupabaseServerInstance } from "@/db/supabase.client";
 import { guardApiFeature } from "@/features/api-helpers";
+import { logger } from "@/lib/utils/logger";
 
 export const prerender = false;
 
@@ -36,7 +37,7 @@ export const POST: APIRoute = async (context) => {
 
     // 4. Obsługa błędów rejestracji
     if (error) {
-      console.error("Signup error:", error);
+      logger.error("Signup error", error);
 
       // Mapowanie błędów Supabase na przyjazne dla użytkownika komunikaty
       const userMessage =
@@ -66,7 +67,7 @@ export const POST: APIRoute = async (context) => {
       }
     );
   } catch (err) {
-    console.error("Signup processing error:", err);
+    logger.error("Signup processing error", err);
 
     // Obsługa błędów walidacji
     if (err instanceof Error) {
