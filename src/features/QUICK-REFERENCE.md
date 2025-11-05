@@ -6,19 +6,19 @@ Szybkie przypomnienie najważniejszych funkcji i patternów.
 
 ```ts
 // Core functions
-import { isFeatureEnabled, isEnabled, getAllFeatures } from '@/features';
+import { isFeatureEnabled, isEnabled, getAllFeatures } from "@/features";
 
 // API helpers
-import { guardApiFeature, requireApiFeature, isApiFeatureEnabled } from '@/features/api-helpers';
+import { guardApiFeature, requireApiFeature, isApiFeatureEnabled } from "@/features/api-helpers";
 
 // Astro helpers
-import { guardAstroFeature, isAstroFeatureEnabled } from '@/features/astro-helpers';
+import { guardAstroFeature, isAstroFeatureEnabled } from "@/features/astro-helpers";
 
 // Hash utilities (advanced)
-import { getUserBucket, isUserInRollout } from '@/features/hash';
+import { getUserBucket, isUserInRollout } from "@/features/hash";
 
 // Types
-import type { FeatureName, FeatureCheckResult } from '@/features/types';
+import type { FeatureName, FeatureCheckResult } from "@/features/types";
 ```
 
 ---
@@ -27,16 +27,16 @@ import type { FeatureName, FeatureCheckResult } from '@/features/types';
 
 ```ts
 // src/pages/api/your-endpoint.ts
-import type { APIContext } from 'astro';
-import { guardApiFeature } from '@/features/api-helpers';
+import type { APIContext } from "astro";
+import { guardApiFeature } from "@/features/api-helpers";
 
 export const prerender = false;
 
 export async function POST(context: APIContext) {
   // Guard pattern
-  const guardResponse = guardApiFeature(context, 'your-feature', {
-    disabledStatus: 503,  // or 404
-    disabledMessage: 'Feature unavailable'
+  const guardResponse = guardApiFeature(context, "your-feature", {
+    disabledStatus: 503, // or 404
+    disabledMessage: "Feature unavailable",
   });
   if (guardResponse) return guardResponse;
 
@@ -51,11 +51,11 @@ export async function POST(context: APIContext) {
 ```astro
 ---
 // src/pages/your-page.astro
-import { guardAstroFeature } from '@/features/astro-helpers';
+import { guardAstroFeature } from "@/features/astro-helpers";
 
 // Guard pattern
-const guardResponse = guardAstroFeature(Astro, 'your-feature', {
-  redirectTo: '/404'
+const guardResponse = guardAstroFeature(Astro, "your-feature", {
+  redirectTo: "/404",
 });
 if (guardResponse) return guardResponse;
 ---
@@ -71,9 +71,9 @@ if (guardResponse) return guardResponse;
 
 ```astro
 ---
-import { isAstroFeatureEnabled } from '@/features/astro-helpers';
+import { isAstroFeatureEnabled } from "@/features/astro-helpers";
 
-const showFeature = isAstroFeatureEnabled(Astro, 'your-feature');
+const showFeature = isAstroFeatureEnabled(Astro, "your-feature");
 ---
 
 <nav>
@@ -86,14 +86,14 @@ const showFeature = isAstroFeatureEnabled(Astro, 'your-feature');
 ## React Component Pattern
 
 ```tsx
-import { useState, useEffect } from 'react';
-import { isEnabled } from '@/features';
+import { useState, useEffect } from "react";
+import { isEnabled } from "@/features";
 
 export function MyComponent({ userId }: { userId?: string }) {
   const [canShowFeature, setCanShowFeature] = useState(false);
 
   useEffect(() => {
-    setCanShowFeature(isEnabled('your-feature', { userId }));
+    setCanShowFeature(isEnabled("your-feature", { userId }));
   }, [userId]);
 
   if (!canShowFeature) return null;
@@ -109,7 +109,7 @@ export function MyComponent({ userId }: { userId?: string }) {
 ```ts
 // src/features/config.ts
 export const featuresConfig: FeaturesConfig = {
-  'your-feature': {
+  "your-feature": {
     local: {
       enabled: true,
       rolloutPercentage: 100,
@@ -117,7 +117,7 @@ export const featuresConfig: FeaturesConfig = {
     integration: {
       enabled: true,
       rolloutPercentage: 50,
-      whitelist: ['user-qa-001'],
+      whitelist: ["user-qa-001"],
     },
     production: {
       enabled: false,
@@ -132,15 +132,15 @@ export const featuresConfig: FeaturesConfig = {
 ## Feature Check Reasons
 
 ```ts
-const result = isFeatureEnabled('auth', { userId: 'user-123' });
+const result = isFeatureEnabled("auth", { userId: "user-123" });
 
 // result.reason може być:
-'feature_disabled'    // enabled: false w config
-'user_blacklisted'    // User na blacklist
-'user_whitelisted'    // User na whitelist
-'rollout_included'    // User w zakresie % rollout
-'rollout_excluded'    // User poza zakresem % rollout
-'no_user_id'         // Brak userId (anonimowy)
+("feature_disabled"); // enabled: false w config
+("user_blacklisted"); // User na blacklist
+("user_whitelisted"); // User na whitelist
+("rollout_included"); // User w zakresie % rollout
+("rollout_excluded"); // User poza zakresem % rollout
+("no_user_id"); // Brak userId (anonimowy)
 ```
 
 ---
@@ -194,10 +194,10 @@ ENV_NAME=local npm test -- src/features
 
 ```ts
 // API
-guardApiFeature(context, 'auth', { debug: true });
+guardApiFeature(context, "auth", { debug: true });
 
 // Astro
-guardAstroFeature(Astro, 'auth', { debug: true });
+guardAstroFeature(Astro, "auth", { debug: true });
 
 // Output:
 // [FeatureFlags API] auth: {
@@ -212,9 +212,9 @@ guardAstroFeature(Astro, 'auth', { debug: true });
 ## Check User Bucket (Advanced)
 
 ```ts
-import { getUserBucket } from '@/features/hash';
+import { getUserBucket } from "@/features/hash";
 
-const bucket = getUserBucket('user-123', 'auth');
+const bucket = getUserBucket("user-123", "auth");
 console.log(`User in bucket: ${bucket}%`);
 // User in bucket: 42.385%
 
@@ -244,21 +244,27 @@ production: {
 ## Common Mistakes
 
 ❌ **DON'T:**
+
 ```ts
 // Sprawdzanie feature bez userId
-isEnabled('auth')  // Zwróci false (no_user_id)
+isEnabled("auth"); // Zwróci false (no_user_id)
 
 // Używanie 100% rollout bez testowania
-production: { rolloutPercentage: 100 }  // Niebezpieczne!
+production: {
+  rolloutPercentage: 100;
+} // Niebezpieczne!
 ```
 
 ✅ **DO:**
+
 ```ts
 // Zawsze przekazuj userId jeśli dostępny
-isEnabled('auth', { userId: user?.id })
+isEnabled("auth", { userId: user?.id });
 
 // Zaczynaj od niskiego rollout
-production: { rolloutPercentage: 1 }  // Bezpieczne
+production: {
+  rolloutPercentage: 1;
+} // Bezpieczne
 ```
 
 ---
@@ -284,14 +290,14 @@ src/features/
 
 ## Key Functions
 
-| Function | Use Case | Returns |
-|----------|----------|---------|
-| `isFeatureEnabled(name, opts)` | Get full result with reason | `FeatureCheckResult` |
-| `isEnabled(name, opts)` | Quick boolean check | `boolean` |
-| `getAllFeatures(userId)` | Get all flags status | `Record<FeatureName, FeatureCheckResult>` |
-| `guardApiFeature(ctx, name)` | Protect API endpoint | `Response \| null` |
-| `guardAstroFeature(Astro, name)` | Protect Astro page | `Response \| null` |
-| `getUserBucket(userId, name)` | Get user's rollout bucket | `number` (0-100) |
+| Function                         | Use Case                    | Returns                                   |
+| -------------------------------- | --------------------------- | ----------------------------------------- |
+| `isFeatureEnabled(name, opts)`   | Get full result with reason | `FeatureCheckResult`                      |
+| `isEnabled(name, opts)`          | Quick boolean check         | `boolean`                                 |
+| `getAllFeatures(userId)`         | Get all flags status        | `Record<FeatureName, FeatureCheckResult>` |
+| `guardApiFeature(ctx, name)`     | Protect API endpoint        | `Response \| null`                        |
+| `guardAstroFeature(Astro, name)` | Protect Astro page          | `Response \| null`                        |
+| `getUserBucket(userId, name)`    | Get user's rollout bucket   | `number` (0-100)                          |
 
 ---
 

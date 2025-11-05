@@ -18,6 +18,7 @@ Implementacja pełnej funkcjonalności zarządzania połączeniem ze sklepem Sho
 #### API Endpoints
 
 **`PUT /api/shops`** - Utworzenie/Aktualizacja połączenia
+
 - **Request:** `UpdateShopCommand { shopifyDomain, apiKey }`
 - **Walidacja:** Zod schema (`updateShopSchema`)
 - **Weryfikacja:** Shopify Admin REST API (GET /admin/shop.json)
@@ -29,16 +30,19 @@ Implementacja pełnej funkcjonalności zarządzania połączeniem ze sklepem Sho
   - RLS enforcement na `user_id`
 
 **`GET /api/shops`** - Pobranie danych sklepu
+
 - **Response:** `ShopResponseDTO` (200 OK) lub 404 (brak sklepu)
 - **Graceful degradation:** Brak sklepu zwraca 404, nie crashuje
 
 **`DELETE /api/shops`** - Usunięcie połączenia
+
 - **Response:** 204 No Content (sukces) lub 404 (brak sklepu)
 - **CASCADE:** Usuwa automatycznie produkty, joby i opisy powiązane ze sklepem
 
 #### Service Layer
 
 **`ShopService`** (`src/lib/services/shop.service.ts`)
+
 - `verifyShopifyApiKey()` - Weryfikacja klucza przez Shopify API
 - `createOrUpdateShop()` - Upsert logic z szyfrowaniem
 - `getShopByUserId()` - Pobieranie danych sklepu
@@ -49,6 +53,7 @@ Implementacja pełnej funkcjonalności zarządzania połączeniem ze sklepem Sho
 **Lokalizacja:** `src/lib/services/__tests__/shop.service.test.ts`
 
 **Pokrycie:** 15 testów, 100% success rate
+
 - ✅ **Weryfikacja Shopify API:**
   - T1: Sukces weryfikacji (200 OK)
   - T2-T4: Obsługa błędów HTTP (401, 403, 500)
@@ -69,6 +74,7 @@ Implementacja pełnej funkcjonalności zarządzania połączeniem ze sklepem Sho
   - T15: Mockowanie encryption w testach (bez ENCRYPTION_KEY)
 
 **Uruchomienie testów:**
+
 ```bash
 npm run test src/lib/services/__tests__/shop.service.test.ts
 ```
@@ -80,6 +86,7 @@ npm run test src/lib/services/__tests__/shop.service.test.ts
 #### Komponenty
 
 **1. `ShopConnectionModal.tsx`** (`src/components/`)
+
 - **Typ:** React Modal (Shadcn Dialog)
 - **Funkcjonalność:**
   - Formularz dodania/aktualizacji klucza API
@@ -98,6 +105,7 @@ npm run test src/lib/services/__tests__/shop.service.test.ts
   - `isLoading`, `apiError` - Stan i błędy
 
 **2. `useShopConnection` Hook** (`src/components/hooks/`)
+
 - **Typ:** Custom React Hook
 - **Funkcjonalność:**
   - Zarządzanie stanem połączenia
@@ -109,6 +117,7 @@ npm run test src/lib/services/__tests__/shop.service.test.ts
   - Actions: `connectShop()`, `disconnectShop()`, `fetchShop()`, `openDialog()`, `closeDialog()`
 
 **3. `ShopSettingsPage.tsx`** (`src/components/`)
+
 - **Typ:** React Page Component (Astro Island)
 - **Funkcjonalność:**
   - Wyświetlanie statusu połączenia (Badge)
@@ -118,6 +127,7 @@ npm run test src/lib/services/__tests__/shop.service.test.ts
   - Integracja z `ShopConnectionModal` i `useShopConnection`
 
 **4. `shop-settings.astro`** (`src/pages/`)
+
 - **Typ:** Astro Page (SSR)
 - **Funkcjonalność:**
   - Autoryzacja (redirect jeśli nie zalogowany)
@@ -136,6 +146,7 @@ npm run test src/lib/services/__tests__/shop.service.test.ts
 #### Page Object Pattern
 
 **`ShopSettingsPage.ts`** (`tests/e2e/page-objects/`)
+
 - Reprezentacja elementów UI strony `/shop-settings`
 - Metody pomocnicze:
   - `goto()`, `isShopConnected()`
@@ -147,6 +158,7 @@ npm run test src/lib/services/__tests__/shop.service.test.ts
 **Lokalizacja:** `tests/e2e/shop-connection.spec.ts`
 
 **Scenariusze:** 7 testów E2E
+
 - ✅ **E2E-F3-01:** Pomyślne dodanie klucza Shopify
   - Weryfikacja pełnego przepływu: otwórz modal → wypełnij → submit → toast → status update
 - ✅ **E2E-F3-02:** Walidacja nieprawidłowego formatu domeny
@@ -164,10 +176,12 @@ npm run test src/lib/services/__tests__/shop.service.test.ts
   - Cancel flow, sklep pozostaje połączony
 
 **Mockowanie:**
+
 - Shopify Admin REST API jest mockowany na poziomie `page.route()`
 - Backend API (`/api/shops`) jest prawdziwe (integracja z Supabase)
 
 **Uruchomienie testów:**
+
 ```bash
 npm run test:e2e tests/e2e/shop-connection.spec.ts
 ```
@@ -177,6 +191,7 @@ npm run test:e2e tests/e2e/shop-connection.spec.ts
 ## Nowe Pliki
 
 ### Backend
+
 - ✅ `src/pages/api/shops/index.ts` - API endpoints (PUT/GET/DELETE)
 - ✅ `src/lib/services/shop.service.ts` - Business logic
 - ✅ `src/lib/services/__tests__/shop.service.test.ts` - Testy jednostkowe
@@ -184,16 +199,19 @@ npm run test:e2e tests/e2e/shop-connection.spec.ts
 - ✅ `src/types.ts` - UpdateShopCommand, ShopResponseDTO
 
 ### Frontend
+
 - ✅ `src/components/ShopConnectionModal.tsx` - Modal komponent
 - ✅ `src/components/hooks/useShopConnection.ts` - Custom hook
 - ✅ `src/components/ShopSettingsPage.tsx` - Strona ustawień
 - ✅ `src/pages/shop-settings.astro` - Astro page
 
 ### Tests
+
 - ✅ `tests/e2e/page-objects/ShopSettingsPage.ts` - Page Object
 - ✅ `tests/e2e/shop-connection.spec.ts` - E2E testy
 
 ### Documentation
+
 - ✅ `docs/F3-SHOP-CONNECTION-IMPLEMENTATION.md` - Ten dokument
 
 ---
@@ -201,6 +219,7 @@ npm run test:e2e tests/e2e/shop-connection.spec.ts
 ## Wykorzystane Technologie
 
 ### Backend
+
 - **Astro 5** - SSR API routes
 - **TypeScript 5** - Type safety
 - **Zod** - Schema validation
@@ -209,12 +228,14 @@ npm run test:e2e tests/e2e/shop-connection.spec.ts
 - **Shopify Admin REST API** - Weryfikacja kluczy
 
 ### Frontend
+
 - **React 19** - UI komponenty (Islands)
 - **Shadcn/ui** - Component library (Dialog, Button, Input, Card, Badge)
 - **Sonner** - Toast notifications
 - **Zod** - Client-side validation
 
 ### Testing
+
 - **Playwright** - E2E testing
 - **Vitest** - Unit testing
 - **Mockowanie** - Supabase mocki, Shopify API mocki
@@ -224,6 +245,7 @@ npm run test:e2e tests/e2e/shop-connection.spec.ts
 ## Bezpieczeństwo
 
 ### Backend
+
 - ✅ **RLS (Row Level Security)** - `shop_id` policy enforcement
 - ✅ **Szyfrowanie** - Klucze API szyfrowane w bazie (AES-256-GCM)
 - ✅ **Walidacja** - Zod schemas na wszystkich inputach
@@ -231,6 +253,7 @@ npm run test:e2e tests/e2e/shop-connection.spec.ts
 - ✅ **Error Handling** - Graceful degradation, nie leakuje szczegółów
 
 ### Frontend
+
 - ✅ **Walidacja** - Klient-side Zod przed wysłaniem
 - ✅ **Autoryzacja** - Redirect jeśli nie zalogowany
 - ✅ **Type Safety** - TypeScript strict mode
@@ -241,18 +264,21 @@ npm run test:e2e tests/e2e/shop-connection.spec.ts
 ## Best Practices
 
 ### Clean Architecture
+
 - ✅ Separation of Concerns: API → Service → Database
 - ✅ Single Responsibility: Każda funkcja ma jedno zadanie
 - ✅ Dependency Injection: Supabase client w konstruktorze
 - ✅ Error Handling: Early returns, guard clauses
 
 ### Testing (TDD)
+
 - ✅ Unit Tests przed implementacją (RED → GREEN → REFACTOR)
 - ✅ E2E Tests pokrywają krytyczne ścieżki użytkownika
 - ✅ Page Object Pattern - reusable, maintainable
 - ✅ Mockowanie zewnętrznych API (Shopify)
 
 ### Dostępność (A11y)
+
 - ✅ Semantic HTML (`<form>`, `<button>`, labels)
 - ✅ ARIA attributes (`aria-invalid`, `aria-describedby`, `role="alert"`)
 - ✅ Unique IDs (React `useId()`)
@@ -260,6 +286,7 @@ npm run test:e2e tests/e2e/shop-connection.spec.ts
 - ✅ Screen reader friendly
 
 ### UX/UI
+
 - ✅ Loading states (`isLoading`, disabled buttons)
 - ✅ Error feedback (inline errors + toasts)
 - ✅ Success feedback (toasts)

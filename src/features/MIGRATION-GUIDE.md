@@ -32,6 +32,7 @@ Sprawdź `src/features/config.ts` i dostosuj flagi dla swoich środowisk.
 ### 3. Wybierz Features do Migracji
 
 Aktualnie dostępne:
+
 - ✅ `auth` - System autoryzacji
 - ✅ `collections` - Kolekcje produktów
 
@@ -45,7 +46,7 @@ Aktualnie dostępne:
 
 ```ts
 // src/pages/api/auth/login.ts
-import type { APIContext } from 'astro';
+import type { APIContext } from "astro";
 
 export const prerender = false;
 
@@ -60,16 +61,16 @@ export async function POST(context: APIContext) {
 
 ```ts
 // src/pages/api/auth/login.ts
-import type { APIContext } from 'astro';
-import { guardApiFeature } from '@/features/api-helpers';  // ← DODANE
+import type { APIContext } from "astro";
+import { guardApiFeature } from "@/features/api-helpers"; // ← DODANE
 
 export const prerender = false;
 
 export async function POST(context: APIContext) {
   // ← DODANE: Sprawdź feature flag
-  const guardResponse = guardApiFeature(context, 'auth', {
+  const guardResponse = guardApiFeature(context, "auth", {
     disabledStatus: 503,
-    disabledMessage: 'Authentication temporarily unavailable'
+    disabledMessage: "Authentication temporarily unavailable",
   });
   if (guardResponse) return guardResponse;
 
@@ -191,7 +192,7 @@ export async function POST(context: APIContext) {
 ```astro
 ---
 // src/pages/login.astro
-import Layout from '@/layouts/Layout.astro';
+import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout title="Login">
@@ -205,11 +206,11 @@ import Layout from '@/layouts/Layout.astro';
 ```astro
 ---
 // src/pages/login.astro
-import { guardAstroFeature } from '@/features/astro-helpers';  // ← DODANE
-import Layout from '@/layouts/Layout.astro';
+import { guardAstroFeature } from "@/features/astro-helpers"; // ← DODANE
+import Layout from "@/layouts/Layout.astro";
 
 // ← DODANE: Sprawdź feature flag
-const guardResponse = guardAstroFeature(Astro, 'auth');
+const guardResponse = guardAstroFeature(Astro, "auth");
 if (guardResponse) return guardResponse;
 ---
 
@@ -385,6 +386,7 @@ ENV_NAME=local
 ```
 
 Sprawdź:
+
 - ✅ Wszystkie features powinny być włączone (rollout 100%)
 - ✅ Login/signup działa normalnie
 - ✅ Collections dostępne
@@ -397,6 +399,7 @@ ENV_NAME=integration
 ```
 
 Sprawdź według config.ts:
+
 - ✅ Auth: 100% rollout
 - ✅ Collections: 50% rollout (niektórzy users mają dostęp)
 
@@ -408,6 +411,7 @@ ENV_NAME=production
 ```
 
 Sprawdź według config.ts:
+
 - ✅ Auth: 100% rollout (wszystkie features auth dostępne)
 - ❌ Collections: disabled (feature_disabled, redirect do 404)
 
@@ -426,13 +430,13 @@ collections: {
 Test z różnymi userIds:
 
 ```ts
-import { getUserBucket } from '@/features/hash';
+import { getUserBucket } from "@/features/hash";
 
 // Sprawdź bucket dla różnych users
-console.log('User A bucket:', getUserBucket('user-A', 'collections'));
+console.log("User A bucket:", getUserBucket("user-A", "collections"));
 // Output: User A bucket: 42.385
 
-console.log('User B bucket:', getUserBucket('user-B', 'collections'));
+console.log("User B bucket:", getUserBucket("user-B", "collections"));
 // Output: User B bucket: 87.123
 
 // Jeśli rollout = 10%:
@@ -454,6 +458,7 @@ collections: {
 ```
 
 Test:
+
 - ✅ `user-qa-001` → dostęp (whitelist override)
 - ❌ `user-other` → brak dostępu (rollout 0%)
 
@@ -473,6 +478,7 @@ auth: {
 ```
 
 **Zadania:**
+
 - [x] Zaimplementować feature flags system
 - [ ] Dodać guards do wszystkich auth endpoints
 - [ ] Dodać guards do wszystkich auth pages
@@ -489,6 +495,7 @@ production: {
 ```
 
 **Zadania:**
+
 - [ ] Deploy do production
 - [ ] Internal team testuje funkcjonalność
 - [ ] Zbieranie feedback
@@ -505,6 +512,7 @@ production: {
 ```
 
 **Zadania:**
+
 - [ ] Monitoruj error rate w Sentry
 - [ ] Sprawdź performance metrics
 - [ ] Zbieraj user feedback
@@ -530,6 +538,7 @@ rolloutPercentage: 100,
 ```
 
 **Kryterium zwiększenia rollout:**
+
 - Error rate < 1%
 - Performance degradation < 5%
 - Brak critical bugs
@@ -538,6 +547,7 @@ rolloutPercentage: 100,
 ### Faza 5: Cleanup (2 tygodnie po 100% rollout)
 
 **Zadania:**
+
 - [ ] Usuń guards z kodu (feature jest teraz standard)
 - [ ] Usuń flagę z config.ts
 - [ ] Update dokumentacji
@@ -550,12 +560,14 @@ rolloutPercentage: 100,
 ### API Endpoints
 
 Auth:
+
 - [ ] `/api/auth/login` - POST
 - [ ] `/api/auth/signup` - POST
 - [ ] `/api/auth/logout` - POST
 - [ ] `/api/auth/reset-password` - POST
 
 Collections (future):
+
 - [ ] `/api/collections` - GET
 - [ ] `/api/collections/[id]` - GET
 - [ ] `/api/collections` - POST
@@ -565,11 +577,13 @@ Collections (future):
 ### Astro Pages
 
 Auth:
+
 - [ ] `/login.astro`
 - [ ] `/signup.astro`
 - [ ] `/reset-password.astro`
 
 Collections (future):
+
 - [ ] `/collections.astro`
 - [ ] `/collections/[id].astro`
 
@@ -619,6 +633,7 @@ guardApiFeature(context, 'auth', { debug: true });
 **To NIE powinno się zdarzyć** - consistent hashing zapewnia stabilność.
 
 **Możliwe przyczyny:**
+
 - userId się zmienia (np. session issue)
 - Zmiana config.ts między requestami
 - Cache issue (restart serwera)

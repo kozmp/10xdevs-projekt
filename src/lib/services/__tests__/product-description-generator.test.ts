@@ -173,10 +173,22 @@ describe("ProductDescriptionGeneratorService", () => {
 
       vi.mocked(service["openRouter"].chat)
         .mockResolvedValueOnce({
-          choices: [{ message: { content: `SHORT:\nKrótki opis 1\n\nLONG:\n<p>Długi opis produktu 1</p>\n\nMETA:\nMeta opis 1` } }],
+          choices: [
+            {
+              message: {
+                content: `SHORT:\nKrótki opis 1\n\nLONG:\n<p>Długi opis produktu 1</p>\n\nMETA:\nMeta opis 1`,
+              },
+            },
+          ],
         })
         .mockResolvedValueOnce({
-          choices: [{ message: { content: `SHORT:\nKrótki opis 2\n\nLONG:\n<p>Długi opis produktu 2</p>\n\nMETA:\nMeta opis 2` } }],
+          choices: [
+            {
+              message: {
+                content: `SHORT:\nKrótki opis 2\n\nLONG:\n<p>Długi opis produktu 2</p>\n\nMETA:\nMeta opis 2`,
+              },
+            },
+          ],
         });
 
       const result1 = await service.generateDescription(product1, {

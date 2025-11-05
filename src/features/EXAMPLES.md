@@ -17,9 +17,9 @@ Ten plik zawiera konkretne przykłady integracji systemu feature flags w różny
 ### Plik: `src/pages/api/auth/login.ts`
 
 ```ts
-import type { APIContext } from 'astro';
-import { guardApiFeature } from '@/features/api-helpers';
-import { z } from 'zod';
+import type { APIContext } from "astro";
+import { guardApiFeature } from "@/features/api-helpers";
+import { z } from "zod";
 
 export const prerender = false;
 
@@ -30,9 +30,9 @@ const loginSchema = z.object({
 
 export async function POST(context: APIContext) {
   // 1. Sprawdź czy auth feature włączony
-  const guardResponse = guardApiFeature(context, 'auth', {
+  const guardResponse = guardApiFeature(context, "auth", {
     disabledStatus: 503,
-    disabledMessage: 'Authentication service is temporarily unavailable. Please try again later.',
+    disabledMessage: "Authentication service is temporarily unavailable. Please try again later.",
   });
 
   if (guardResponse) {
@@ -58,13 +58,13 @@ export async function POST(context: APIContext) {
 
     return new Response(
       JSON.stringify({
-        message: 'Login successful',
+        message: "Login successful",
         user: { id: data.user.id, email: data.user.email },
       }),
       { status: 200 }
     );
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Invalid request' }), {
+    return new Response(JSON.stringify({ error: "Invalid request" }), {
       status: 400,
     });
   }
@@ -74,14 +74,14 @@ export async function POST(context: APIContext) {
 ### Plik: `src/pages/api/auth/signup.ts`
 
 ```ts
-import type { APIContext } from 'astro';
-import { guardApiFeature } from '@/features/api-helpers';
+import type { APIContext } from "astro";
+import { guardApiFeature } from "@/features/api-helpers";
 
 export const prerender = false;
 
 export async function POST(context: APIContext) {
   // Używamy tego samego guarda dla signup
-  const guardResponse = guardApiFeature(context, 'auth');
+  const guardResponse = guardApiFeature(context, "auth");
   if (guardResponse) return guardResponse;
 
   // ... signup logic
@@ -96,30 +96,26 @@ export async function POST(context: APIContext) {
 
 ```astro
 ---
-import { guardAstroFeature } from '@/features/astro-helpers';
-import Layout from '@/layouts/Layout.astro';
+import { guardAstroFeature } from "@/features/astro-helpers";
+import Layout from "@/layouts/Layout.astro";
 
 // Sprawdź czy auth feature włączony
-const guardResponse = guardAstroFeature(Astro, 'auth', {
-  redirectTo: '/404',
+const guardResponse = guardAstroFeature(Astro, "auth", {
+  redirectTo: "/404",
 });
 
 if (guardResponse) return guardResponse;
 
 // Feature włączony - renderuj normalnie
 const { searchParams } = Astro.url;
-const errorMessage = searchParams.get('error');
+const errorMessage = searchParams.get("error");
 ---
 
 <Layout title="Login">
   <div class="container">
     <h1>Login to Your Account</h1>
 
-    {errorMessage && (
-      <div class="error-banner">
-        {errorMessage}
-      </div>
-    )}
+    {errorMessage && <div class="error-banner">{errorMessage}</div>}
 
     <form action="/api/auth/login" method="POST">
       <input type="email" name="email" placeholder="Email" required />
@@ -138,10 +134,10 @@ const errorMessage = searchParams.get('error');
 
 ```astro
 ---
-import { guardAstroFeature } from '@/features/astro-helpers';
-import Layout from '@/layouts/Layout.astro';
+import { guardAstroFeature } from "@/features/astro-helpers";
+import Layout from "@/layouts/Layout.astro";
 
-const guardResponse = guardAstroFeature(Astro, 'auth');
+const guardResponse = guardAstroFeature(Astro, "auth");
 if (guardResponse) return guardResponse;
 ---
 
@@ -154,10 +150,10 @@ if (guardResponse) return guardResponse;
 
 ```astro
 ---
-import { guardAstroFeature } from '@/features/astro-helpers';
-import Layout from '@/layouts/Layout.astro';
+import { guardAstroFeature } from "@/features/astro-helpers";
+import Layout from "@/layouts/Layout.astro";
 
-const guardResponse = guardAstroFeature(Astro, 'auth');
+const guardResponse = guardAstroFeature(Astro, "auth");
 if (guardResponse) return guardResponse;
 ---
 
@@ -174,45 +170,45 @@ if (guardResponse) return guardResponse;
 
 ```astro
 ---
-import { isAstroFeatureEnabled } from '@/features/astro-helpers';
+import { isAstroFeatureEnabled } from "@/features/astro-helpers";
 
-const showCollections = isAstroFeatureEnabled(Astro, 'collections');
-const showAuth = isAstroFeatureEnabled(Astro, 'auth');
+const showCollections = isAstroFeatureEnabled(Astro, "collections");
+const showAuth = isAstroFeatureEnabled(Astro, "auth");
 ---
 
 <nav class="main-nav">
   <a href="/dashboard">Dashboard</a>
 
-  {showCollections && (
-    <a href="/collections">Collections</a>
-  )}
+  {showCollections && <a href="/collections">Collections</a>}
 
   <a href="/products">Products</a>
 
-  {showAuth ? (
-    <div class="auth-section">
-      {Astro.locals.user ? (
-        <a href="/api/auth/logout">Logout</a>
-      ) : (
-        <>
-          <a href="/login">Login</a>
-          <a href="/signup">Sign Up</a>
-        </>
-      )}
-    </div>
-  ) : (
-    <div class="auth-disabled">
-      <span class="badge">Coming Soon</span>
-    </div>
-  )}
+  {
+    showAuth ? (
+      <div class="auth-section">
+        {Astro.locals.user ? (
+          <a href="/api/auth/logout">Logout</a>
+        ) : (
+          <>
+            <a href="/login">Login</a>
+            <a href="/signup">Sign Up</a>
+          </>
+        )}
+      </div>
+    ) : (
+      <div class="auth-disabled">
+        <span class="badge">Coming Soon</span>
+      </div>
+    )
+  }
 </nav>
 ```
 
 ### Plik: `src/components/DashboardPage.tsx` (React)
 
 ```tsx
-import { useEffect, useState } from 'react';
-import { isEnabled } from '@/features';
+import { useEffect, useState } from "react";
+import { isEnabled } from "@/features";
 
 interface Props {
   userId?: string;
@@ -227,8 +223,8 @@ export function DashboardPage({ userId }: Props) {
   useEffect(() => {
     // Sprawdź feature flags po stronie klienta
     setFeatures({
-      collections: isEnabled('collections', { userId }),
-      auth: isEnabled('auth', { userId }),
+      collections: isEnabled("collections", { userId }),
+      auth: isEnabled("auth", { userId }),
     });
   }, [userId]);
 
@@ -254,11 +250,7 @@ export function DashboardPage({ userId }: Props) {
       {/* Auth Status */}
       {features.auth ? (
         <section className="auth-status">
-          {userId ? (
-            <p>Logged in as: {userId}</p>
-          ) : (
-            <a href="/login">Login to continue</a>
-          )}
+          {userId ? <p>Logged in as: {userId}</p> : <a href="/login">Login to continue</a>}
         </section>
       ) : (
         <section className="auth-unavailable">
@@ -329,6 +321,7 @@ collections: {
 ```
 
 **Monitoruj przez 24h:**
+
 - Error rate
 - Performance metrics
 - User feedback
@@ -371,22 +364,22 @@ rolloutPercentage: 100,
 
 ```astro
 ---
-import { getAllFeatures, getFeaturesConfig } from '@/features';
-import Layout from '@/layouts/Layout.astro';
+import { getAllFeatures, getFeaturesConfig } from "@/features";
+import Layout from "@/layouts/Layout.astro";
 
 // Sprawdź czy user jest adminem
 const userId = Astro.locals.user?.id;
-if (!userId || !userId.startsWith('admin-')) {
-  return Astro.redirect('/404');
+if (!userId || !userId.startsWith("admin-")) {
+  return Astro.redirect("/404");
 }
 
 // Pobierz status wszystkich flag dla różnych środowisk
-const currentEnv = import.meta.env.ENV_NAME || 'local';
+const currentEnv = import.meta.env.ENV_NAME || "local";
 const config = getFeaturesConfig();
 const userFeatures = getAllFeatures(userId);
 
 // Przykładowe sprawdzenie dla test usera
-const testUserFeatures = getAllFeatures('user-test-123');
+const testUserFeatures = getAllFeatures("user-test-123");
 ---
 
 <Layout title="Feature Flags Dashboard">
@@ -397,36 +390,36 @@ const testUserFeatures = getAllFeatures('user-test-123');
     <section class="current-config">
       <h2>Current Configuration</h2>
 
-      {Object.entries(config.features).map(([featureName, featureConfig]) => (
-        <div class="feature-card">
-          <h3>{featureName}</h3>
+      {
+        Object.entries(config.features).map(([featureName, featureConfig]) => (
+          <div class="feature-card">
+            <h3>{featureName}</h3>
 
-          <div class="config-details">
-            <p>
-              Status:
-              <span class={featureConfig.enabled ? 'enabled' : 'disabled'}>
-                {featureConfig.enabled ? '✅ Enabled' : '❌ Disabled'}
-              </span>
-            </p>
-
-            <p>Rollout: {featureConfig.rolloutPercentage}%</p>
-
-            {featureConfig.whitelist && featureConfig.whitelist.length > 0 && (
+            <div class="config-details">
               <p>
-                Whitelist: {featureConfig.whitelist.length} user(s)
-                <br />
-                <small>{featureConfig.whitelist.join(', ')}</small>
+                Status:
+                <span class={featureConfig.enabled ? "enabled" : "disabled"}>
+                  {featureConfig.enabled ? "✅ Enabled" : "❌ Disabled"}
+                </span>
               </p>
-            )}
 
-            {featureConfig.blacklist && featureConfig.blacklist.length > 0 && (
-              <p>
-                Blacklist: {featureConfig.blacklist.length} user(s)
-              </p>
-            )}
+              <p>Rollout: {featureConfig.rolloutPercentage}%</p>
+
+              {featureConfig.whitelist && featureConfig.whitelist.length > 0 && (
+                <p>
+                  Whitelist: {featureConfig.whitelist.length} user(s)
+                  <br />
+                  <small>{featureConfig.whitelist.join(", ")}</small>
+                </p>
+              )}
+
+              {featureConfig.blacklist && featureConfig.blacklist.length > 0 && (
+                <p>Blacklist: {featureConfig.blacklist.length} user(s)</p>
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      }
     </section>
 
     <section class="user-simulation">
@@ -434,35 +427,35 @@ const testUserFeatures = getAllFeatures('user-test-123');
 
       <div class="simulation-card">
         <h3>Admin User (You)</h3>
-        {Object.entries(userFeatures).map(([feature, result]) => (
-          <div class="feature-result">
-            <strong>{feature}:</strong>
-            <span class={result.enabled ? 'enabled' : 'disabled'}>
-              {result.enabled ? '✅' : '❌'}
-            </span>
-            <small>({result.reason})</small>
-          </div>
-        ))}
+        {
+          Object.entries(userFeatures).map(([feature, result]) => (
+            <div class="feature-result">
+              <strong>{feature}:</strong>
+              <span class={result.enabled ? "enabled" : "disabled"}>{result.enabled ? "✅" : "❌"}</span>
+              <small>({result.reason})</small>
+            </div>
+          ))
+        }
       </div>
 
       <div class="simulation-card">
         <h3>Test User (user-test-123)</h3>
-        {Object.entries(testUserFeatures).map(([feature, result]) => (
-          <div class="feature-result">
-            <strong>{feature}:</strong>
-            <span class={result.enabled ? 'enabled' : 'disabled'}>
-              {result.enabled ? '✅' : '❌'}
-            </span>
-            <small>({result.reason})</small>
-          </div>
-        ))}
+        {
+          Object.entries(testUserFeatures).map(([feature, result]) => (
+            <div class="feature-result">
+              <strong>{feature}:</strong>
+              <span class={result.enabled ? "enabled" : "disabled"}>{result.enabled ? "✅" : "❌"}</span>
+              <small>({result.reason})</small>
+            </div>
+          ))
+        }
       </div>
     </section>
 
     <section class="rollout-calculator">
       <h2>Rollout Impact Calculator</h2>
       <p>
-        With <strong>collections</strong> at{' '}
+        With <strong>collections</strong> at{" "}
         <strong>{config.features.collections.rolloutPercentage}%</strong> rollout:
       </p>
       <ul>
@@ -529,8 +522,8 @@ const testUserFeatures = getAllFeatures('user-test-123');
 ### React Component Version: `src/components/admin/FeatureFlagsPanel.tsx`
 
 ```tsx
-import { useState, useEffect } from 'react';
-import { getAllFeatures, getFeaturesConfig } from '@/features';
+import { useState, useEffect } from "react";
+import { getAllFeatures, getFeaturesConfig } from "@/features";
 
 interface Props {
   adminUserId: string;
@@ -548,7 +541,7 @@ export function FeatureFlagsPanel({ adminUserId }: Props) {
       // Test dla różnych userIds
       const results = {
         admin: getAllFeatures(adminUserId),
-        testUser: getAllFeatures('user-test-123'),
+        testUser: getAllFeatures("user-test-123"),
         anonymous: getAllFeatures(undefined),
       };
       setTestResults(results);
@@ -571,13 +564,10 @@ export function FeatureFlagsPanel({ adminUserId }: Props) {
           <div key={name} className="feature-card">
             <h3>{name}</h3>
             <div className="status-badge" data-enabled={cfg.enabled}>
-              {cfg.enabled ? '✅ Enabled' : '❌ Disabled'}
+              {cfg.enabled ? "✅ Enabled" : "❌ Disabled"}
             </div>
             <div className="rollout-meter">
-              <div
-                className="rollout-fill"
-                style={{ width: `${cfg.rolloutPercentage}%` }}
-              />
+              <div className="rollout-fill" style={{ width: `${cfg.rolloutPercentage}%` }} />
               <span>{cfg.rolloutPercentage}%</span>
             </div>
           </div>
@@ -589,35 +579,29 @@ export function FeatureFlagsPanel({ adminUserId }: Props) {
 
         <div className="user-test">
           <h4>Admin</h4>
-          {Object.entries(testResults.admin || {}).map(
-            ([feature, result]: [string, any]) => (
-              <div key={feature}>
-                {feature}: {result.enabled ? '✅' : '❌'} ({result.reason})
-              </div>
-            )
-          )}
+          {Object.entries(testResults.admin || {}).map(([feature, result]: [string, any]) => (
+            <div key={feature}>
+              {feature}: {result.enabled ? "✅" : "❌"} ({result.reason})
+            </div>
+          ))}
         </div>
 
         <div className="user-test">
           <h4>Test User</h4>
-          {Object.entries(testResults.testUser || {}).map(
-            ([feature, result]: [string, any]) => (
-              <div key={feature}>
-                {feature}: {result.enabled ? '✅' : '❌'} ({result.reason})
-              </div>
-            )
-          )}
+          {Object.entries(testResults.testUser || {}).map(([feature, result]: [string, any]) => (
+            <div key={feature}>
+              {feature}: {result.enabled ? "✅" : "❌"} ({result.reason})
+            </div>
+          ))}
         </div>
 
         <div className="user-test">
           <h4>Anonymous</h4>
-          {Object.entries(testResults.anonymous || {}).map(
-            ([feature, result]: [string, any]) => (
-              <div key={feature}>
-                {feature}: {result.enabled ? '✅' : '❌'} ({result.reason})
-              </div>
-            )
-          )}
+          {Object.entries(testResults.anonymous || {}).map(([feature, result]: [string, any]) => (
+            <div key={feature}>
+              {feature}: {result.enabled ? "✅" : "❌"} ({result.reason})
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -633,15 +617,15 @@ export function FeatureFlagsPanel({ adminUserId }: Props) {
 
 ```ts
 // src/lib/services/__tests__/collections.test.ts
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { isEnabled } from '@/features';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { isEnabled } from "@/features";
 
-describe('Collections Service', () => {
-  it('should only process collections when feature enabled', () => {
-    const userId = 'user-123';
+describe("Collections Service", () => {
+  it("should only process collections when feature enabled", () => {
+    const userId = "user-123";
 
     // Mock feature flag
-    const enabled = isEnabled('collections', { userId, environment: 'local' });
+    const enabled = isEnabled("collections", { userId, environment: "local" });
 
     if (!enabled) {
       expect(enabled).toBe(false);
@@ -659,35 +643,35 @@ describe('Collections Service', () => {
 
 ```ts
 // tests/e2e/collections.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Collections Feature (when enabled)', () => {
-  test('should show collections page for enabled users', async ({ page }) => {
+test.describe("Collections Feature (when enabled)", () => {
+  test("should show collections page for enabled users", async ({ page }) => {
     // Login as user w whitelist lub z odpowiednim bucket
-    await page.goto('/login');
-    await page.fill('input[name="email"]', 'user-whitelisted@example.com');
-    await page.fill('input[name="password"]', 'password123');
+    await page.goto("/login");
+    await page.fill('input[name="email"]', "user-whitelisted@example.com");
+    await page.fill('input[name="password"]', "password123");
     await page.click('button[type="submit"]');
 
     // Próba dostępu do /collections
-    await page.goto('/collections');
+    await page.goto("/collections");
 
     // Jeśli feature enabled, powinna się załadować strona
-    await expect(page.locator('h1')).toContainText('Collections');
+    await expect(page.locator("h1")).toContainText("Collections");
   });
 
-  test('should redirect to 404 for disabled users', async ({ page }) => {
+  test("should redirect to 404 for disabled users", async ({ page }) => {
     // Login as user poza rollout
-    await page.goto('/login');
-    await page.fill('input[name="email"]', 'user-excluded@example.com');
-    await page.fill('input[name="password"]', 'password123');
+    await page.goto("/login");
+    await page.fill('input[name="email"]', "user-excluded@example.com");
+    await page.fill('input[name="password"]', "password123");
     await page.click('button[type="submit"]');
 
     // Próba dostępu do /collections
-    await page.goto('/collections');
+    await page.goto("/collections");
 
     // Jeśli feature disabled, redirect do 404
-    expect(page.url()).toContain('/404');
+    expect(page.url()).toContain("/404");
   });
 });
 ```
@@ -719,6 +703,7 @@ collections: {
 ```
 
 **Co się stanie:**
+
 1. Rebuild aplikacji (`npm run build`)
 2. Deploy nowej wersji
 3. Wszyscy użytkownicy tracą dostęp do collections
