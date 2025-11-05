@@ -99,6 +99,7 @@ psql -U postgres -d your_database -f supabase/migrations/20251024000000_add_esti
 ```
 
 Zweryfikuj:
+
 ```sql
 SELECT column_name, data_type, is_nullable
 FROM information_schema.columns
@@ -107,6 +108,7 @@ WHERE table_name = 'jobs'
 ```
 
 Oczekiwany wynik:
+
 ```
 column_name              | data_type | is_nullable
 ─────────────────────────┼───────────┼────────────
@@ -117,9 +119,11 @@ estimated_tokens_total   | integer   | YES
 ### 2. API Endpoints
 
 #### POST /api/jobs
+
 **Endpoint:** `src/pages/api/jobs/index.ts`
 
 **Request:**
+
 ```json
 {
   "productIds": ["uuid-1", "uuid-2"],
@@ -131,6 +135,7 @@ estimated_tokens_total   | integer   | YES
 ```
 
 **Response (201 Created):**
+
 ```json
 {
   "jobId": "job-uuid-123",
@@ -139,14 +144,17 @@ estimated_tokens_total   | integer   | YES
 ```
 
 **Headers:**
+
 ```
 Location: /api/jobs/job-uuid-123
 ```
 
 #### GET /api/jobs/:id
+
 **Endpoint:** `src/pages/api/jobs/[id].ts`
 
 **Response (200 OK):**
+
 ```json
 {
   "id": "job-uuid-123",
@@ -166,17 +174,20 @@ Location: /api/jobs/job-uuid-123
 ### 3. JobService Methods
 
 **Metoda:** `JobService.createJob(command, shopId)`
+
 - Tworzy job w bazie danych
 - Tworzy powiązania job_products
 - Zwraca JobDTO
 
 **Metoda:** `JobService.calculateInitialCostEstimate(jobId, model?)`
+
 - **Asynchroniczna** - nie blokuje
 - Wywołana w tle przez `.catch()`
 - Loguje błędy do console.error
 - Nie rzuca wyjątków
 
 **Przykład użycia:**
+
 ```typescript
 const job = await jobService.createJob(command, shopId);
 
@@ -198,6 +209,7 @@ return { jobId: job.id, status: job.status };
 **Lokalizacja:** `src/components/hooks/useJobCostEstimate.ts`
 
 **Użycie:**
+
 ```typescript
 import { useJobCostEstimate } from "@/components/hooks/useJobCostEstimate";
 
@@ -223,14 +235,15 @@ function JobDetailsPage({ jobId }: { jobId: string }) {
 ```
 
 **API:**
+
 ```typescript
 interface UseJobCostEstimateResult {
-  job: JobData | null;           // Dane joba
-  isLoading: boolean;            // Czy trwa ładowanie
-  error: Error | null;           // Błąd (jeśli wystąpił)
-  isPolling: boolean;            // Czy polling jest aktywny
-  attempts: number;              // Liczba prób pollingu
-  refetch: () => Promise<void>;  // Ręczne odświeżenie
+  job: JobData | null; // Dane joba
+  isLoading: boolean; // Czy trwa ładowanie
+  error: Error | null; // Błąd (jeśli wystąpił)
+  isPolling: boolean; // Czy polling jest aktywny
+  attempts: number; // Liczba prób pollingu
+  refetch: () => Promise<void>; // Ręczne odświeżenie
 }
 ```
 
@@ -239,12 +252,13 @@ interface UseJobCostEstimateResult {
 **Lokalizacja:** `src/components/JobCostEstimateCard.tsx`
 
 **Props:**
+
 ```typescript
 interface JobCostEstimateCardProps {
-  totalCostEstimate?: number | null;      // USD
-  estimatedTokensTotal?: number | null;   // Tokeny
-  isLoading?: boolean;                    // Stan ładowania
-  productCount?: number;                  // Liczba produktów
+  totalCostEstimate?: number | null; // USD
+  estimatedTokensTotal?: number | null; // Tokeny
+  isLoading?: boolean; // Stan ładowania
+  productCount?: number; // Liczba produktów
 }
 ```
 
@@ -266,6 +280,7 @@ interface JobCostEstimateCardProps {
    - Koszt per produkt
 
 **Przykład integracji w Astro:**
+
 ```astro
 ---
 // src/pages/jobs/[id].astro
@@ -287,11 +302,13 @@ const { id } = Astro.params;
 **Plik:** `src/lib/services/__tests__/job.service.test.ts`
 
 **Uruchomienie:**
+
 ```bash
 npm test -- job.service.test.ts
 ```
 
 **Coverage:**
+
 - ✅ createJob() - sukces
 - ✅ createJob() - produkty nie znalezione
 - ✅ createJob() - rollback przy błędzie
@@ -309,6 +326,7 @@ npm test -- job.service.test.ts
 **Plik:** `tests/e2e/async-cost-estimation.spec.ts`
 
 **Uruchomienie:**
+
 ```bash
 npm run test:e2e -- async-cost-estimation.spec.ts
 ```
@@ -338,19 +356,23 @@ npm run test:e2e -- async-cost-estimation.spec.ts
 ### Pre-deployment
 
 - [ ] Uruchom migrację bazy danych
+
   ```bash
   supabase migration up
   ```
 
 - [ ] Zweryfikuj że kolumna `estimated_tokens_total` istnieje
+
   ```sql
   SELECT * FROM jobs LIMIT 1;
   ```
 
 - [ ] Uruchom unit testy
+
   ```bash
   npm test -- job.service.test.ts
   ```
+
   **Oczekiwany wynik:** 9/9 tests passed
 
 - [ ] Uruchom E2E testy (opcjonalnie)
@@ -379,12 +401,14 @@ npm run test:e2e -- async-cost-estimation.spec.ts
 ### Monitoring
 
 **Metryki do monitorowania:**
+
 - Czas tworzenia joba (POST /api/jobs) - oczekiwany: < 500ms
 - Czas kalkulacji kosztów (calculateInitialCostEstimate) - oczekiwany: 1-2s
 - Liczba prób pollingu przed sukcesem - oczekiwany: 1-2 próby
 - % jobów z pomyślną kalkulacją kosztów - oczekiwany: > 95%
 
 **Błędy do monitorowania:**
+
 ```
 [JobService] Failed to fetch job <jobId>
 [JobService] Failed to fetch products for job <jobId>
@@ -398,11 +422,13 @@ npm run test:e2e -- async-cost-estimation.spec.ts
 ### Problem: Koszty nie ładują się (stan "Pending" nie zmienia się)
 
 **Możliwe przyczyny:**
+
 1. Asynchroniczna kalkulacja nie została wywołana
 2. Błąd w CostEstimateService
 3. Produkty nie istnieją w bazie
 
 **Debugging:**
+
 ```bash
 # Sprawdź logi backendu
 tail -f logs/app.log | grep "JobService"
@@ -416,6 +442,7 @@ psql -U postgres -d your_db -c "SELECT id, total_cost_estimate, estimated_tokens
 **Możliwa przyczyna:** Koszty są zapisane jako `undefined` zamiast `null`
 
 **Fix:**
+
 ```typescript
 // W JobService.calculateInitialCostEstimate()
 const { error: updateError } = await this.supabase

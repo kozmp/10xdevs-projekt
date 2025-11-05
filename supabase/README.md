@@ -32,6 +32,7 @@ npx supabase db execute --file supabase/seed.dev.sql
 ```
 
 **Dane testowe**:
+
 - User: `kozmp.dev@gmail.com` / Hasło: `Test1test1`
 - Sklep: `test-shop-dev.myshopify.com`
 - 3 produkty mock (ID: 11111111-..., 22222222-..., 33333333-...)
@@ -52,6 +53,7 @@ npx supabase db diff
 ```
 
 **Dane produkcyjne**:
+
 - Użytkownicy zakładają konta przez UI
 - Sklepy są dodawane przez formularz (prawdziwe klucze API Shopify)
 - Produkty są synchronizowane z Shopify API
@@ -84,6 +86,7 @@ npx supabase db push
 **Przyczyna**: Nie zastosowano migracji `20251025000000_fix_shops_user_id.sql`
 
 **Rozwiązanie**:
+
 ```bash
 # Local
 npx supabase db reset
@@ -97,6 +100,7 @@ npx supabase db push
 **Przyczyna**: Brak seed data w środowisku DEV
 
 **Rozwiązanie**:
+
 ```bash
 npx supabase db execute --file supabase/seed.dev.sql
 ```

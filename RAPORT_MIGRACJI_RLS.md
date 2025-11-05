@@ -1,4 +1,5 @@
 # Raport Wykonania Migracji RLS
+
 **Data:** 2025-10-19
 **Status:** ✅ **ZAKOŃCZONA POMYŚLNIE**
 
@@ -13,11 +14,13 @@ Migracja `20251019000000_fix_rls_gaps.sql` została pomyślnie wykonana na lokal
 ## 🔧 Wykonane Działania
 
 ### 1. Przygotowanie Migracji
+
 - ✅ Utworzono plik migracji SQL: `20251019000000_fix_rls_gaps.sql`
 - ✅ Usunięto konfliktującą migrację: `20251015224700_create_jobs_table.sql`
 - ✅ Zaktualizowano migrację RLS (usunięto PART 5 dotyczącą duplikatu tabeli jobs)
 
 ### 2. Wykonanie Migracji
+
 - ✅ Uruchomiono lokalną instancję Supabase: `supabase start`
 - ✅ Wykonano migrację: `supabase db reset`
 - ✅ Wszystkie migracje zaaplikowane bez błędów
@@ -25,6 +28,7 @@ Migracja `20251019000000_fix_rls_gaps.sql` została pomyślnie wykonana na lokal
 ### 3. Weryfikacja Techniczna
 
 #### 3.1 RLS Włączone na Wszystkich Tabelach Asocjacyjnych
+
 ```
 tablename           | rls_enabled
 --------------------+-------------
@@ -32,9 +36,11 @@ job_products        | t
 product_categories  | t
 product_collections | t
 ```
+
 **Status:** ✅ PASS (3/3 tabele)
 
 #### 3.2 Polityki RLS Utworzone
+
 ```
 tablename           | policy_count
 --------------------+--------------
@@ -43,15 +49,18 @@ jobs                | 4
 product_categories  | 4
 product_collections | 4
 ```
+
 **Status:** ✅ PASS (16 polityk łącznie)
 
 **Szczegóły polityk:**
+
 - `product_categories`: SELECT, INSERT, UPDATE, DELETE
 - `product_collections`: SELECT, INSERT, UPDATE, DELETE
 - `job_products`: SELECT, INSERT, UPDATE, DELETE
 - `jobs`: SELECT, INSERT, UPDATE, DELETE (już istniejące)
 
 #### 3.3 Indeksy Wydajnościowe Utworzone
+
 ```
 tablename           | indexname
 --------------------+---------------------------------------
@@ -67,19 +76,23 @@ product_collections | idx_product_collections_collection_id
 product_collections | idx_product_collections_product_id
 product_collections | product_collections_pkey
 ```
+
 **Status:** ✅ PASS (11 indeksów)
 
 ### 4. Testy Funkcjonalne
 
 #### Test 1: Izolacja Danych Między Sklepami
+
 **Scenariusz:** Dwa sklepy (Shop1, Shop2), każdy z własnymi danymi
 
 **Wynik:**
+
 - Postgres superuser widzi: **2 rekordy** (wszystkie)
 - Shop 1 uwierzytelniony widzi: **1 rekord** (tylko swój) ✅
 - Shop 2 uwierzytelniony widzi: **1 rekord** (tylko swój) ✅
 
 **Weryfikacja szczegółowa:**
+
 ```
 === Shop 1 widzi ===
 Product: Shop1 Product, Category: Shop1 Category
@@ -91,6 +104,7 @@ Product: Shop2 Product, Category: Shop2 Category
 **Status:** ✅ PASS - Izolacja działa poprawnie
 
 #### Test 2: Polityka INSERT
+
 **Scenariusz:** Shop 1 próbuje wstawić dane Shop 2
 
 **Wynik:**
@@ -104,26 +118,28 @@ Product: Shop2 Product, Category: Shop2 Category
 
 ### Przed Migracją (KRYTYCZNE ZAGROŻENIA)
 
-| Tabela | RLS | SELECT | INSERT | UPDATE | DELETE | Ryzyko |
-|--------|-----|--------|--------|--------|--------|--------|
-| product_categories | ❌ | - | - | - | - | **KRYTYCZNE** |
-| product_collections | ❌ | - | - | - | - | **KRYTYCZNE** |
-| job_products | ❌ | - | - | - | - | **KRYTYCZNE** |
+| Tabela              | RLS | SELECT | INSERT | UPDATE | DELETE | Ryzyko        |
+| ------------------- | --- | ------ | ------ | ------ | ------ | ------------- |
+| product_categories  | ❌  | -      | -      | -      | -      | **KRYTYCZNE** |
+| product_collections | ❌  | -      | -      | -      | -      | **KRYTYCZNE** |
+| job_products        | ❌  | -      | -      | -      | -      | **KRYTYCZNE** |
 
 **Konsekwencje:**
+
 - Użytkownicy mogli przeglądać relacje produktów z innych sklepów
 - Możliwość nieautoryzowanego tworzenia/modyfikowania relacji między sklepami
 - Brak audytu i kontroli dostępu na poziomie bazy danych
 
 ### Po Migracji (ZABEZPIECZONE)
 
-| Tabela | RLS | SELECT | INSERT | UPDATE | DELETE | Ryzyko |
-|--------|-----|--------|--------|--------|--------|--------|
-| product_categories | ✅ | ✅ | ✅ | ✅ | ✅ | **BEZPIECZNE** |
-| product_collections | ✅ | ✅ | ✅ | ✅ | ✅ | **BEZPIECZNE** |
-| job_products | ✅ | ✅ | ✅ | ✅ | ✅ | **BEZPIECZNE** |
+| Tabela              | RLS | SELECT | INSERT | UPDATE | DELETE | Ryzyko         |
+| ------------------- | --- | ------ | ------ | ------ | ------ | -------------- |
+| product_categories  | ✅  | ✅     | ✅     | ✅     | ✅     | **BEZPIECZNE** |
+| product_collections | ✅  | ✅     | ✅     | ✅     | ✅     | **BEZPIECZNE** |
+| job_products        | ✅  | ✅     | ✅     | ✅     | ✅     | **BEZPIECZNE** |
 
 **Korzyści:**
+
 - ✅ Pełna izolacja danych na poziomie bazy danych
 - ✅ Niemożliwe jest dostęp do danych innych sklepów
 - ✅ Każda operacja CRUD jest weryfikowana przez RLS
@@ -133,19 +149,19 @@ Product: Shop2 Product, Category: Shop2 Category
 
 ## 📊 Pokrycie RLS - Wszystkie Tabele
 
-| Tabela | RLS | Polityki | Status |
-|--------|-----|----------|--------|
-| shops | ✅ | 4 | ✅ Zabezpieczone |
-| products | ✅ | 4 | ✅ Zabezpieczone |
-| categories | ✅ | 4 | ✅ Zabezpieczone |
-| collections | ✅ | 4 | ✅ Zabezpieczone |
-| prompt_templates | ✅ | 4 | ✅ Zabezpieczone |
-| jobs | ✅ | 4 | ✅ Zabezpieczone |
-| api_rate_limits | ✅ | 4 | ✅ Zabezpieczone |
-| audit_logs | ✅ | 4 | ✅ Zabezpieczone |
-| **product_categories** | ✅ | 4 | ✅ **NAPRAWIONE** |
-| **product_collections** | ✅ | 4 | ✅ **NAPRAWIONE** |
-| **job_products** | ✅ | 4 | ✅ **NAPRAWIONE** |
+| Tabela                  | RLS | Polityki | Status            |
+| ----------------------- | --- | -------- | ----------------- |
+| shops                   | ✅  | 4        | ✅ Zabezpieczone  |
+| products                | ✅  | 4        | ✅ Zabezpieczone  |
+| categories              | ✅  | 4        | ✅ Zabezpieczone  |
+| collections             | ✅  | 4        | ✅ Zabezpieczone  |
+| prompt_templates        | ✅  | 4        | ✅ Zabezpieczone  |
+| jobs                    | ✅  | 4        | ✅ Zabezpieczone  |
+| api_rate_limits         | ✅  | 4        | ✅ Zabezpieczone  |
+| audit_logs              | ✅  | 4        | ✅ Zabezpieczone  |
+| **product_categories**  | ✅  | 4        | ✅ **NAPRAWIONE** |
+| **product_collections** | ✅  | 4        | ✅ **NAPRAWIONE** |
+| **job_products**        | ✅  | 4        | ✅ **NAPRAWIONE** |
 
 **Pokrycie:** 11/11 tabel (100%) ✅
 
@@ -157,10 +173,12 @@ Product: Shop2 Product, Category: Shop2 Category
 
 **Symptom:**
 Dwie definicje tabeli `jobs` w różnych migracjach:
+
 - `20251009120000_core_tables.sql` - używa `shop_id` (POPRAWNA)
 - `20251015224700_create_jobs_table.sql` - używa `user_id` (KONFLIKT)
 
 **Rozwiązanie:**
+
 - ✅ Usunięto duplikującą migrację `20251015224700_create_jobs_table.sql`
 - ✅ Zachowano oryginalną definicję z `shop_id`
 - ✅ Zaktualizowano `database.types.ts` (już używał `shop_id`)
@@ -173,6 +191,7 @@ Spójny model danych bez konfliktów
 ## 📈 Wpływ na Wydajność
 
 ### Utworzone Indeksy
+
 Dodano 6 nowych indeksów B-tree dla optymalizacji zapytań RLS:
 
 ```sql
@@ -185,11 +204,13 @@ idx_job_products_product_id
 ```
 
 **Przewidywany wpływ:**
+
 - ✅ Szybsze sprawdzanie polityk RLS (JOIN z products/jobs/categories/collections)
 - ✅ Optymalizacja zapytań SELECT z filtrowaniem
 - ✅ Lepsza wydajność przy dużej ilości danych
 
 ### Benchmark (Szacunkowy)
+
 - Zapytania SELECT: ~5-10ms (z indeksami) vs ~50-100ms (bez indeksów)
 - Overhead RLS: ~1-3ms dodatkowego czasu (akceptowalne dla bezpieczeństwa)
 
@@ -198,6 +219,7 @@ idx_job_products_product_id
 ## 🚀 Następne Kroki
 
 ### Dla Środowiska Deweloperskiego
+
 ✅ **GOTOWE** - Migracja zaaplikowana lokalnie
 
 ### Dla Środowiska Produkcyjnego
@@ -205,6 +227,7 @@ idx_job_products_product_id
 **Zalecana procedura:**
 
 1. **Backup bazy danych**
+
    ```bash
    supabase db dump > backup_before_rls_$(date +%Y%m%d).sql
    ```
@@ -220,6 +243,7 @@ idx_job_products_product_id
    - Run
 
 4. **Metoda B: Supabase CLI**
+
    ```bash
    supabase link --project-ref your-project-ref
    supabase db push
@@ -275,6 +299,7 @@ idx_job_products_product_id
 **Migracja zakończona sukcesem.** Wszystkie krytyczne luki bezpieczeństwa w RLS zostały naprawione. Baza danych jest teraz w pełni zabezpieczona na poziomie 100% tabel.
 
 ### Kluczowe Osiągnięcia:
+
 ✅ Naprawiono 3 krytyczne luki bezpieczeństwa
 ✅ Dodano 12 nowych polityk RLS
 ✅ Utworzono 6 indeksów wydajnościowych
@@ -283,6 +308,7 @@ idx_job_products_product_id
 ✅ Potwierdzona izolacja danych między sklepami
 
 ### Model Bezpieczeństwa:
+
 - Każdy sklep (shop_id) ma pełną izolację danych
 - Niemożliwy jest dostęp do danych innych sklepów
 - Wszystkie operacje CRUD chronione przez RLS

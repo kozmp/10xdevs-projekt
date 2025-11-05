@@ -18,6 +18,7 @@ Migracja `20251019000000_fix_rls_gaps.sql` naprawia krytyczne luki w zabezpiecze
 ### 🔒 Model Bezpieczeństwa
 
 Wszystkie polityki RLS zapewniają izolację na poziomie `shop_id`:
+
 - Użytkownicy mogą tylko odczytywać/modyfikować dane ze swojego sklepu
 - Sprawdzanie odbywa się poprzez JOIN z tabelami nadrzędnymi (products, jobs, categories, collections)
 - Każda operacja CRUD (SELECT, INSERT, UPDATE, DELETE) jest zabezpieczona
@@ -44,6 +45,7 @@ supabase start
 ```
 
 Powinieneś zobaczyć output z dostępami:
+
 ```
 Started supabase local development setup.
 
@@ -214,6 +216,7 @@ Po wykonaniu migracji przetestuj w aplikacji:
 ## 🛡️ Co Robi Ta Migracja - Szczegóły Techniczne
 
 ### PART 1: Włączenie RLS
+
 ```sql
 ALTER TABLE product_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE product_collections ENABLE ROW LEVEL SECURITY;
@@ -227,6 +230,7 @@ Dla każdej tabeli asocjacyjnej tworzone są 4 polityki:
 #### Przykład: product_categories
 
 **SELECT Policy** - Użytkownicy widzą tylko swoje relacje:
+
 ```sql
 USING (
   EXISTS (
@@ -238,6 +242,7 @@ USING (
 ```
 
 **INSERT Policy** - Użytkownicy mogą tworzyć tylko relacje dla swoich danych:
+
 ```sql
 WITH CHECK (
   EXISTS (SELECT 1 FROM products WHERE id = product_id AND shop_id = auth.uid())
@@ -249,6 +254,7 @@ WITH CHECK (
 **UPDATE Policy** - Analogicznie do INSERT
 
 **DELETE Policy** - Użytkownicy mogą usuwać tylko swoje relacje:
+
 ```sql
 USING (
   EXISTS (SELECT 1 FROM products WHERE id = product_id AND shop_id = auth.uid())
@@ -258,6 +264,7 @@ USING (
 ### PART 5: Naprawa Tabeli Jobs
 
 Dodaje brakującą politykę DELETE dla tabeli `jobs` (jeśli używa `user_id`):
+
 ```sql
 CREATE POLICY "Users can delete their own jobs"
   ON jobs FOR DELETE
@@ -268,6 +275,7 @@ CREATE POLICY "Users can delete their own jobs"
 ### PART 6: Indeksy dla Wydajności
 
 Tworzy indeksy B-tree dla kluczy obcych, co znacząco przyspiesza sprawdzanie polityk RLS:
+
 ```sql
 CREATE INDEX idx_product_categories_product_id ON product_categories(product_id);
 CREATE INDEX idx_product_categories_category_id ON product_categories(category_id);
@@ -281,6 +289,7 @@ CREATE INDEX idx_product_categories_category_id ON product_categories(category_i
 ### Problem: "relation already exists"
 
 **Rozwiązanie**: Migracja jest idempotentna (bezpieczna do wielokrotnego uruchomienia) dzięki:
+
 - `CREATE INDEX IF NOT EXISTS`
 - Sprawdzeniu czy polityki już istnieją przed utworzeniem
 
@@ -289,6 +298,7 @@ Możesz bezpiecznie uruchomić migrację ponownie.
 ### Problem: "permission denied for table X"
 
 **Rozwiązanie**: Upewnij się że użytkownik wykonujący migrację ma odpowiednie uprawnienia:
+
 ```sql
 -- Jako postgres superuser
 GRANT ALL ON ALL TABLES IN SCHEMA public TO authenticated;
@@ -297,6 +307,7 @@ GRANT ALL ON ALL TABLES IN SCHEMA public TO authenticated;
 ### Problem: Polityki RLS spowalniają zapytania
 
 **Rozwiązanie**: Migracja automatycznie tworzy indeksy. Jeśli problem nadal występuje:
+
 ```sql
 -- Sprawdź plan wykonania zapytania
 EXPLAIN ANALYZE SELECT * FROM product_categories WHERE product_id = 'some-uuid';
@@ -307,6 +318,7 @@ EXPLAIN ANALYZE SELECT * FROM product_categories WHERE product_id = 'some-uuid';
 ### Problem: Konflikt z istniejącymi politykami
 
 **Rozwiązanie**: Usuń stare polityki przed uruchomieniem migracji:
+
 ```sql
 -- Lista istniejących polityk
 SELECT policyname FROM pg_policies WHERE tablename = 'product_categories';
