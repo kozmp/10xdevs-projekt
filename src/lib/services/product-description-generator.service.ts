@@ -140,7 +140,9 @@ export class ProductDescriptionGeneratorService {
     try {
       return await this.generateUsingOpenRouter(productData, config);
     } catch (error) {
-      console.error("OpenRouter generation failed:", error);
+      // Import logger dynamically to avoid circular dependencies
+      const { logger } = await import("@/lib/utils/logger");
+      logger.error("OpenRouter generation failed", error);
       return this.generateFallbackDescription(productData);
     }
   }
@@ -232,7 +234,9 @@ export class ProductDescriptionGeneratorService {
   private async generateUsingOpenRouter(productData: any, config: GenerationConfig): Promise<GeneratedDescription> {
     const { style, language } = config;
 
-    console.log("Generating description for product:", {
+    // Import logger dynamically to avoid circular dependencies
+    const { logger } = await import("@/lib/utils/logger");
+    logger.debug("Generating description for product", {
       productId: productData.id,
       style,
       language,

@@ -43,7 +43,9 @@ export const onRequest = defineMiddleware(async ({ locals, cookies, url, request
 
   // 8. Obsługa błędów autoryzacji
   if (error) {
-    console.error("Auth error:", error);
+    // Import logger dynamically to avoid circular dependencies
+    const { logger } = await import("@/lib/utils/logger");
+    logger.error("Auth error", error);
     locals.user = null;
 
     if (isApiRequest) {

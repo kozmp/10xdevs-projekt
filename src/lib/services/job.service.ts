@@ -95,7 +95,9 @@ export class JobService {
         .single();
 
       if (jobError || !job) {
-        console.error(`[JobService] Failed to fetch job ${jobId}:`, jobError?.message);
+        // Import logger dynamically to avoid circular dependencies
+        const { logger } = await import("@/lib/utils/logger");
+        logger.error(`[JobService] Failed to fetch job ${jobId}`, jobError);
         return;
       }
 
@@ -106,7 +108,9 @@ export class JobService {
         .eq("job_id", jobId);
 
       if (jobProductsError || !jobProducts || jobProducts.length === 0) {
-        console.error(`[JobService] Failed to fetch products for job ${jobId}:`, jobProductsError?.message);
+        // Import logger dynamically to avoid circular dependencies
+        const { logger } = await import("@/lib/utils/logger");
+        logger.error(`[JobService] Failed to fetch products for job ${jobId}`, jobProductsError);
         return;
       }
 
@@ -134,13 +138,19 @@ export class JobService {
         .eq("id", jobId);
 
       if (updateError) {
-        console.error(`[JobService] Failed to update job ${jobId} with cost estimate:`, updateError.message);
+        // Import logger dynamically to avoid circular dependencies
+        const { logger } = await import("@/lib/utils/logger");
+        logger.error(`[JobService] Failed to update job ${jobId} with cost estimate`, updateError);
         return;
       }
 
-      console.log(`[JobService] Successfully calculated cost estimate for job ${jobId}: $${estimate.totalCost}`);
+      // Import logger dynamically to avoid circular dependencies
+      const { logger } = await import("@/lib/utils/logger");
+      logger.debug(`[JobService] Successfully calculated cost estimate for job ${jobId}: $${estimate.totalCost}`);
     } catch (error) {
-      console.error(`[JobService] Error calculating cost estimate for job ${jobId}:`, error);
+      // Import logger dynamically to avoid circular dependencies
+      const { logger } = await import("@/lib/utils/logger");
+      logger.error(`[JobService] Error calculating cost estimate for job ${jobId}`, error);
       // Nie rzucamy błędu - to funkcja asynchroniczna w tle
     }
   }

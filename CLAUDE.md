@@ -94,6 +94,77 @@ npm run format      # Format code with Prettier
 - Use guard clauses for preconditions
 - Implement proper error logging with user-friendly messages
 
+### Logging Guidelines
+
+**IMPORTANT:** Never use `console.log`, `console.info`, or `console.debug` directly in production code. Always use the structured logger.
+
+#### Using the Structured Logger
+
+Import and use the logger from `@/lib/utils/logger`:
+
+```typescript
+import { logger } from "@/lib/utils/logger";
+
+// Debug information (disabled in production)
+logger.debug("Processing user request", { userId: user.id });
+
+// General information (disabled in production)
+logger.info("Job completed successfully", { jobId: job.id });
+
+// Warnings (enabled in production)
+logger.warn("API rate limit approaching", { remaining: 10 });
+
+// Errors (enabled in production, sanitizes sensitive data)
+logger.error("Database connection failed", error, { context: "user-signup" });
+
+// Performance metrics (for monitoring)
+logger.metric("api_response_time", 245, { endpoint: "/api/products" });
+
+// Security audit logs (for compliance)
+logger.audit("User logged in", user.id, { ip: request.ip });
+```
+
+#### Security Features
+
+The structured logger automatically:
+- **Sanitizes sensitive data**: API keys, tokens, passwords, credentials are redacted
+- **Disables debug/info logs in production**: Prevents performance overhead and data leakage
+- **Formats logs consistently**: Timestamp, log level, message, and context
+- **Integrates with monitoring**: Ready for Sentry integration (FR-049-051)
+
+#### Sensitive Data Protection
+
+These keys are automatically redacted in logs:
+- `password`, `token`, `apiKey`, `api_key`
+- `secret`, `authorization`, `cookie`, `session`
+- `credentials`, `accessToken`, `refreshToken`
+- `shopify_access_token`, `openrouter_api_key`
+- `encryption_key`, `supabase_key`
+
+#### ESLint Enforcement
+
+ESLint is configured to enforce structured logging:
+```javascript
+// ❌ WRONG - ESLint error
+console.log("User data:", user);
+
+// ✅ CORRECT
+import { logger } from "@/lib/utils/logger";
+logger.debug("User data", { userId: user.id });
+```
+
+**Exceptions:**
+- Test files (`**/*.test.ts`, `**/*.spec.ts`)
+- Setup files (`**/*.setup.ts`, `check-env.js`)
+- Logger utility itself (`src/lib/utils/logger.ts`)
+
+#### Browser/Client-Side Code
+
+For React components and hooks, prefer browser DevTools Network tab for debugging API calls. If logging is necessary:
+- Remove debug logs before committing
+- Use logger for error tracking only
+- Never log sensitive user data in client-side code
+
 ### Accessibility
 
 - Use semantic HTML first, ARIA only when necessary

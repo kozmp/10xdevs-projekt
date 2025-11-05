@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import type { UpdateShopCommand } from "../../../types";
 import { updateShopSchema, shopResponseSchema } from "../../../lib/schemas/shop";
 import { ShopService } from "../../../lib/services/shop.service";
+import { logger } from "../../../lib/utils/logger";
 
 // Wyłączamy prerenderowanie dla endpointów API
 export const prerender = false;
@@ -73,7 +74,7 @@ export const PUT: APIRoute = async ({ locals, request }) => {
       // 5. Walidacja odpowiedzi
       const responseValidation = shopResponseSchema.safeParse(shop);
       if (!responseValidation.success) {
-        console.error("[PUT /api/shops] Invalid shop response format:", responseValidation.error);
+        logger.error("[PUT /api/shops] Invalid shop response format", responseValidation.error);
         return new Response(
           JSON.stringify({
             error: "Internal server error",
@@ -91,7 +92,7 @@ export const PUT: APIRoute = async ({ locals, request }) => {
       });
     } catch (serviceError) {
       const errorMessage = serviceError instanceof Error ? serviceError.message : "Unknown error";
-      console.error("[PUT /api/shops] Service error:", serviceError);
+      logger.error("[PUT /api/shops] Service error", serviceError);
 
       return new Response(
         JSON.stringify({
@@ -105,7 +106,7 @@ export const PUT: APIRoute = async ({ locals, request }) => {
       );
     }
   } catch (err) {
-    console.error("[PUT /api/shops] Error:", err);
+    logger.error("[PUT /api/shops] Error", err);
     return new Response(
       JSON.stringify({
         error: "Internal server error",
@@ -167,7 +168,7 @@ export const GET: APIRoute = async ({ locals }) => {
     // 4. Walidacja odpowiedzi
     const responseValidation = shopResponseSchema.safeParse(responseDTO);
     if (!responseValidation.success) {
-      console.error("[GET /api/shops] Invalid shop response format:", responseValidation.error);
+      logger.error("[GET /api/shops] Invalid shop response format", responseValidation.error);
       return new Response(
         JSON.stringify({
           error: "Internal server error",
@@ -184,7 +185,7 @@ export const GET: APIRoute = async ({ locals }) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error("[GET /api/shops] Error:", err);
+    logger.error("[GET /api/shops] Error", err);
     return new Response(
       JSON.stringify({
         error: "Internal server error",
@@ -246,7 +247,7 @@ export const DELETE: APIRoute = async ({ locals }) => {
       });
     } catch (serviceError) {
       const errorMessage = serviceError instanceof Error ? serviceError.message : "Unknown error";
-      console.error("[DELETE /api/shops] Service error:", serviceError);
+      logger.error("[DELETE /api/shops] Service error", serviceError);
 
       return new Response(
         JSON.stringify({
@@ -260,7 +261,7 @@ export const DELETE: APIRoute = async ({ locals }) => {
       );
     }
   } catch (err) {
-    console.error("[DELETE /api/shops] Error:", err);
+    logger.error("[DELETE /api/shops] Error", err);
     return new Response(
       JSON.stringify({
         error: "Internal server error",

@@ -48,11 +48,7 @@ export function useGenerate({ ids }: UseGenerateParams): UseGenerateReturn {
       setResults([]);
       setSummary(null);
 
-      console.log("Sending request to generate descriptions:", {
-        productIds: ids,
-        style,
-        language,
-      });
+      // Debug logging removed - use browser DevTools Network tab to inspect requests
 
       const response = await fetch("/api/products/generate-descriptions", {
         method: "POST",
@@ -76,7 +72,7 @@ export function useGenerate({ ids }: UseGenerateParams): UseGenerateReturn {
         throw new Error(errorData.error || "Failed to generate descriptions");
       }
 
-      console.log("API response:", response);
+      // Debug logging removed - use browser DevTools Network tab to inspect responses
 
       const data = await response.json();
 

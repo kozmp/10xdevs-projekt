@@ -127,10 +127,12 @@ export class OpenRouterService {
   private async handleResponse(response: Response): Promise<ChatResponse> {
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
-      console.error("OpenRouter API error:", {
+
+      // Import logger dynamically to avoid circular dependencies
+      const { logger } = await import("@/lib/utils/logger");
+      logger.error("OpenRouter API error", error, {
         status: response.status,
         statusText: response.statusText,
-        error,
       });
 
       if (response.status === 429) {
