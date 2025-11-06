@@ -84,7 +84,17 @@ describe("ProductsTable", () => {
   });
 
   it("handles pagination changes", async () => {
-    render(<ProductsTable {...defaultProps} />);
+    // Render with pagination that shows controls (multiple pages)
+    render(
+      <ProductsTable
+        {...defaultProps}
+        pagination={{
+          page: 1,
+          limit: 10,
+          total: 25, // Total 25 products = 3 pages, so pagination controls will show
+        }}
+      />
+    );
 
     const nextPageButton = screen.getByRole("button", { name: "Następna strona" });
     await userEvent.click(nextPageButton);

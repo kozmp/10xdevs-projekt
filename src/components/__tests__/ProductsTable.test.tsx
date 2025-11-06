@@ -1,8 +1,16 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import { ProductsTable } from "../ProductsTable";
 
 describe("ProductsTable", () => {
+  beforeEach(() => {
+    // Mock fetch to prevent ECONNREFUSED errors
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({}),
+    });
+  });
+
   const mockProducts = [
     {
       id: "1",
@@ -143,7 +151,7 @@ describe("ProductsTable", () => {
           pagination={{
             page: 1,
             limit: 10,
-            total: 10,
+            total: 11, // 2 pages total (page 1 of 2) - next enabled, prev disabled on page 1
           }}
         />
       );
@@ -151,8 +159,8 @@ describe("ProductsTable", () => {
       const prevButton = screen.getByRole("button", { name: /prev|poprzednia/i });
       const nextButton = screen.getByRole("button", { name: /next|następna/i });
 
-      expect(prevButton).toBeDisabled();
-      expect(nextButton).toBeDisabled();
+      expect(prevButton).toBeDisabled(); // Can't go back from page 1
+      expect(nextButton).not.toBeDisabled(); // Can go to page 2
     });
   });
 
@@ -202,7 +210,16 @@ describe("ProductsTable", () => {
     });
 
     it("should have accessible pagination controls", () => {
-      render(<ProductsTable {...defaultProps} />);
+      render(
+        <ProductsTable
+          {...defaultProps}
+          pagination={{
+            page: 1,
+            limit: 10,
+            total: 25, // 3 pages total, so pagination controls will render
+          }}
+        />
+      );
 
       // PaginationControls component may not have navigation role
       expect(screen.getByRole("button", { name: /prev|poprzednia/i })).toBeInTheDocument();

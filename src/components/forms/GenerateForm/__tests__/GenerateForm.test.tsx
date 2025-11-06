@@ -2,15 +2,20 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GenerateForm } from "../index";
 import { vi } from "vitest";
+import * as useGenerateModule from "@/components/hooks/useGenerate";
 
-// Mock useGenerate hook
-vi.mock("@/components/hooks/useGenerate", () => ({
-  useGenerate: () => ({
-    generate: vi.fn(),
-    isGenerating: false,
-    progress: 0,
-  }),
+// Mock useGenerate hook with proper spy setup
+const mockGenerate = vi.fn();
+const mockUseGenerate = vi.fn(() => ({
+  generate: mockGenerate,
+  isGenerating: false,
+  progress: 0,
+  results: [],
+  summary: null,
+  error: null,
 }));
+
+vi.spyOn(useGenerateModule, "useGenerate").mockImplementation(mockUseGenerate);
 
 describe("GenerateForm", () => {
   const mockSelectedProductIds = ["1", "2", "3"];
@@ -38,10 +43,13 @@ describe("GenerateForm", () => {
   });
 
   it("shows progress bar when generating", () => {
-    vi.mocked(useGenerate).mockReturnValue({
-      generate: vi.fn(),
+    mockUseGenerate.mockReturnValueOnce({
+      generate: mockGenerate,
       isGenerating: true,
       progress: 50,
+      results: [],
+      summary: null,
+      error: null,
     });
 
     render(
@@ -56,7 +64,7 @@ describe("GenerateForm", () => {
     const mockResults = [
       {
         productId: "1",
-        status: "success",
+        status: "success" as const,
         data: {
           shortDescription: "Short desc",
           longDescription: "Long desc",
@@ -65,13 +73,18 @@ describe("GenerateForm", () => {
       },
     ];
 
-    vi.mocked(useGenerate).mockReturnValue({
-      generate: vi.fn().mockResolvedValue({
-        results: mockResults,
-        summary: { total: 1, success: 1, error: 0 },
-      }),
+    const mockGenerateSuccess = vi.fn(async () => ({
+      results: mockResults,
+      summary: { total: 1, success: 1, error: 0 },
+    }));
+
+    mockUseGenerate.mockReturnValue({
+      generate: mockGenerateSuccess,
       isGenerating: false,
       progress: 100,
+      results: mockResults,
+      summary: { total: 1, success: 1, error: 0 },
+      error: null,
     });
 
     render(
@@ -90,11 +103,15 @@ describe("GenerateForm", () => {
 
   it("displays error message when generation fails", async () => {
     const mockError = new Error("Test error");
+    const mockGenerateFail = vi.fn().mockRejectedValue(mockError);
 
-    vi.mocked(useGenerate).mockReturnValue({
-      generate: vi.fn().mockRejectedValue(mockError),
+    mockUseGenerate.mockReturnValueOnce({
+      generate: mockGenerateFail,
       isGenerating: false,
       progress: 0,
+      results: [],
+      summary: null,
+      error: null,
     });
 
     render(
