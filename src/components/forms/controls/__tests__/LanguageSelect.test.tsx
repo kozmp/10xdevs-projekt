@@ -1,17 +1,21 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { LanguageSelect } from "../LanguageSelect";
 import { LANGUAGES } from "../constants";
 
 function TestWrapper() {
-  const { control } = useForm({
+  const methods = useForm({
     defaultValues: {
       language: "pl",
     },
   });
 
-  return <LanguageSelect name="language" control={control} label="Test Label" description="Test Description" />;
+  return (
+    <FormProvider {...methods}>
+      <LanguageSelect name="language" control={methods.control} label="Test Label" description="Test Description" />
+    </FormProvider>
+  );
 }
 
 describe("LanguageSelect", () => {
@@ -20,7 +24,7 @@ describe("LanguageSelect", () => {
 
     expect(screen.getByText("Test Label")).toBeInTheDocument();
     expect(screen.getByText("Test Description")).toBeInTheDocument();
-    expect(screen.getByRole("combobox")).toHaveValue("Polski");
+    expect(screen.getByRole("combobox")).toHaveTextContent("Polski");
   });
 
   it("shows all language options", async () => {
@@ -29,8 +33,11 @@ describe("LanguageSelect", () => {
     const combobox = screen.getByRole("combobox");
     await userEvent.click(combobox);
 
+    // Wait for dropdown to open and options to render
     for (const language of LANGUAGES) {
-      expect(screen.getByText(language.name)).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText(language.name)).toBeInTheDocument();
+      });
     }
   });
 
@@ -39,10 +46,13 @@ describe("LanguageSelect", () => {
 
     const combobox = screen.getByRole("combobox");
     await userEvent.click(combobox);
-    await userEvent.click(screen.getByText("English"));
+
+    // Wait for English option to appear then click it
+    const englishOption = await screen.findByText("English");
+    await userEvent.click(englishOption);
 
     await waitFor(() => {
-      expect(combobox).toHaveValue("English");
+      expect(combobox).toHaveTextContent("English");
     });
   });
 });
