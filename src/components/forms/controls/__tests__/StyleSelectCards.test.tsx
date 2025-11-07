@@ -1,17 +1,21 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { StyleSelectCards } from "../StyleSelectCards";
 import { STYLES } from "../constants";
 
 function TestWrapper() {
-  const { control } = useForm({
+  const methods = useForm({
     defaultValues: {
       style: "professional",
     },
   });
 
-  return <StyleSelectCards name="style" control={control} label="Test Label" description="Test Description" />;
+  return (
+    <FormProvider {...methods}>
+      <StyleSelectCards name="style" control={methods.control} label="Test Label" description="Test Description" />
+    </FormProvider>
+  );
 }
 
 describe("StyleSelectCards", () => {
@@ -23,7 +27,7 @@ describe("StyleSelectCards", () => {
 
     // Sprawdź, czy domyślny styl jest zaznaczony
     const defaultStyle = STYLES.find((s) => s.id === "professional");
-    const defaultCard = screen.getByText(defaultStyle!.name).closest(".card");
+    const defaultCard = screen.getByText(defaultStyle!.name).closest('[data-slot="card"]');
     expect(defaultCard).toHaveClass("border-primary");
   });
 
@@ -40,7 +44,7 @@ describe("StyleSelectCards", () => {
     render(<TestWrapper />);
 
     const casualStyle = STYLES.find((s) => s.id === "casual")!;
-    const casualCard = screen.getByText(casualStyle.name).closest(".card");
+    const casualCard = screen.getByText(casualStyle.name).closest('[data-slot="card"]');
 
     await userEvent.click(casualCard!);
 
@@ -53,7 +57,7 @@ describe("StyleSelectCards", () => {
     render(<TestWrapper />);
 
     for (const style of STYLES) {
-      const card = screen.getByText(style.name).closest(".card");
+      const card = screen.getByText(style.name).closest('[data-slot="card"]');
       await userEvent.click(card!);
 
       await waitFor(() => {
@@ -61,7 +65,7 @@ describe("StyleSelectCards", () => {
 
         // Sprawdź, czy inne karty nie są zaznaczone
         STYLES.filter((s) => s.id !== style.id).forEach((otherStyle) => {
-          const otherCard = screen.getByText(otherStyle.name).closest(".card");
+          const otherCard = screen.getByText(otherStyle.name).closest('[data-slot="card"]');
           expect(otherCard).not.toHaveClass("border-primary");
         });
       });
