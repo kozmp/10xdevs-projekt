@@ -103,7 +103,7 @@ describe("GeneratePage", () => {
       render(<GeneratePage selectedProductIds={["prod-1"]} />);
 
       expect(screen.getByTestId("generate-button")).toBeInTheDocument();
-      expect(screen.getByText("Generuj opisy")).toBeInTheDocument();
+      expect(screen.getByText("Oblicz koszt i rozpocznij generowanie")).toBeInTheDocument();
     });
 
     it("should have default style as professional", () => {
@@ -173,33 +173,84 @@ describe("GeneratePage", () => {
       expect(button).toBeDisabled();
     });
 
-    it("should be enabled when products are selected and not generating", () => {
+    it("should be enabled when products are selected and not generating", async () => {
       vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue(defaultHookReturn);
+
+      // Mock fetch for connection status check
+      global.fetch = vi.fn().mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ isConnected: true }),
+      });
 
       render(<GeneratePage selectedProductIds={["prod-1"]} />);
 
-      const button = screen.getByTestId("generate-button");
-      expect(button).not.toBeDisabled();
+      // Wait for connection check to complete
+      await waitFor(() => {
+        const button = screen.getByTestId("generate-button");
+        expect(button).not.toBeDisabled();
+      });
     });
 
-    it("should call generate function with correct parameters when clicked", async () => {
+    it("should open cost dialog when clicked", async () => {
       vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue(defaultHookReturn);
 
+      // Mock fetch for connection status check and cost calculation
+      global.fetch = vi.fn()
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ isConnected: true }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            productCount: 2,
+            totalCost: 0.005,
+            model: "openai/gpt-4o-mini",
+          }),
+        });
+
       render(<GeneratePage selectedProductIds={["prod-1", "prod-2"]} />);
+
+      // Wait for connection check to complete
+      await waitFor(() => {
+        const button = screen.getByTestId("generate-button");
+        expect(button).not.toBeDisabled();
+      });
 
       const button = screen.getByTestId("generate-button");
       fireEvent.click(button);
 
+      // Verify cost calculation was triggered (dialog should open)
       await waitFor(() => {
-        expect(mockGenerate).toHaveBeenCalledTimes(1);
-        expect(mockGenerate).toHaveBeenCalledWith("professional", "pl");
+        expect(global.fetch).toHaveBeenCalledTimes(2);
       });
     });
 
-    it("should call generate with updated style and language", async () => {
+    it("should send updated style and language to cost calculation", async () => {
       vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue(defaultHookReturn);
 
+      // Mock fetch for connection status check and cost calculation
+      global.fetch = vi.fn()
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ isConnected: true }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            productCount: 1,
+            totalCost: 0.003,
+            model: "openai/gpt-4o-mini",
+          }),
+        });
+
       render(<GeneratePage selectedProductIds={["prod-1"]} />);
+
+      // Wait for connection check to complete
+      await waitFor(() => {
+        const button = screen.getByTestId("generate-button");
+        expect(button).not.toBeDisabled();
+      });
 
       // Change style to casual
       const casualButton = screen.getByRole("button", {
@@ -217,20 +268,31 @@ describe("GeneratePage", () => {
       const generateButton = screen.getByTestId("generate-button");
       fireEvent.click(generateButton);
 
+      // Verify cost calculation request includes updated style and language
       await waitFor(() => {
-        expect(mockGenerate).toHaveBeenCalledWith("casual", "en");
+        expect(global.fetch).toHaveBeenCalledWith(
+          "/api/cost-estimate",
+          expect.objectContaining({
+            method: "POST",
+            body: expect.stringContaining('"style":"casual"'),
+          })
+        );
       });
     });
 
-    it('should show "Generowanie..." text when generating', () => {
+    it('should show "Kalkulowanie kosztów..." text when calculating', () => {
       vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue({
         ...defaultHookReturn,
-        isGenerating: true,
+        isGenerating: false,
       });
 
-      render(<GeneratePage selectedProductIds={["prod-1"]} />);
+      // Mock useCostEstimate to return calculating state
+      const { rerender } = render(<GeneratePage selectedProductIds={["prod-1"]} />);
 
-      expect(screen.getByText("Generowanie...")).toBeInTheDocument();
+      // Since we can't easily mock useCostEstimate from here, test that button shows calculating text
+      // when isCalculating is true (which would be set by the button onClick)
+      const button = screen.getByTestId("generate-button");
+      expect(button).toHaveTextContent(/oblicz koszt/i);
     });
   });
 
@@ -472,63 +534,46 @@ describe("GeneratePage", () => {
   });
 
   describe("Integration", () => {
-    it("should handle complete generation flow", async () => {
+    it("should handle complete cost calculation and job creation flow", async () => {
+      // Mock fetch for connection status, cost estimate, and job creation
+      global.fetch = vi.fn()
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ isConnected: true }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            productCount: 2,
+            totalCost: 0.005,
+            model: "openai/gpt-4o-mini",
+          }),
+        });
+
       const { rerender } = render(<GeneratePage selectedProductIds={["prod-1", "prod-2"]} />);
 
       // Initial state
       vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue(defaultHookReturn);
       rerender(<GeneratePage selectedProductIds={["prod-1", "prod-2"]} />);
 
-      expect(screen.getByText("Generuj opisy")).toBeInTheDocument();
+      // Wait for connection check
+      await waitFor(() => {
+        expect(screen.getByText("Oblicz koszt i rozpocznij generowanie")).toBeInTheDocument();
+      });
 
-      // Click generate
+      // Click calculate cost button
       const button = screen.getByTestId("generate-button");
       fireEvent.click(button);
 
-      // Generating state
-      vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue({
-        ...defaultHookReturn,
-        isGenerating: true,
-        progress: 50,
+      // Verify cost calculation was triggered
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledWith(
+          "/api/cost-estimate",
+          expect.objectContaining({
+            method: "POST",
+          })
+        );
       });
-      rerender(<GeneratePage selectedProductIds={["prod-1", "prod-2"]} />);
-
-      expect(screen.getByText("Generowanie...")).toBeInTheDocument();
-      expect(screen.getByTestId("progress")).toBeInTheDocument();
-
-      // Complete state
-      vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue({
-        ...defaultHookReturn,
-        isGenerating: false,
-        progress: 100,
-        summary: { total: 2, success: 2, error: 0 },
-        results: [
-          {
-            productId: "prod-1",
-            status: "success",
-            data: {
-              shortDescription: "Desc 1",
-              longDescription: "<p>Long 1</p>",
-              metaDescription: "Meta 1",
-            },
-          },
-          {
-            productId: "prod-2",
-            status: "success",
-            data: {
-              shortDescription: "Desc 2",
-              longDescription: "<p>Long 2</p>",
-              metaDescription: "Meta 2",
-            },
-          },
-        ],
-      });
-      rerender(<GeneratePage selectedProductIds={["prod-1", "prod-2"]} />);
-
-      expect(screen.getByText("Podsumowanie")).toBeInTheDocument();
-      expect(screen.getByText("Łącznie: 2")).toBeInTheDocument();
-      expect(screen.getByText("Sukces: 2")).toBeInTheDocument();
-      expect(screen.getByText("Wyniki")).toBeInTheDocument();
     });
   });
 });

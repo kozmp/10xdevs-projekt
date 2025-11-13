@@ -34,11 +34,18 @@ describe("LanguageSelect", () => {
     await userEvent.click(combobox);
 
     // Wait for dropdown to open and options to render
-    for (const language of LANGUAGES) {
-      await waitFor(() => {
-        expect(screen.getByText(language.name)).toBeInTheDocument();
-      });
-    }
+    await waitFor(() => {
+      expect(combobox).toHaveAttribute("aria-expanded", "true");
+    });
+
+    // Verify all options are present (use getAllByRole for multiple options)
+    const options = screen.getAllByRole("option");
+    expect(options).toHaveLength(LANGUAGES.length);
+
+    // Verify each language name appears in the options
+    LANGUAGES.forEach((language) => {
+      expect(screen.getByRole("option", { name: language.name })).toBeInTheDocument();
+    });
   });
 
   it("allows selecting a different language", async () => {

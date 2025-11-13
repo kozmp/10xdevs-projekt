@@ -43,7 +43,7 @@ describe("GenerateForm", () => {
   });
 
   it("shows progress bar when generating", () => {
-    mockUseGenerate.mockReturnValueOnce({
+    mockUseGenerate.mockReturnValue({
       generate: mockGenerate,
       isGenerating: true,
       progress: 50,
@@ -56,7 +56,7 @@ describe("GenerateForm", () => {
       <GenerateForm selectedProductIds={mockSelectedProductIds} onSuccess={mockOnSuccess} onError={mockOnError} />
     );
 
-    expect(screen.getByText(/generowanie opisów... 50%/i)).toBeInTheDocument();
+    expect(screen.getByText(/generowanie opisów\.\.\. 50%/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /generowanie.../i })).toBeDisabled();
   });
 
@@ -105,7 +105,7 @@ describe("GenerateForm", () => {
     const mockError = new Error("Test error");
     const mockGenerateFail = vi.fn().mockRejectedValue(mockError);
 
-    mockUseGenerate.mockReturnValueOnce({
+    mockUseGenerate.mockReturnValue({
       generate: mockGenerateFail,
       isGenerating: false,
       progress: 0,
