@@ -2,6 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 import { JobsHistoryPage } from "../index";
+import { useJobsHistory } from "@/components/hooks/useJobsHistory";
 
 // Mock useJobsHistory hook
 vi.mock("@/components/hooks/useJobsHistory", () => ({

@@ -4,6 +4,7 @@ import { vi } from "vitest";
 import { JobProgressPage } from "../index";
 import { toast } from "sonner";
 import { TOAST_MESSAGES } from "../constants";
+import { useJobProgress } from "@/components/hooks/useJobProgress";
 
 // Mock useJobProgress hook
 vi.mock("@/components/hooks/useJobProgress", () => ({
