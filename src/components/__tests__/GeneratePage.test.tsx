@@ -84,13 +84,13 @@ describe("GeneratePage", () => {
     vi.clearAllMocks();
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
-    
+
     // Mock fetch for connection status check (default: connected)
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ isConnected: true }),
     });
-    
+
     // Default mock for useCostEstimate
     vi.spyOn(useCostEstimateModule, "useCostEstimate").mockReturnValue(defaultCostEstimateReturn);
   });
@@ -129,7 +129,7 @@ describe("GeneratePage", () => {
       render(<GeneratePage selectedProductIds={["prod-1"]} />);
 
       expect(screen.getByTestId("generate-button")).toBeInTheDocument();
-      
+
       // Wait for connection check to complete
       await waitFor(() => {
         expect(screen.getByText("Oblicz koszt i rozpocznij generowanie")).toBeInTheDocument();
@@ -221,7 +221,7 @@ describe("GeneratePage", () => {
     it("should open cost dialog when clicked", async () => {
       const mockCalculate = vi.fn();
       const mockOpenDialog = vi.fn();
-      
+
       vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue(defaultHookReturn);
       vi.spyOn(useCostEstimateModule, "useCostEstimate").mockReturnValue({
         ...defaultCostEstimateReturn,
@@ -249,7 +249,7 @@ describe("GeneratePage", () => {
 
     it("should send updated style and language to cost calculation", async () => {
       const mockCalculate = vi.fn();
-      
+
       vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue(defaultHookReturn);
       vi.spyOn(useCostEstimateModule, "useCostEstimate").mockReturnValue({
         ...defaultCostEstimateReturn,
@@ -296,7 +296,7 @@ describe("GeneratePage", () => {
         ...defaultHookReturn,
         isGenerating: false,
       });
-      
+
       vi.spyOn(useCostEstimateModule, "useCostEstimate").mockReturnValue({
         ...defaultCostEstimateReturn,
         isCalculating: true,
@@ -553,7 +553,7 @@ describe("GeneratePage", () => {
     it("should handle complete cost calculation and job creation flow", async () => {
       const mockCalculate = vi.fn();
       const mockOpenDialog = vi.fn();
-      
+
       vi.spyOn(useGenerateModule, "useGenerate").mockReturnValue(defaultHookReturn);
       vi.spyOn(useCostEstimateModule, "useCostEstimate").mockReturnValue({
         ...defaultCostEstimateReturn,
