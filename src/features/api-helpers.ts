@@ -1,6 +1,7 @@
 import type { APIContext } from "astro";
 import { isFeatureEnabled } from "./index";
 import type { FeatureName } from "./types";
+import { logger } from "@/lib/utils/logger";
 
 /**
  * API Helpers for Feature Flags
@@ -96,7 +97,6 @@ export function guardApiFeature(
 
   // Debug logging (only in development via logger)
   if (debug) {
-    const { logger } = await import("@/lib/utils/logger");
     logger.debug(`[FeatureFlags API] ${featureName}`, {
       enabled: result.enabled,
       reason: result.reason,
