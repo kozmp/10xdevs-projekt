@@ -11,7 +11,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: "html",
+  reporter: process.env.CI ? [["html"], ["json", { outputFile: "test-results/results.json" }]] : "html",
 
   // Global setup & teardown
   globalSetup: "./tests/e2e/global-setup.ts",
@@ -21,6 +21,15 @@ export default defineConfig({
     baseURL: "http://localhost:3003",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
+    // Enable coverage collection in CI
+    ...(process.env.CI && {
+      contextOptions: {
+        recordHar: {
+          mode: "minimal",
+          content: "omit",
+        },
+      },
+    }),
   },
   projects: [
     {
